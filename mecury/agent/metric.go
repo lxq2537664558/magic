@@ -6,6 +6,7 @@ import (
 	"github.com/influxdata/influxdb/client/v2"
 )
 
+// Metric ...
 type Metric interface {
 	// Name returns the measurement name of the metric
 	Name() string
