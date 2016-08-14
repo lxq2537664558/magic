@@ -1,0 +1,39 @@
+
+#################################### Alarm ####################################
+alarm:
+  common:
+    version: 0.0.1
+    logdebug: true
+    logpath: "./alarm.log"
+    loglevel: debug
+
+  
+
+#################################### Center ####################################
+center:
+  common:
+    version: 0.0.1
+    logdebug: true
+    logpath: "./center.log"
+    loglevel: debug
+
+
+#################################### Stream ####################################
+stream:
+  common:
+    version: 0.0.1
+    logdebug: true
+    logpath: "./stream.log"
+    loglevel: debug
+  discover: 
+    etcd: 
+      addrs: 
+        - "127.0.0.1:8991"
+        - "127.0.0.1:8992"
+        - "127.0.0.1:8993"
+  inputer: 
+    nats:
+      addrs:
+        - "127.0.0.1:8997"
+        - "127.0.0.1:8998"
+        - "127.0.0.1:8999"
