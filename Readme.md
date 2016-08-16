@@ -12,12 +12,13 @@ This platform is composed of two parts: </br>
 
 Installation
 ------------
-These part all are Runable applications,so,we could get mecury with following command:  </br>
+These part all are Runable applications,so,we could get with following command:  </br>
    ```bash
-    $ go get -u github.com/corego/vgo/mecury
+    $ go get -u github.com/corego/vgo
+    $ cd $GOPATH/src/github.com/corego/vgo/mecury && go install
+    $ cd $GOPATH/src/github.com/corego/vgo/vgo && go install
    ```
-
-   ```bash
-    $ go get -u github.com/corego/vgo/vgo
-   ``` 
+Then we get two independent binarys in our $GOPATH/bin directory: 
+    - mecury
+    - vgo
 
