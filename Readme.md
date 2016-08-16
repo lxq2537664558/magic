@@ -17,15 +17,15 @@ Features
 
 Functionality
 -------------
- - Metric collect plugins (mecury)
- - Metric report plugins (mecury
- - Metric parse plugins (mecury)
- - Distributed systems tracing log collect (mecury)
- - Metric Store、Show (influxdb + grafana)
- - Metric streaming (vgo)
+ - Metric collect  (mecury)
+ - Metric report  (mecury
+ - Metric parse  (mecury)
+ - Dapper log collect (mecury)
+ - Metric store、show (influxdb + grafana)
+ - Data streaming (vgo)
  - Alarm  (vgo)
- - Distributed systems tracing、API call sequence (vgo)
- 
+ - Dapper log store 、 anlaysize、show(vgo)
+
 Components
 ------------
  - vgo : The monitor platform,which is server side. 
@@ -33,6 +33,7 @@ Components
  - etcd
  - influxdb
  - grafana
+ 
 Installation
 ------------
 These part all are Runable applications,so,we could get with following command:  </br>
