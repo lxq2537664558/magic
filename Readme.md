@@ -1,4 +1,4 @@
-<p align="center">
+<p align="left">
     <a href="https://vgo.io">
      <img  width="300" src="https://github.com/corego/vgo/blob/master/assets/images/vgo.png"></a>
 </p>
