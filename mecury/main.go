@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/corego/fuchsia/mecury/cmd"
+import "github.com/corego/vgo/mecury/cmd"
 
 func main() {
 	cmd.Execute()

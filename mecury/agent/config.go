@@ -1,9 +1,19 @@
 package agent
 
-import "time"
+import (
+	"io/ioutil"
+	"log"
+	"time"
+
+	_ "github.com/corego/vgo/common/vlog"
+	"github.com/influxdata/toml"
+)
 
 type Config struct {
 	Common *CommonConfig
+
+	// default tags
+	Tags map[string]string
 
 	Agent *AgentConfig
 
@@ -13,8 +23,30 @@ type Config struct {
 
 var Conf *Config
 
-func (c *Config) Load() {
+func LoadConfig() {
+	// init the new  config params
+	initConf()
 
+	contents, err := ioutil.ReadFile("mecury.conf")
+	if err != nil {
+		log.Fatal("[FATAL] load config: ", err)
+	}
+
+	tbl, err := toml.Parse(contents)
+	if err != nil {
+		log.Fatal("[FATAL] parse config: ", err)
+	}
+
+	// parse common config
+	parseCommon(tbl)
+
+	// parse the global tags
+	parseTags(tbl)
+
+	// parse agent
+	parseAgent(tbl)
+
+	log.Printf("%#v\n", *Conf.Common)
 }
 
 func Reload(r chan struct{}) {
@@ -23,16 +55,17 @@ func Reload(r chan struct{}) {
 }
 
 type CommonConfig struct {
+	Version  string
+	IsDebug  bool   `toml:"isdebug"`
+	LogLevel string `toml:"loglevel"`
+	LogPath  string `toml:"logpath"`
+
+	Hostname string
 }
 
 type AgentConfig struct {
 	// Interval at which to gather information
 	Interval time.Duration
-
-	// RoundInterval rounds collection interval to 'interval'.
-	//     ie, if Interval=10s then always collect on :00, :10, :20, etc.
-	RoundInterval bool
-
 	// By default, precision will be set to the same timestamp order as the
 	// collection interval, with the maximum being 1s.
 	//   ie, when interval = "10s", precision will be "1s"
@@ -41,48 +74,12 @@ type AgentConfig struct {
 	// service input to set the timestamp at the appropriate precision.
 	Precision time.Duration
 
-	// CollectionJitter is used to jitter the collection by a random amount.
-	// Each plugin will sleep for a random time within jitter before collecting.
-	// This can be used to avoid many plugins querying things like sysfs at the
-	// same time, which can have a measurable effect on the system.
-	CollectionJitter time.Duration
-
 	// FlushInterval is the Interval at which to flush data
 	FlushInterval time.Duration
-
-	// FlushJitter Jitters the flush interval by a random amount.
-	// This is primarily to avoid large write spikes for users running a large
-	// number of telegraf instances.
-	// ie, a jitter of 5s and interval 10s means flushes will happen every 10-15s
-	FlushJitter time.Duration
 
 	// MetricBatchSize is the maximum number of metrics that is wrote to an
 	// output plugin in one call.
 	MetricBatchSize int
-
-	// MetricBufferLimit is the max number of metrics that each output plugin
-	// will cache. The buffer is cleared when a successful write occurs. When
-	// full, the oldest metrics will be overwritten. This number should be a
-	// multiple of MetricBatchSize. Due to current implementation, this could
-	// not be less than 2 times MetricBatchSize.
-	MetricBufferLimit int
-
-	// FlushBufferWhenFull tells Telegraf to flush the metric buffer whenever
-	// it fills up, regardless of FlushInterval. Setting this option to true
-	// does _not_ deactivate FlushInterval.
-	FlushBufferWhenFull bool
-
-	// TODO(cam): Remove UTC and parameter, they are no longer
-	// valid for the agent config. Leaving them here for now for backwards-
-	// compatability
-	UTC bool `toml:"utc"`
-
-	Hostname string
-
-	OmitHostname bool
-
-	// default tags
-	Tags map[string]string
 }
 
 type InputConfig struct {

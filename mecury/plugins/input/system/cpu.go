@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/corego/fuchsia/mecury/agent"
+	"github.com/corego/vgo/mecury/agent"
 	"github.com/shirou/gopsutil/cpu"
 )
 

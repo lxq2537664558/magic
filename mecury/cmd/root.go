@@ -20,10 +20,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/corego/fuchsia/mecury/agent"
-	_ "github.com/corego/fuchsia/mecury/plugins/input/all"
-	_ "github.com/corego/fuchsia/mecury/plugins/output/all"
-	_ "github.com/corego/vgo-common/vlog"
+	_ "github.com/corego/vgo/common/vlog"
+	"github.com/corego/vgo/mecury/agent"
+	_ "github.com/corego/vgo/mecury/plugins/input/all"
+	_ "github.com/corego/vgo/mecury/plugins/output/all"
 	"github.com/spf13/cobra"
 )
 
@@ -60,6 +60,8 @@ func start(cmd *cobra.Command, args []string) {
 	for isReload {
 		isReload = false
 
+		// init config
+		agent.LoadConfig()
 		// init logger
 
 		ag := agent.New()

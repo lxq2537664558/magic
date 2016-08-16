@@ -4,10 +4,6 @@ type Agent struct {
 }
 
 func New() *Agent {
-	// init config
-	Conf = &Config{}
-	Conf.Load()
-
 	return &Agent{}
 }
 
