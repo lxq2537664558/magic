@@ -1,8 +1,9 @@
 Vgo
 ===
-Modern and plug-in monitor system,designed with Simplicity And Performance.
+Modern and plug-in,Simplicity And Performance.
 --------
 
+    Write entirely in Go. <br/>Much easier to use than others,while it's highly customizable.
 
 This platform is composed of two parts:
     * vgo 
