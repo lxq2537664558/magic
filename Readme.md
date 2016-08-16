@@ -1,3 +1,7 @@
+<p align="center">
+    <a href="https://vgo.io">
+     <img  width="600" src="https://github.com/corego/vgo/blob/master/assets/images/vgo.png"></a>
+</p>
 Official Site
 ------------
 <a href="http://vgo.io">vgo.io</a>
