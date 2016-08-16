@@ -4,7 +4,7 @@
 </p>
 Official Site
 ------------
-<a href="http://vgo.io">vgo.io</a>
+<a href="http://vgo.io">http://vgo.io</a>
 
 Features
 ------------
