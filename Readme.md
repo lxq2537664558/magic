@@ -19,6 +19,6 @@ These part all are Runable applications,so,we could get with following command: 
     $ cd $GOPATH/src/github.com/corego/vgo/vgo && go install
    ```
 Then we get two independent binarys in our $GOPATH/bin directory: 
-    - mecury
-    - vgo
+   *  mecury.
+   *  vgo.
 
