@@ -4,10 +4,10 @@ Modern and plug-in monitor system,designed with Simplicity And Performance.
 --------
 
 
-This platform is composed of two parts: </br>
-1.vgo </br>
-        The monitor platform,which is server side. </br>
-    2.mecury </br>
+This platform is composed of two parts:
+    * vgo 
+        The monitor platform,which is server side. 
+    * mecury 
         A plug-in client side agent,Collec and report metrics to output(Default is to vgo). </br>
 
 Installation
