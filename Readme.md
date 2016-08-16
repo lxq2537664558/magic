@@ -8,15 +8,31 @@ Official Site
 
 Features
 ------------
- - Modern and plug-in,Simplicity And Performance.
- - Write entirely in Go. Much easier to use than others,while it's highly customizable.
+ - Pure Go
+ - Modern architecture
+ - Highly customizable
+ - Simplicity
+ - Extreme high performance
+ - Easy installing and using
 
-
+Functionality
+-------------
+ - Metric collect plugins (mecury)
+ - Metric report plugins (mecury
+ - Metric parse plugins (mecury)
+ - Distributed systems tracing log collect (mecury)
+ - Metric Store、Show (influxdb + grafana)
+ - Metric streaming (vgo)
+ - Alarm  (vgo)
+ - Distributed systems tracing、API call sequence (vgo)
+ 
 Components
 ------------
  - vgo : The monitor platform,which is server side. 
  - mecury : A plug-in client side agent,Collec and report metrics to output(Default is to vgo).
-
+ - etcd
+ - influxdb
+ - grafana
 Installation
 ------------
 These part all are Runable applications,so,we could get with following command:  </br>
