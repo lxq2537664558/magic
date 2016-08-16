@@ -2,8 +2,10 @@ package agent
 
 import (
 	"log"
+	"os"
 	"time"
 
+	"github.com/corego/vgo/mecury/misc"
 	"github.com/influxdata/toml"
 	"github.com/influxdata/toml/ast"
 )
@@ -12,9 +14,9 @@ func initConf() {
 	Conf = &Config{
 		// Agent defaults:
 		Agent: &AgentConfig{
-			Interval:        10 * time.Second,
-			FlushInterval:   10 * time.Second,
-			Precision:       10 * time.Second,
+			Interval:        misc.Duration{10 * time.Second},
+			FlushInterval:   misc.Duration{10 * time.Second},
+			Precision:       misc.Duration{10 * time.Second},
 			MetricBatchSize: 1000,
 		},
 
@@ -38,7 +40,7 @@ func parseCommon(tbl *ast.Table) {
 }
 
 func parseTags(tbl *ast.Table) {
-	if val, ok := tbl.Fields["tags"]; ok {
+	if val, ok := tbl.Fields["global_tags"]; ok {
 		subTbl, ok := val.(*ast.Table)
 		if !ok {
 			log.Fatalln("[FATAL] : ", subTbl)
@@ -48,6 +50,20 @@ func parseTags(tbl *ast.Table) {
 			log.Fatalln("[FATAL] parseTags: ", err)
 		}
 	}
+
+	// 解析hostname
+	var host string
+	var err error
+	if Conf.Common.Hostname == "" {
+		host, err = os.Hostname()
+		if err != nil {
+			log.Fatalln("[FATAL] get hostname error: ", err)
+		}
+		Conf.Tags["host"] = host
+	} else {
+		Conf.Tags["host"] = Conf.Common.Hostname
+	}
+
 }
 
 func parseAgent(tbl *ast.Table) {
@@ -59,6 +75,24 @@ func parseAgent(tbl *ast.Table) {
 		err := toml.UnmarshalTable(subTbl, Conf.Agent)
 		if err != nil {
 			log.Fatalln("[FATAL] parseAgent: ", err)
+		}
+	}
+}
+
+func parseInputs(tbl *ast.Table) {
+	if val, ok := tbl.Fields["inputs"]; ok {
+		subTbl, _ := val.(*ast.Table)
+		for pn, pt := range subTbl.Fields {
+			switch iTbl := pt.(type) {
+			case *ast.Table:
+				Conf.Add(pn, iTbl)
+			case []*ast.Table:
+				for _, t := range iTbl {
+					Conf.Add(pn, t)
+				}
+			default:
+				log.Fatalln("[FATAL] inputs parse error: ", iTbl)
+			}
 		}
 	}
 }

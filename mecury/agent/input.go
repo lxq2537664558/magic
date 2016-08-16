@@ -1,12 +1,19 @@
 package agent
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/influxdata/config"
+	"github.com/influxdata/toml/ast"
+)
 
 type Inputer interface {
 	// SampleConfig returns the default configuration of the Input
 	SampleConfig() string
 
-	// Description returns a one-sentence description on the Input
+	// Description returns  a one-sentence description on the Input
 	Description() string
 	// Gather takes in an accumulator and adds the metrics that the Input
 	// gathers. This is called every "interval"
@@ -21,11 +28,11 @@ func AddInput(name string, input Inputer) {
 
 // InputFilter containing drop/pass and tagdrop/tagpass rules
 type InputFilter struct {
-	Name []string
-	name Filter
+	NameDrop []string
+	nameDrop Filter
 
-	Field []string
-	field Filter
+	FieldDrop []string
+	fieldDrop Filter
 
 	TagDrop []TagFilter
 
@@ -42,12 +49,12 @@ type TagFilter struct {
 // Compile all Filter lists into filter.Filter objects.
 func (f *InputFilter) CompileFilter() error {
 	var err error
-	f.name, err = CompileFilter(f.Name)
+	f.nameDrop, err = CompileFilter(f.NameDrop)
 	if err != nil {
 		return fmt.Errorf("Error compiling 'namedrop', %s", err)
 	}
 
-	f.field, err = CompileFilter(f.Field)
+	f.fieldDrop, err = CompileFilter(f.FieldDrop)
 	if err != nil {
 		return fmt.Errorf("Error compiling 'fielddrop', %s", err)
 	}
@@ -72,8 +79,8 @@ func (f *InputFilter) ShouldMetricPass(metric Metric) bool {
 // ShouldFieldsPass returns true if the metric should pass, false if should drop
 // based on the drop/pass filter parameters
 func (f *InputFilter) ShouldNamePass(key string) bool {
-	if f.name != nil {
-		if f.name.Match(key) {
+	if f.nameDrop != nil {
+		if f.nameDrop.Match(key) {
 			return false
 		}
 	}
@@ -103,10 +110,66 @@ func (f *InputFilter) ShouldTagsPass(tags map[string]string) bool {
 // ShouldFieldsPass returns true if the metric should pass, false if should drop
 // based on the drop/pass filter parameters
 func (f *InputFilter) ShouldFieldsPass(key string) bool {
-	if f.field != nil {
-		if f.field.Match(key) {
+	if f.fieldDrop != nil {
+		if f.fieldDrop.Match(key) {
 			return false
 		}
 	}
 	return true
+}
+
+// buildInput parses input specific items from the ast.Table,
+// builds the filter and returns a
+// models.InputConfig to be inserted into models.RunningInput
+func buildInput(name string, tbl *ast.Table) (*InputConfig, error) {
+	cp := &InputConfig{Name: name}
+	if node, ok := tbl.Fields["interval"]; ok {
+		if kv, ok := node.(*ast.KeyValue); ok {
+			if str, ok := kv.Value.(*ast.String); ok {
+				dur, err := time.ParseDuration(str.Value)
+				if err != nil {
+					return nil, err
+				}
+
+				cp.Interval = dur
+			}
+		}
+	}
+
+	if node, ok := tbl.Fields["name_prefix"]; ok {
+		if kv, ok := node.(*ast.KeyValue); ok {
+			if str, ok := kv.Value.(*ast.String); ok {
+				cp.Prefix = str.Value
+			}
+		}
+	}
+
+	if node, ok := tbl.Fields["name_suffix"]; ok {
+		if kv, ok := node.(*ast.KeyValue); ok {
+			if str, ok := kv.Value.(*ast.String); ok {
+				cp.Suffix = str.Value
+			}
+		}
+	}
+
+	cp.Tags = make(map[string]string)
+	if node, ok := tbl.Fields["tags"]; ok {
+		if subtbl, ok := node.(*ast.Table); ok {
+			if err := config.UnmarshalTable(subtbl, cp.Tags); err != nil {
+				log.Printf("Could not parse tags for input %s\n", name)
+			}
+		}
+	}
+
+	delete(tbl.Fields, "name_prefix")
+	delete(tbl.Fields, "name_suffix")
+	delete(tbl.Fields, "name_override")
+	delete(tbl.Fields, "interval")
+	delete(tbl.Fields, "tags")
+	var err error
+	cp.Filter, err = buildFilter(tbl)
+	if err != nil {
+		return cp, err
+	}
+	return cp, nil
 }

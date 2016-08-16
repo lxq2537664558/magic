@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/gobwas/glob"
+	"github.com/influxdata/toml/ast"
 )
 
 type Filter interface {
@@ -76,4 +77,70 @@ func compileFilterNoGlob(filters []string) Filter {
 		out.m[filter] = struct{}{}
 	}
 	return &out
+}
+
+// buildFilter builds a Filter
+// (tagpass/tagdrop/namepass/namedrop/fieldpass/fielddrop) to
+// be inserted into the models.OutputConfig/models.InputConfig
+// to be used for glob filtering on tags and measurements
+func buildFilter(tbl *ast.Table) (InputFilter, error) {
+	f := InputFilter{}
+
+	if node, ok := tbl.Fields["namedrop"]; ok {
+		if kv, ok := node.(*ast.KeyValue); ok {
+			if ary, ok := kv.Value.(*ast.Array); ok {
+				for _, elem := range ary.Value {
+					if str, ok := elem.(*ast.String); ok {
+						f.NameDrop = append(f.NameDrop, str.Value)
+						f.IsActive = true
+					}
+				}
+			}
+		}
+	}
+
+	if node, ok := tbl.Fields["tagdrop"]; ok {
+		if subtbl, ok := node.(*ast.Table); ok {
+			for name, val := range subtbl.Fields {
+				if kv, ok := val.(*ast.KeyValue); ok {
+					tagfilter := &TagFilter{Name: name}
+					if ary, ok := kv.Value.(*ast.Array); ok {
+						for _, elem := range ary.Value {
+							if str, ok := elem.(*ast.String); ok {
+								tagfilter.Filter = append(tagfilter.Filter, str.Value)
+							}
+						}
+					}
+					f.TagDrop = append(f.TagDrop, *tagfilter)
+					f.IsActive = true
+				}
+			}
+		}
+	}
+
+	fields := []string{"drop", "fielddrop"}
+	for _, field := range fields {
+		if node, ok := tbl.Fields[field]; ok {
+			if kv, ok := node.(*ast.KeyValue); ok {
+				if ary, ok := kv.Value.(*ast.Array); ok {
+					for _, elem := range ary.Value {
+						if str, ok := elem.(*ast.String); ok {
+							f.FieldDrop = append(f.FieldDrop, str.Value)
+							f.IsActive = true
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if err := f.CompileFilter(); err != nil {
+		return f, err
+	}
+
+	delete(tbl.Fields, "namedrop")
+	delete(tbl.Fields, "fielddrop")
+	delete(tbl.Fields, "tagdrop")
+
+	return f, nil
 }
