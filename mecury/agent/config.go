@@ -51,10 +51,19 @@ func LoadConfig() {
 	// parse inputs
 	parseInputs(tbl)
 
+	// parse outputs
+	parseOutputs(tbl)
+
 	log.Printf("%#v\n", *Conf.Common)
 	log.Printf("%#v\n", *Conf.Agent)
 	log.Printf("%#v\n", Conf.Tags)
-	log.Printf("%#v\n", Conf.Inputs)
+	for _, input := range Conf.Inputs {
+		log.Printf("input %v : %#v", input.Name, input.Input)
+	}
+
+	for _, output := range Conf.Outputs {
+		log.Printf("output %v : %#v", output.Name, output.Output)
+	}
 }
 
 func Reload(r chan struct{}) {
@@ -102,8 +111,11 @@ type InputConfig struct {
 	Interval time.Duration
 }
 
-func (ic *Config) Add(name string, iTbl *ast.Table) {
-	input := Inputs[name]
+func (c *Config) AddInput(name string, iTbl *ast.Table) {
+	input, ok := Inputs[name]
+	if !ok {
+		log.Fatalf("[FATAL] no plugin %v available\n", name)
+	}
 
 	t, ok := input.(ParserInput)
 	if ok {
@@ -122,7 +134,27 @@ func (ic *Config) Add(name string, iTbl *ast.Table) {
 	}
 	inC.Input = input
 
-	ic.Inputs = append(ic.Inputs, inC)
+	c.Inputs = append(c.Inputs, inC)
+}
+
+func (c *Config) AddOutput(name string, iTbl *ast.Table) {
+	output, ok := Outputs[name]
+	if !ok {
+		log.Fatalf("[FATAL] no output plugin %v available\n", name)
+	}
+
+	outC, err := buildOutput(name, iTbl)
+	if err != nil {
+		log.Fatalln("[FATAL] build output : ", err)
+	}
+
+	err = toml.UnmarshalTable(iTbl, output)
+	if err != nil {
+		log.Fatalln("[FATAL] unmarshal output: ", err)
+	}
+	outC.Output = output
+
+	c.Outputs = append(c.Outputs, outC)
 }
 
 type OutputConfig struct {

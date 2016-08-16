@@ -1,5 +1,7 @@
 package agent
 
+import "github.com/influxdata/toml/ast"
+
 type Outputer interface {
 	// Connect to the Output
 	Connect() error
@@ -42,4 +44,26 @@ func (o *Output) AddMetric(metric Metric) {
 
 func (o *Output) Write() error {
 	return nil
+}
+
+func buildOutput(name string, tbl *ast.Table) (*OutputConfig, error) {
+	oc := &OutputConfig{
+		Name: name,
+	}
+	// if node, ok := tbl.Fields["metric_batch_size"]; ok {
+	// 	if kv, ok := node.(*ast.KeyValue); ok {
+	// 		if str, ok := kv.Value.(*ast.Integer); ok {
+	// 			i, err := str.Int()
+	// 			if err != nil {
+	// 				return nil, err
+	// 			}
+	// 			log.Println("here1111", i)
+	// 			oc.Metrics = NewBuffer(int(i))
+	// 		}
+	// 	}
+	// } else {
+	oc.Metrics = NewBuffer(Conf.Agent.MetricBatchSize)
+	// }
+
+	return oc, nil
 }

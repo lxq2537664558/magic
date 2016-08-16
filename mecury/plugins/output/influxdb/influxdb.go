@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/corego/vgo/mecury/agent"
+	"github.com/corego/vgo/mecury/misc"
 
 	"github.com/influxdata/influxdb/client/v2"
 )
@@ -24,9 +25,9 @@ type InfluxDB struct {
 	UserAgent        string
 	RetentionPolicy  string
 	WriteConsistency string
-	Timeout          time.Duration
+	Timeout          misc.Duration
 	UDPPayload       int `toml:"udp_payload"`
-
+	MetricBatchSize  int
 	// Precision is only here for legacy support. It will be ignored.
 	Precision string
 
@@ -104,7 +105,7 @@ func (i *InfluxDB) Connect() error {
 				Username:  i.Username,
 				Password:  i.Password,
 				UserAgent: i.UserAgent,
-				Timeout:   i.Timeout,
+				Timeout:   i.Timeout.Duration,
 			})
 			if err != nil {
 				return err
@@ -201,5 +202,5 @@ func (i *InfluxDB) Write(metrics []agent.Metric) error {
 }
 
 func init() {
-	agent.AddOutput("influxdb", &InfluxDB{Timeout: time.Second * 5})
+	agent.AddOutput("influxdb", &InfluxDB{Timeout: misc.Duration{time.Second * 5}})
 }

@@ -85,10 +85,28 @@ func parseInputs(tbl *ast.Table) {
 		for pn, pt := range subTbl.Fields {
 			switch iTbl := pt.(type) {
 			case *ast.Table:
-				Conf.Add(pn, iTbl)
+				Conf.AddInput(pn, iTbl)
 			case []*ast.Table:
 				for _, t := range iTbl {
-					Conf.Add(pn, t)
+					Conf.AddInput(pn, t)
+				}
+			default:
+				log.Fatalln("[FATAL] inputs parse error: ", iTbl)
+			}
+		}
+	}
+}
+
+func parseOutputs(tbl *ast.Table) {
+	if val, ok := tbl.Fields["outputs"]; ok {
+		subTbl, _ := val.(*ast.Table)
+		for pn, pt := range subTbl.Fields {
+			switch iTbl := pt.(type) {
+			case *ast.Table:
+				Conf.AddOutput(pn, iTbl)
+			case []*ast.Table:
+				for _, t := range iTbl {
+					Conf.AddOutput(pn, t)
 				}
 			default:
 				log.Fatalln("[FATAL] inputs parse error: ", iTbl)
