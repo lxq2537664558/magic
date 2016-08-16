@@ -1,8 +1,11 @@
 Vgo
 ===
+
+Features
+------------
  - Modern and plug-in,Simplicity And Performance.
  - Write entirely in Go. Much easier to use than others,while it's highly customizable.
---------
+
 
 This platform is composed of two parts:
  - vgo : The monitor platform,which is server side. 
