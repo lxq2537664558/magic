@@ -1,6 +1,6 @@
 Official Site
 ------------
-<a href="https://www.gitbook.com/book/kataras/iris/details">vgo.io</a>
+<a href="http;//vgo.io">vgo.io</a>
 
 Features
 ------------
