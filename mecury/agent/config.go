@@ -83,13 +83,6 @@ type CommonConfig struct {
 type AgentConfig struct {
 	// Interval at which to gather information
 	Interval misc.Duration
-	// By default, precision will be set to the same timestamp order as the
-	// collection interval, with the maximum being 1s.
-	//   ie, when interval = "10s", precision will be "1s"
-	//       when interval = "250ms", precision will be "1ms"
-	// Precision will NOT be used for service inputs. It is up to each individual
-	// service input to set the timestamp at the appropriate precision.
-	Precision misc.Duration
 
 	// FlushInterval is the Interval at which to flush data
 	FlushInterval misc.Duration

@@ -76,7 +76,7 @@ func start(cmd *cobra.Command, args []string) {
 
 		// config reload signal
 		reload := make(chan struct{})
-		go agent.Reload(reload)
+		// go agent.Reload(reload)
 
 		// wait for system exit and config reload signal
 		go func() {

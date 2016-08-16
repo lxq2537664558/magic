@@ -77,7 +77,21 @@ func (a *Agent) flush(shutdown chan struct{}, metricC chan Metric) {
 
 }
 
-func (a *Agent) gather(down chan struct{}, input *InputConfig, intvl time.Duration, metricC chan Metric) error {
+func (a *Agent) gather(down chan struct{}, input *InputConfig, intvl time.Duration, metricC chan Metric) {
+	ticker := time.NewTicker(intvl)
+	defer ticker.Stop()
 
-	return nil
+	for {
+		acc := NewAccumulate(input, metricC)
+		acc.SetPrecision(intvl)
+
+		input.Input.Gather(acc)
+
+		select {
+		case <-down:
+			return
+		case <-ticker.C:
+			continue
+		}
+	}
 }

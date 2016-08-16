@@ -27,7 +27,6 @@ type InfluxDB struct {
 	WriteConsistency string
 	Timeout          misc.Duration
 	UDPPayload       int `toml:"udp_payload"`
-	MetricBatchSize  int
 	// Precision is only here for legacy support. It will be ignored.
 	Precision string
 

@@ -50,20 +50,21 @@ func buildOutput(name string, tbl *ast.Table) (*OutputConfig, error) {
 	oc := &OutputConfig{
 		Name: name,
 	}
-	// if node, ok := tbl.Fields["metric_batch_size"]; ok {
-	// 	if kv, ok := node.(*ast.KeyValue); ok {
-	// 		if str, ok := kv.Value.(*ast.Integer); ok {
-	// 			i, err := str.Int()
-	// 			if err != nil {
-	// 				return nil, err
-	// 			}
-	// 			log.Println("here1111", i)
-	// 			oc.Metrics = NewBuffer(int(i))
-	// 		}
-	// 	}
-	// } else {
-	oc.Metrics = NewBuffer(Conf.Agent.MetricBatchSize)
-	// }
+	if node, ok := tbl.Fields["metric_batch_size"]; ok {
+		if kv, ok := node.(*ast.KeyValue); ok {
+			if str, ok := kv.Value.(*ast.Integer); ok {
+				i, err := str.Int()
+				if err != nil {
+					return nil, err
+				}
+				oc.Metrics = NewBuffer(int(i))
+			}
+		}
+	} else {
+		oc.Metrics = NewBuffer(Conf.Agent.MetricBatchSize)
+	}
+
+	delete(tbl.Fields, "metric_batch_size")
 
 	return oc, nil
 }

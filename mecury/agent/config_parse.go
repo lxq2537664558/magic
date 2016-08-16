@@ -16,7 +16,6 @@ func initConf() {
 		Agent: &AgentConfig{
 			Interval:        misc.Duration{10 * time.Second},
 			FlushInterval:   misc.Duration{10 * time.Second},
-			Precision:       misc.Duration{10 * time.Second},
 			MetricBatchSize: 1000,
 		},
 
