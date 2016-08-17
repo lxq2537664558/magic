@@ -12,7 +12,7 @@ This is a sample configuration for the plugin.
 ```toml
 [[inputs.udp_listener]]
   ## Address and port to host UDP listener on
-  service_address = ":8092"
+  service_address = ":18092"
 
   ## Number of UDP messages allowed to queue up. Once filled, the
   ## UDP listener will start dropping packets.
