@@ -9,30 +9,17 @@ import (
 
 // Config ...
 type Config struct {
-	Alarm struct {
-		Common struct {
-			Version  string
-			LogDebug bool `yaml:"debug"`
-			LogPath  string
-			LogLevel string
-		}
+	Common struct {
+		Version  string
+		LogDebug bool `yaml:"debug"`
+		LogPath  string
+		LogLevel string
 	}
-
+	Alarm struct {
+	}
 	Center struct {
-		Common struct {
-			Version  string
-			LogDebug bool `yaml:"debug"`
-			LogPath  string
-			LogLevel string
-		}
 	}
 	Stream struct {
-		Common struct {
-			Version  string
-			LogDebug bool `yaml:"debug"`
-			LogPath  string
-			LogLevel string
-		}
 		Discover struct {
 			Etcd struct {
 				Addrs []string
@@ -59,5 +46,4 @@ func init() {
 	if err != nil {
 		log.Fatal("yaml decode error :", err)
 	}
-	log.Println(Conf)
 }

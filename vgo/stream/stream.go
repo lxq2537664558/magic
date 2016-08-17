@@ -1,9 +1,10 @@
 package stream
 
 import (
-	"fmt"
-
 	"github.com/corego/vgo/vgo/config"
+
+	"github.com/corego/vgo/common/vlog"
+	"github.com/uber-go/zap"
 )
 
 // Logger logger
@@ -15,7 +16,7 @@ type Stream struct {
 
 // Start start stream server
 func (s *Stream) Start() {
-	fmt.Printf("conf msg is %v \n", config.Conf)
+	vlog.Logger.Info("stream", zap.String("name", "scc"))
 }
 
 // Close close stream server
@@ -25,6 +26,12 @@ func (s *Stream) Close() error {
 
 // New get new stream struct
 func New() *Stream {
+	initLogger()
 	stream := &Stream{}
 	return stream
+}
+
+// initLogger init vgo logger
+func initLogger() {
+	vlog.Init(config.Conf.Common.LogPath, config.Conf.Common.LogLevel, config.Conf.Common.LogDebug)
 }
