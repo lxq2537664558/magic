@@ -29,7 +29,7 @@ type Metric interface {
 	// PrecisionString returns a line-protocol string of the metric, at precision
 	PrecisionString(string) string
 
-	// Point returns a influxdb client.Point object
+	// Point returns a influxdb client.Point object1
 	Point() *client.Point
 }
 

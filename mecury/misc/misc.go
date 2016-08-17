@@ -1,6 +1,8 @@
 package misc
 
 import (
+	"log"
+	"runtime"
 	"strconv"
 	"time"
 )
@@ -33,4 +35,11 @@ func (d *Duration) UnmarshalTOML(b []byte) error {
 	}
 
 	return nil
+}
+
+func PrintStack(all bool) {
+	buf := make([]byte, 4096)
+	n := runtime.Stack(buf, all)
+
+	log.Println("[FATAL] catch a panic,stack is: ", string(buf[:n]))
 }

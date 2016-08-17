@@ -65,7 +65,15 @@ func LoadConfig() {
 	// parse outputs
 	parseOutputs(tbl)
 
-	vLogger.Info("config allready loaded!")
+	log.Println("All inputs ------------------------")
+	for _, in := range Conf.Inputs {
+		log.Println(in.Name)
+	}
+
+	log.Println("All outputs ------------------------")
+	for _, out := range Conf.Outputs {
+		log.Println(out.Name)
+	}
 }
 
 func Reload(r chan struct{}) {

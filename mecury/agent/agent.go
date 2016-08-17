@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/corego/vgo/mecury/misc"
-	"github.com/sunface/tools"
 	"github.com/uber-go/zap"
 )
 
@@ -75,7 +74,7 @@ func (a *Agent) flusher(wg *sync.WaitGroup, shutdown chan struct{}, metricC chan
 	defer func() {
 		wg.Done()
 		if err := recover(); err != nil {
-			tools.PrintStack(false)
+			misc.PrintStack(false)
 			vLogger.Fatal("flush fatal error ", zap.Error(err.(error)))
 		}
 	}()
@@ -100,7 +99,7 @@ func (a *Agent) gather(wg *sync.WaitGroup, down chan struct{}, input *InputConfi
 	defer func() {
 		wg.Done()
 		if err := recover(); err != nil {
-			tools.PrintStack(false)
+			misc.PrintStack(false)
 			log.Printf("[FATAL] input %v error: %v\n", input.Name, err)
 		}
 	}()
@@ -112,8 +111,10 @@ func (a *Agent) gather(wg *sync.WaitGroup, down chan struct{}, input *InputConfi
 		acc := NewAccumulate(input, metricC)
 		acc.SetPrecision(intvl)
 
-		input.Input.Gather(acc)
-
+		err := input.Input.Gather(acc)
+		if err != nil {
+			vLogger.Warn("input gather error", zap.String("name", input.Name), zap.Error(err))
+		}
 		select {
 		case <-down:
 			return
