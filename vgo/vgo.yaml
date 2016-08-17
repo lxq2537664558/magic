@@ -1,7 +1,7 @@
 #################################### common ####################################
 common:
   version: 0.0.1
-  logdebug: true
+  isdebug: true
   logpath: "./stream.log"
   loglevel: debug
 

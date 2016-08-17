@@ -1,14 +1,12 @@
 package stream
 
 import (
-	"github.com/corego/vgo/vgo/config"
-
 	"github.com/corego/vgo/common/vlog"
+	"github.com/corego/vgo/vgo/config"
 	"github.com/uber-go/zap"
 )
 
-// Logger logger
-// var Logger zap.Logger
+var vLogger zap.Logger
 
 // Stream struct
 type Stream struct {
@@ -31,7 +29,7 @@ func New() *Stream {
 	return stream
 }
 
-// initLogger init vgo logger
 func initLogger() {
-	vlog.Init(config.Conf.Common.LogPath, config.Conf.Common.LogLevel, config.Conf.Common.LogDebug)
+	config.InitConf()
+	vLogger = vlog.Logger
 }

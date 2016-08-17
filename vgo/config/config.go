@@ -4,6 +4,8 @@ import (
 	"io/ioutil"
 	"log"
 
+	"github.com/corego/vgo/common/vlog"
+
 	"gopkg.in/yaml.v1"
 )
 
@@ -11,7 +13,7 @@ import (
 type Config struct {
 	Common struct {
 		Version  string
-		LogDebug bool `yaml:"debug"`
+		IsDebug  bool `yaml:"debug"`
 		LogPath  string
 		LogLevel string
 	}
@@ -36,7 +38,7 @@ type Config struct {
 // Conf ...
 var Conf = &Config{}
 
-func init() {
+func InitConf() {
 	data, err := ioutil.ReadFile("vgo.yaml")
 	if err != nil {
 		log.Fatal("read config error :", err)
@@ -46,4 +48,11 @@ func init() {
 	if err != nil {
 		log.Fatal("yaml decode error :", err)
 	}
+
+	// init log logger
+	initLogger()
+}
+
+func initLogger() {
+	vlog.Init(Conf.Common.LogPath, Conf.Common.LogLevel, Conf.Common.IsDebug)
 }
