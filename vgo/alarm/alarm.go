@@ -1,10 +1,6 @@
 package alarm
 
-import (
-	"fmt"
-
-	"github.com/corego/vgo/vgo/config"
-)
+import "fmt"
 
 // Alarm struct
 type Alarm struct {
@@ -12,7 +8,7 @@ type Alarm struct {
 
 // Start start alarm server
 func (a *Alarm) Start() {
-	fmt.Printf("config msg is %v !\n", config.Conf)
+	fmt.Printf("Alarm !\n")
 }
 
 // Close close alarm server

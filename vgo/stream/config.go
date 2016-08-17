@@ -1,4 +1,4 @@
-package config
+package stream
 
 import (
 	"io/ioutil"
@@ -24,7 +24,9 @@ type Config struct {
 var Conf = &Config{}
 
 func LoadConfig() {
+	// init the new config params
 	initConf()
+
 	contents, err := ioutil.ReadFile("vgo.toml")
 	if err != nil {
 		log.Fatal("[FATAL] load vgo.toml: ", err)
@@ -33,13 +35,19 @@ func LoadConfig() {
 	if err != nil {
 		log.Fatal("[FATAL] parse vgo.toml: ", err)
 	}
+	// parse common config
 	parseCommon(tbl)
-	// init log logger
+	// init logger
 	initLogger()
+
+	// init Inputers
+	parseInputs(tbl)
 }
 
+// initLogger init logger
 func initLogger() {
 	vlog.Init(Conf.Common.LogPath, Conf.Common.LogLevel, Conf.Common.IsDebug)
+	vLogger = vlog.Logger
 }
 
 func initConf() {

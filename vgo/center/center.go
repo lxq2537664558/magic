@@ -1,10 +1,6 @@
 package center
 
-import (
-	"fmt"
-
-	"github.com/corego/vgo/vgo/config"
-)
+import "fmt"
 
 // Center struct
 type Center struct {
@@ -12,7 +8,7 @@ type Center struct {
 
 // Start start center server
 func (c *Center) Start() {
-	fmt.Printf("config msg is %v !\n", config.Conf)
+	fmt.Printf("Center !\n")
 
 }
 
