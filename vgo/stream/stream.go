@@ -25,11 +25,19 @@ func (s *Stream) Close() error {
 // New get new stream struct
 func New() *Stream {
 	initLogger()
+	initPlugin()
+
 	stream := &Stream{}
 	return stream
 }
 
+// initLogger init logger
 func initLogger() {
-	config.InitConf()
+	config.LoadConfig()
 	vLogger = vlog.Logger
+}
+
+// initPlugin loading plugin
+func initPlugin() {
+
 }

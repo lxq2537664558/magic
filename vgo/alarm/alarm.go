@@ -12,7 +12,7 @@ type Alarm struct {
 
 // Start start alarm server
 func (a *Alarm) Start() {
-	fmt.Printf("config msg is %v !\n", config.Conf.Alarm)
+	fmt.Printf("config msg is %v !\n", config.Conf)
 }
 
 // Close close alarm server

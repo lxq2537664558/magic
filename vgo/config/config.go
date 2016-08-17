@@ -5,54 +5,45 @@ import (
 	"log"
 
 	"github.com/corego/vgo/common/vlog"
-
-	"gopkg.in/yaml.v1"
+	"github.com/naoina/toml"
 )
+
+type CommonConfig struct {
+	Version  string
+	IsDebug  bool
+	LogLevel string
+	LogPath  string
+}
 
 // Config ...
 type Config struct {
-	Common struct {
-		Version  string
-		IsDebug  bool `yaml:"debug"`
-		LogPath  string
-		LogLevel string
-	}
-	Alarm struct {
-	}
-	Center struct {
-	}
-	Stream struct {
-		Discover struct {
-			Etcd struct {
-				Addrs []string
-			}
-		}
-		Inputer struct {
-			Nats struct {
-				Addrs []string
-			}
-		}
-	}
+	Common *CommonConfig
 }
 
 // Conf ...
 var Conf = &Config{}
 
-func InitConf() {
-	data, err := ioutil.ReadFile("vgo.yaml")
+func LoadConfig() {
+	initConf()
+	contents, err := ioutil.ReadFile("vgo.toml")
 	if err != nil {
-		log.Fatal("read config error :", err)
+		log.Fatal("[FATAL] load vgo.toml: ", err)
 	}
-
-	err = yaml.Unmarshal(data, &Conf)
+	tbl, err := toml.Parse(contents)
 	if err != nil {
-		log.Fatal("yaml decode error :", err)
+		log.Fatal("[FATAL] parse vgo.toml: ", err)
 	}
-
+	parseCommon(tbl)
 	// init log logger
 	initLogger()
 }
 
 func initLogger() {
 	vlog.Init(Conf.Common.LogPath, Conf.Common.LogLevel, Conf.Common.IsDebug)
+}
+
+func initConf() {
+	Conf = &Config{
+		Common: &CommonConfig{},
+	}
 }

@@ -12,7 +12,7 @@ type Center struct {
 
 // Start start center server
 func (c *Center) Start() {
-	fmt.Printf("config msg is %v !\n", config.Conf.Center)
+	fmt.Printf("config msg is %v !\n", config.Conf)
 
 }
 
