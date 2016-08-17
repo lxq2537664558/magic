@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// Duration just wraps time.Duration1
+// Duration just wraps time.Duration
 type Duration struct {
 	Duration time.Duration
 }
