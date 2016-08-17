@@ -53,7 +53,6 @@ func (a *Agent) Start(shutdown chan struct{}) {
 			// metrics.
 			acc.DisablePrecision()
 
-			p.Start(acc)
 			if err := p.Start(acc); err != nil {
 				log.Fatalf("Service for input %s failed to start, exiting\n%s\n",
 					input.Name, err.Error())
