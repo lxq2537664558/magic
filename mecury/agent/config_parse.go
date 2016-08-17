@@ -78,6 +78,32 @@ func parseAgent(tbl *ast.Table) {
 	}
 }
 
+func parseFilters(tbl *ast.Table) {
+	Conf.Filter = &GlobalFilter{}
+	if val, ok := tbl.Fields["global_filters"]; ok {
+		if subTbl, ok := val.(*ast.Table); ok {
+			if node, ok := subTbl.Fields["namedrop"]; ok {
+				if kv, ok := node.(*ast.KeyValue); ok {
+					if ary, ok := kv.Value.(*ast.Array); ok {
+						for _, elem := range ary.Value {
+							if str, ok := elem.(*ast.String); ok {
+								Conf.Filter.NameDrop = append(Conf.Filter.NameDrop, str.Value)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	nameDrop, err := CompileFilter(Conf.Filter.NameDrop)
+	if err != nil {
+		log.Fatalf("Error compiling 'namedrop', %s\n", err)
+	}
+
+	Conf.Filter.nameDrop = nameDrop
+}
+
 func parseInputs(tbl *ast.Table) {
 	if val, ok := tbl.Fields["inputs"]; ok {
 		subTbl, _ := val.(*ast.Table)

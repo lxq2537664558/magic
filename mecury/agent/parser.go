@@ -13,6 +13,29 @@ import (
 	"github.com/influxdata/toml/ast"
 )
 
+// ParseConfig is a struct that covers the data types needed for all parser types,
+// and can be used to instantiate _any_ of the parsers.
+type ParseConfig struct {
+	// Dataformat can be one of: json, influx, graphite, value, nagios
+	DataFormat string
+
+	// Separator only applied to Graphite data.
+	Separator string
+	// Templates only apply to Graphite data.
+	Templates []string
+
+	// TagKeys only apply to JSON data
+	TagKeys []string
+	// MetricName applies to JSON & value. This will be the name of the measurement.
+	MetricName string
+
+	// DataType only applies to value, this will be the type to parse value to
+	DataType string
+
+	// DefaultTags are the default tags that will be added to all parsed metrics.
+	DefaultTags map[string]string
+}
+
 // ParserInput is an interface for input plugins that are able to parse
 // arbitrary data formats.
 type ParserInput interface {

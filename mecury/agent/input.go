@@ -9,6 +9,18 @@ import (
 	"github.com/influxdata/toml/ast"
 )
 
+type InputConfig struct {
+	Name   string
+	Prefix string
+	Suffix string
+
+	Input Inputer
+
+	Tags     map[string]string
+	Filter   InputFilter
+	Interval time.Duration
+}
+
 type Inputer interface {
 	// SampleConfig returns the default configuration of the Input
 	SampleConfig() string
@@ -28,9 +40,6 @@ func AddInput(name string, input Inputer) {
 
 // InputFilter containing drop/pass and tagdrop/tagpass rules
 type InputFilter struct {
-	NameDrop []string
-	nameDrop Filter
-
 	FieldDrop []string
 	fieldDrop Filter
 
@@ -49,10 +58,6 @@ type TagFilter struct {
 // Compile all Filter lists into filter.Filter objects.
 func (f *InputFilter) CompileFilter() error {
 	var err error
-	f.nameDrop, err = CompileFilter(f.NameDrop)
-	if err != nil {
-		return fmt.Errorf("Error compiling 'namedrop', %s", err)
-	}
 
 	f.fieldDrop, err = CompileFilter(f.FieldDrop)
 	if err != nil {
@@ -67,24 +72,6 @@ func (f *InputFilter) CompileFilter() error {
 	}
 
 	return nil
-}
-
-func (f *InputFilter) ShouldMetricPass(metric Metric) bool {
-	if f.ShouldNamePass(metric.Name()) && f.ShouldTagsPass(metric.Tags()) {
-		return true
-	}
-	return false
-}
-
-// ShouldFieldsPass returns true if the metric should pass, false if should drop
-// based on the drop/pass filter parameters
-func (f *InputFilter) ShouldNamePass(key string) bool {
-	if f.nameDrop != nil {
-		if f.nameDrop.Match(key) {
-			return false
-		}
-	}
-	return true
 }
 
 // ShouldTagsPass returns true if the metric should pass, false if should drop

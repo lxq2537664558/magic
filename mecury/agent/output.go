@@ -17,6 +17,14 @@ type Outputer interface {
 	SampleConfig() string
 }
 
+type OutputConfig struct {
+	Name string
+
+	Output Outputer
+
+	Metrics *Buffer
+}
+
 var Outputs = map[string]Outputer{}
 
 func AddOutput(n string, op Outputer) {

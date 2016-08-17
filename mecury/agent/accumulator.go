@@ -63,12 +63,12 @@ func (ac *Accumulate) Add(
 	tags map[string]string,
 	t ...time.Time,
 ) {
-	fields := make(map[string]interface{})
-	fields["value"] = value
-
-	if !ac.inputConfig.Filter.ShouldNamePass(measurement) {
+	if !Conf.Filter.ShouldNamePass(measurement) {
 		return
 	}
+
+	fields := make(map[string]interface{})
+	fields["value"] = value
 
 	ac.AddFields(measurement, fields, tags, t...)
 }
@@ -83,7 +83,7 @@ func (ac *Accumulate) AddFields(
 		return
 	}
 
-	if !ac.inputConfig.Filter.ShouldNamePass(measurement) {
+	if !Conf.Filter.ShouldNamePass(measurement) {
 		return
 	}
 

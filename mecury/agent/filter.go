@@ -11,6 +11,22 @@ type Filter interface {
 	Match(string) bool
 }
 
+type GlobalFilter struct {
+	NameDrop []string
+	nameDrop Filter
+}
+
+// ShouldFieldsPass returns true if the metric should pass, false if should drop
+// based on the drop/pass filter parameters
+func (f *GlobalFilter) ShouldNamePass(key string) bool {
+	if f.nameDrop != nil {
+		if f.nameDrop.Match(key) {
+			return false
+		}
+	}
+	return true
+}
+
 // CompileFilter takes a list of string filters and returns a Filter interface
 // for matching a given string against the filter list. The filter list
 // supports glob matching too, ie:
@@ -85,19 +101,6 @@ func compileFilterNoGlob(filters []string) Filter {
 // to be used for glob filtering on tags and measurements
 func buildFilter(tbl *ast.Table) (InputFilter, error) {
 	f := InputFilter{}
-
-	if node, ok := tbl.Fields["namedrop"]; ok {
-		if kv, ok := node.(*ast.KeyValue); ok {
-			if ary, ok := kv.Value.(*ast.Array); ok {
-				for _, elem := range ary.Value {
-					if str, ok := elem.(*ast.String); ok {
-						f.NameDrop = append(f.NameDrop, str.Value)
-						f.IsActive = true
-					}
-				}
-			}
-		}
-	}
 
 	if node, ok := tbl.Fields["tagdrop"]; ok {
 		if subtbl, ok := node.(*ast.Table); ok {

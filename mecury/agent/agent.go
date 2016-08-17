@@ -5,10 +5,23 @@ import (
 	"sync"
 	"time"
 
+	"github.com/corego/vgo/mecury/misc"
 	"github.com/sunface/tools"
 )
 
 type Agent struct {
+}
+
+type AgentConfig struct {
+	// Interval at which to gather information
+	Interval misc.Duration
+
+	// FlushInterval is the Interval at which to flush data
+	FlushInterval misc.Duration
+
+	// MetricBatchSize is the maximum number of metrics that is wrote to an
+	// output plugin in one call.
+	MetricBatchSize int
 }
 
 func New() *Agent {
