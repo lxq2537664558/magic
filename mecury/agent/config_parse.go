@@ -8,6 +8,7 @@ import (
 	"github.com/corego/vgo/mecury/misc"
 	"github.com/influxdata/toml"
 	"github.com/influxdata/toml/ast"
+	"github.com/uber-go/zap"
 )
 
 func initConf() {
@@ -42,11 +43,11 @@ func parseTags(tbl *ast.Table) {
 	if val, ok := tbl.Fields["global_tags"]; ok {
 		subTbl, ok := val.(*ast.Table)
 		if !ok {
-			log.Fatalln("[FATAL] : ", subTbl)
+			vLogger.Fatal("global_tags to table error")
 		}
 		err := toml.UnmarshalTable(subTbl, Conf.Tags)
 		if err != nil {
-			log.Fatalln("[FATAL] parseTags: ", err)
+			vLogger.Fatal("parse global_tags error", zap.Error(err))
 		}
 	}
 

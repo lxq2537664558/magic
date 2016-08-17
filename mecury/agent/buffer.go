@@ -7,6 +7,8 @@ type Buffer struct {
 	drops int
 	// total metrics added
 	total int
+
+	metricBatchSize int
 }
 
 // NewBuffer returns a Buffer
@@ -14,7 +16,8 @@ type Buffer struct {
 //   called when the buffer is full, then the oldest metric(s) will be dropped.
 func NewBuffer(size int) *Buffer {
 	return &Buffer{
-		buf: make(chan Metric, size),
+		buf:             make(chan Metric, size),
+		metricBatchSize: size,
 	}
 }
 
@@ -26,6 +29,10 @@ func (b *Buffer) IsEmpty() bool {
 // Len returns the current length of the buffer.
 func (b *Buffer) Len() int {
 	return len(b.buf)
+}
+
+func (b *Buffer) Cap() int {
+	return b.metricBatchSize
 }
 
 // Drops returns the total number of dropped metrics that have occured in this

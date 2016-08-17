@@ -46,14 +46,27 @@ func NewOutput(name string, output Outputer) *Output {
 	}
 }
 
-func (o *Output) AddMetric(metric Metric) {
-
+func (o *OutputConfig) AddMetric(metric Metric) {
+	o.Metrics.Add(metric)
+	if o.Metrics.Len() >= o.Metrics.Cap() {
+		batch := o.Metrics.Batch(o.Metrics.Len())
+		o.write(batch)
+	}
 }
 
-func (o *Output) Write() error {
-	return nil
+func (o *OutputConfig) write(metrics []Metric) error {
+	if metrics == nil || len(metrics) == 0 {
+		return nil
+	}
+
+	err := o.Output.Write(metrics)
+	return err
 }
 
+func (o *OutputConfig) Write() {
+	batch := o.Metrics.Batch(o.Metrics.Len())
+	o.write(batch)
+}
 func buildOutput(name string, tbl *ast.Table) (*OutputConfig, error) {
 	oc := &OutputConfig{
 		Name: name,

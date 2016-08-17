@@ -7,6 +7,7 @@ import (
 
 	"github.com/corego/vgo/mecury/misc"
 	"github.com/sunface/tools"
+	"github.com/uber-go/zap"
 )
 
 type Agent struct {
@@ -49,15 +50,7 @@ func (a *Agent) Start(shutdown chan struct{}) {
 	// start flusher
 	wg.Add(1)
 	go func() {
-		defer func() {
-			wg.Done()
-			if err := recover(); err != nil {
-				tools.PrintStack(false)
-				log.Println("[FATAL] flusher error: ", err)
-			}
-		}()
-
-		a.flush(shutdown, metricC)
+		a.flusher(&wg, shutdown, metricC)
 	}()
 
 	wg.Add(len(Conf.Inputs))
@@ -69,15 +62,7 @@ func (a *Agent) Start(shutdown chan struct{}) {
 		}
 
 		go func(in *InputConfig, intvl time.Duration) {
-			defer func() {
-				wg.Done()
-				if err := recover(); err != nil {
-					tools.PrintStack(false)
-					log.Printf("[FATAL] input %v error: %v\n", input.Name, err)
-				}
-			}()
-
-			a.gather(shutdown, in, intvl, metricC)
+			a.gather(&wg, shutdown, in, intvl, metricC)
 
 		}(input, interval)
 	}
@@ -86,11 +71,40 @@ func (a *Agent) Start(shutdown chan struct{}) {
 }
 
 // flusher monitors the metrics input channel and flushes on the minimum interval
-func (a *Agent) flush(shutdown chan struct{}, metricC chan Metric) {
+func (a *Agent) flusher(wg *sync.WaitGroup, shutdown chan struct{}, metricC chan Metric) {
+	defer func() {
+		wg.Done()
+		if err := recover(); err != nil {
+			tools.PrintStack(false)
+			vLogger.Fatal("flush fatal error ", zap.Error(err.(error)))
+		}
+	}()
 
+	ticker := time.NewTicker(Conf.Agent.FlushInterval.Duration)
+	for {
+		select {
+		case <-shutdown:
+			a.flush()
+			return
+		case <-ticker.C:
+			a.flush()
+		case m := <-metricC:
+			for _, o := range Conf.Outputs {
+				o.AddMetric(m)
+			}
+		}
+	}
 }
 
-func (a *Agent) gather(down chan struct{}, input *InputConfig, intvl time.Duration, metricC chan Metric) {
+func (a *Agent) gather(wg *sync.WaitGroup, down chan struct{}, input *InputConfig, intvl time.Duration, metricC chan Metric) {
+	defer func() {
+		wg.Done()
+		if err := recover(); err != nil {
+			tools.PrintStack(false)
+			log.Printf("[FATAL] input %v error: %v\n", input.Name, err)
+		}
+	}()
+
 	ticker := time.NewTicker(intvl)
 	defer ticker.Stop()
 
@@ -106,5 +120,11 @@ func (a *Agent) gather(down chan struct{}, input *InputConfig, intvl time.Durati
 		case <-ticker.C:
 			continue
 		}
+	}
+}
+
+func (a *Agent) flush() {
+	for _, o := range Conf.Outputs {
+		o.Write()
 	}
 }

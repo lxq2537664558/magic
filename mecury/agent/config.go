@@ -5,9 +5,10 @@ import (
 	"log"
 	"time"
 
-	_ "github.com/corego/vgo/common/vlog"
+	"github.com/corego/vgo/common/vlog"
 	"github.com/influxdata/toml"
 	"github.com/influxdata/toml/ast"
+	"github.com/uber-go/zap"
 )
 
 type Config struct {
@@ -26,6 +27,7 @@ type Config struct {
 }
 
 var Conf *Config
+var vLogger zap.Logger
 
 func LoadConfig() {
 	// init the new  config params
@@ -44,6 +46,10 @@ func LoadConfig() {
 	// parse common config
 	parseCommon(tbl)
 
+	// init log logger
+	vlog.Init(Conf.Common.LogPath, Conf.Common.LogLevel, Conf.Common.IsDebug)
+	vLogger = vlog.Logger
+
 	// parse the global tags
 	parseTags(tbl)
 
@@ -59,16 +65,7 @@ func LoadConfig() {
 	// parse outputs
 	parseOutputs(tbl)
 
-	log.Printf("%#v\n", *Conf.Common)
-	log.Printf("%#v\n", *Conf.Agent)
-	log.Printf("%#v\n", Conf.Tags)
-	for _, input := range Conf.Inputs {
-		log.Printf("input %v : %#v", input.Name, input.Input)
-	}
-
-	for _, output := range Conf.Outputs {
-		log.Printf("output %v : %#v", output.Name, output.Output)
-	}
+	vLogger.Info("config allready loaded!")
 }
 
 func Reload(r chan struct{}) {
