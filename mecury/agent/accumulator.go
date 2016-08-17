@@ -156,3 +156,7 @@ func (ac *Accumulate) AddFields(
 
 	ac.metricC <- m
 }
+
+func (ac *Accumulate) DisablePrecision() {
+	ac.precision = time.Nanosecond
+}

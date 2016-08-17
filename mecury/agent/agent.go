@@ -42,6 +42,26 @@ func (a *Agent) Start(shutdown chan struct{}) {
 
 	metricC := make(chan Metric, 10000)
 
+	// start the listener-typed inputs
+	for _, input := range Conf.Inputs {
+		// Start service of any ServicePlugins
+		switch p := input.Input.(type) {
+		case ServiceInputer:
+			acc := NewAccumulate(input, metricC)
+
+			// Service input plugins should set their own precision of their
+			// metrics.
+			acc.DisablePrecision()
+
+			p.Start(acc)
+			if err := p.Start(acc); err != nil {
+				log.Fatalf("Service for input %s failed to start, exiting\n%s\n",
+					input.Name, err.Error())
+			}
+			defer p.Stop()
+		}
+	}
+
 	// round collection start time to the collection interval
 	i := int64(Conf.Agent.Interval.Duration)
 	time.Sleep(time.Duration(i - (time.Now().UnixNano() % i)))

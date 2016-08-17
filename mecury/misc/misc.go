@@ -1,11 +1,14 @@
 package misc
 
 import (
+	"crypto/rand"
 	"log"
 	"runtime"
 	"strconv"
 	"time"
 )
+
+const alphanum string = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
 // Duration just wraps time.Duration1
 type Duration struct {
@@ -42,4 +45,14 @@ func PrintStack(all bool) {
 	n := runtime.Stack(buf, all)
 
 	log.Println("[FATAL] catch a panic,stack is: ", string(buf[:n]))
+}
+
+// RandomString returns a random string of alpha-numeric characters
+func RandomString(n int) string {
+	var bytes = make([]byte, n)
+	rand.Read(bytes)
+	for i, b := range bytes {
+		bytes[i] = alphanum[b%byte(len(alphanum))]
+	}
+	return string(bytes)
 }
