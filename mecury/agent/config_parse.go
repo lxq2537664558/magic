@@ -80,15 +80,16 @@ func parseAgent(tbl *ast.Table) {
 }
 
 func parseFilters(tbl *ast.Table) {
+	// parse input plugin drop
 	Conf.Filter = &GlobalFilter{}
 	if val, ok := tbl.Fields["global_filters"]; ok {
 		if subTbl, ok := val.(*ast.Table); ok {
-			if node, ok := subTbl.Fields["namedrop"]; ok {
+			if node, ok := subTbl.Fields["inputdrop"]; ok {
 				if kv, ok := node.(*ast.KeyValue); ok {
 					if ary, ok := kv.Value.(*ast.Array); ok {
 						for _, elem := range ary.Value {
 							if str, ok := elem.(*ast.String); ok {
-								Conf.Filter.NameDrop = append(Conf.Filter.NameDrop, str.Value)
+								Conf.Filter.InputDrop = append(Conf.Filter.InputDrop, str.Value)
 							}
 						}
 					}
@@ -97,18 +98,47 @@ func parseFilters(tbl *ast.Table) {
 		}
 	}
 
-	nameDrop, err := CompileFilter(Conf.Filter.NameDrop)
+	inputDrop, err := CompileFilter(Conf.Filter.InputDrop)
 	if err != nil {
-		log.Fatalf("Error compiling 'namedrop', %s\n", err)
+		log.Fatalf("Error compiling 'inputdrop', %s\n", err)
 	}
 
-	Conf.Filter.nameDrop = nameDrop
+	Conf.Filter.inputDrop = inputDrop
+
+	// parse output plugin drop
+	if val, ok := tbl.Fields["global_filters"]; ok {
+		if subTbl, ok := val.(*ast.Table); ok {
+			if node, ok := subTbl.Fields["outputdrop"]; ok {
+				if kv, ok := node.(*ast.KeyValue); ok {
+					if ary, ok := kv.Value.(*ast.Array); ok {
+						for _, elem := range ary.Value {
+							if str, ok := elem.(*ast.String); ok {
+								Conf.Filter.OutputDrop = append(Conf.Filter.OutputDrop, str.Value)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	outputDrop, err := CompileFilter(Conf.Filter.OutputDrop)
+	if err != nil {
+		log.Fatalf("Error compiling 'outputdrop', %s\n", err)
+	}
+
+	Conf.Filter.outputDrop = outputDrop
 }
 
 func parseInputs(tbl *ast.Table) {
 	if val, ok := tbl.Fields["inputs"]; ok {
 		subTbl, _ := val.(*ast.Table)
 		for pn, pt := range subTbl.Fields {
+			// filter the inputs,drop the ones in global_filters
+			if !Conf.Filter.ShouldInputPass(pn) {
+				continue
+			}
+
 			switch iTbl := pt.(type) {
 			case *ast.Table:
 				Conf.AddInput(pn, iTbl)
@@ -127,6 +157,11 @@ func parseOutputs(tbl *ast.Table) {
 	if val, ok := tbl.Fields["outputs"]; ok {
 		subTbl, _ := val.(*ast.Table)
 		for pn, pt := range subTbl.Fields {
+			// filter the output drop the ones in global_filters
+			if !Conf.Filter.ShouldOutputPass(pn) {
+				continue
+			}
+
 			switch iTbl := pt.(type) {
 			case *ast.Table:
 				Conf.AddOutput(pn, iTbl)

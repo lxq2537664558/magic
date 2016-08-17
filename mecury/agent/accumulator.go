@@ -63,9 +63,6 @@ func (ac *Accumulate) Add(
 	tags map[string]string,
 	t ...time.Time,
 ) {
-	if !Conf.Filter.ShouldNamePass(measurement) {
-		return
-	}
 
 	fields := make(map[string]interface{})
 	fields["value"] = value
@@ -80,10 +77,6 @@ func (ac *Accumulate) AddFields(
 	t ...time.Time,
 ) {
 	if len(fields) == 0 || len(measurement) == 0 {
-		return
-	}
-
-	if !Conf.Filter.ShouldNamePass(measurement) {
 		return
 	}
 

@@ -12,15 +12,27 @@ type Filter interface {
 }
 
 type GlobalFilter struct {
-	NameDrop []string
-	nameDrop Filter
+	InputDrop []string
+	inputDrop Filter
+
+	OutputDrop []string
+	outputDrop Filter
 }
 
 // ShouldFieldsPass returns true if the metric should pass, false if should drop
 // based on the drop/pass filter parameters
-func (f *GlobalFilter) ShouldNamePass(key string) bool {
-	if f.nameDrop != nil {
-		if f.nameDrop.Match(key) {
+func (f *GlobalFilter) ShouldInputPass(key string) bool {
+	if f.inputDrop != nil {
+		if f.inputDrop.Match(key) {
+			return false
+		}
+	}
+	return true
+}
+
+func (f *GlobalFilter) ShouldOutputPass(key string) bool {
+	if f.outputDrop != nil {
+		if f.outputDrop.Match(key) {
 			return false
 		}
 	}
