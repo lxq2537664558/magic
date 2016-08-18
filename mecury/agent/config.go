@@ -33,7 +33,7 @@ func LoadConfig() {
 	// init the new  config params
 	initConf()
 
-	contents, err := ioutil.ReadFile("mecury.conf")
+	contents, err := ioutil.ReadFile("mecury.toml")
 	if err != nil {
 		log.Fatal("[FATAL] load config: ", err)
 	}

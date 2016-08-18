@@ -1,0 +1,263 @@
+###############################################################################
+#                           Common                              #
+###############################################################################
+[common]
+   version = "0.0.1" 
+   is_debug = true
+   log_level = "debug"
+   log_path = "./out.log"
+
+
+
+###############################################################################
+#                            Agent                                  #
+###############################################################################
+[agent]
+    interval = "10s"
+    flush_interval = "10s"
+    metric_batch_size = 10000
+
+
+
+###############################################################################
+#                           Global Tags                                 #
+###############################################################################
+[global_tags]
+    #dc = "test-1"
+
+
+
+
+
+###############################################################################
+#                           Global Filters                               #
+###############################################################################
+[global_filters]
+    inputdrop = ["disk", "diskio" ,"kernel" ,"kernel_vmstat","swap","net" ,
+     "netstat", "processes", "system","udp_listener",
+     "haproxy", "http_response",
+
+     "log_collect","mongodb","mysql",
+     "net_response","nginx","ping","postgresql","redis","apache", "dns_query","docker",
+     "elasticsearch","memcached","zookeeper","mem","cpu"]
+
+    outputdrop = [ ]
+
+
+
+###############################################################################
+#                            INPUT PLUGINS                                   #
+###############################################################################
+# Read metrics about cpu usage
+[[inputs.cpu]]
+    ## Whether to report per-cpu stats or not
+    percpu = true
+    ## Whether to report total system cpu stats or not
+    totalcpu = true
+    ## Comment this line if you want the raw CPU time metrics
+    fielddrop = ["time_*"]
+    #[inputs.cpu.tagdrop]
+    #    cpu = [ "cpu*" ]
+    interval = "10s"
+[[inputs.disk]]
+
+[[inputs.diskio]]
+
+
+[[inputs.mem]]
+
+[[inputs.swap]]
+
+[[inputs.net]]
+
+[[inputs.netstat]]
+
+[[inputs.processes]]
+
+[[inputs.system]]
+
+[[inputs.udp_listener]]
+  ## Address and port to host UDP listener on
+  service_address = ":8092"
+
+  ## Number of UDP messages allowed to queue up. Once filled, the
+  ## UDP listener will start dropping packets.
+  allowed_pending_messages = 10000
+
+  ## Data format to consume.
+  ## Each data format has it's own unique set of configuration options, read
+  ## more about them here:
+  data_format = "influx"
+
+[[inputs.java_metrics_http]]
+  service_address = ":8093"
+
+[[inputs.haproxy]]
+    
+[[inputs.http_response]]
+  address = "http://github.com"
+  response_timeout = "5s"
+   method = "GET"
+    ## Whether to follow redirects from the server (defaults to false)
+  follow_redirects = true
+
+[[inputs.log_collect]]
+    files = ["/var/log/test.log"]
+    from_beginning = true
+
+    [inputs.log_collect.raw]
+         name = "test"
+         field_name = "log"
+
+[[inputs.mongodb]]
+    servers = ["127.0.0.1:27017"]
+    gather_perdb_stats = false
+
+# Read metrics from one or many mysql servers
+[[inputs.mysql]]
+  ## specify servers via a url matching:
+  ##  [username[:password]@][protocol[(address)]]/[?tls=[true|false|skip-verify]]
+  ##  see https://github.com/go-sql-driver/mysql#dsn-data-source-name
+  ##  e.g.
+  ##    db_user:passwd@tcp(127.0.0.1:3306)/?tls=false
+  ##    db_user@tcp(127.0.0.1:3306)/?tls=false
+  #
+  ## If no servers are specified, then localhost is used as the host.
+  servers = ["root@tcp(127.0.0.1:3306)/"]
+  ## the limits for metrics form perf_events_statements
+  perf_events_statements_digest_text_limit  = 120
+  perf_events_statements_limit              = 250
+  perf_events_statements_time_limit         = 86400
+  #
+  ## if the list is empty, then metrics are gathered from all database tables
+  table_schema_databases                    = []
+  #
+  ## gather metrics from INFORMATION_SCHEMA.TABLES for databases provided above list
+  gather_table_schema                       = false
+  #
+  ## gather thread state counts from INFORMATION_SCHEMA.PROCESSLIST
+  gather_process_list                       = true
+  #
+  ## gather auto_increment columns and max values from information schema
+  gather_info_schema_auto_inc               = true
+  #
+  ## gather metrics from SHOW SLAVE STATUS command output
+  gather_slave_status                       = true
+  #
+  ## gather metrics from SHOW BINARY LOGS command output
+  gather_binary_logs                        = false
+  #
+  ## gather metrics from PERFORMANCE_SCHEMA.TABLE_IO_WAITS_SUMMARY_BY_TABLE
+  gather_table_io_waits                     = false
+  #
+  ## gather metrics from PERFORMANCE_SCHEMA.TABLE_LOCK_WAITS
+  gather_table_lock_waits                   = false
+  #
+  ## gather metrics from PERFORMANCE_SCHEMA.TABLE_IO_WAITS_SUMMARY_BY_INDEX_USAGE
+  gather_index_io_waits                     = false
+  #
+  ## gather metrics from PERFORMANCE_SCHEMA.EVENT_WAITS
+  gather_event_waits                        = false
+  #
+  ## gather metrics from PERFORMANCE_SCHEMA.FILE_SUMMARY_BY_EVENT_NAME
+  gather_file_events_stats                  = false
+  #
+  ## gather metrics from PERFORMANCE_SCHEMA.EVENTS_STATEMENTS_SUMMARY_BY_DIGEST
+  gather_perf_events_statements             = false
+  #
+  ## Some queries we may want to run less often (such as SHOW GLOBAL VARIABLES)
+  interval_slow                             = "30m"
+
+
+
+[[inputs.net_response]]
+  ## Protocol, must be "tcp" or "udp"
+  protocol = "tcp"
+  ## Server address (default localhost)
+  address = "qq.com:80"
+  ## Set timeout
+  timeout = "1s"
+
+  ## Optional string sent to the server
+  send = "ssh"
+  ## Optional expected string in answer
+  expect = "ssh"
+  ## Set read timeout (only used if expecting a response)
+  read_timeout = "5s"
+
+[[inputs.nginx]]
+  ## An array of Nginx stub_status URI to gather stats.
+  urls = ["http://localhost/status"]
+
+[[inputs.ping]]
+    urls = ["www.baidu.com"] # required
+    ## number of pings to send per collection (ping -c <COUNT>)
+    count = 1 # required
+    ## interval, in s, at which to ping. 0 == default (ping -i <PING_INTERVAL>)
+    ping_interval = 0.0
+     ## per-ping timeout, in s. 0 == no timeout (ping -W <TIMEOUT>)
+    timeout = 1.0
+    ## interface to send ping from (ping -I <INTERFACE>)
+    interface = ""
+
+[[inputs.postgresql]]
+    address = "host=localhost user=postgres sslmode=disable"
+
+[[inputs.redis]]
+  ## specify servers via a url matching:
+  ##  [protocol://][:password]@address[:port]
+  ##  e.g.
+  ##    tcp://localhost:6379
+  ##    tcp://:password@192.168.99.100
+  ##
+  ## If no servers are specified, then localhost is used as the host.
+  ## If no port is specified, 6379 is used
+  servers = ["tcp://localhost:6379"]
+
+[[inputs.apache]]
+  urls = ["http://localhost/server-status?auto"]
+
+[[inputs.dns_query]]
+  domains = ["mjasion.pl"]
+  servers = ["8.8.8.8", "8.8.4.4"]
+  record_type = "A"
+
+[[inputs.docker]]
+  # Docker Endpoint
+  #   To use TCP, set endpoint = "tcp://[ip]:[port]"
+  #   To use environment variables (ie, docker-machine), set endpoint = "ENV"
+  endpoint = "unix:///var/run/docker.sock"
+  # Only collect metrics for these containers, collect all if empty
+  container_names = []
+
+[[inputs.elasticsearch]]
+  servers = ["http://10.7.15.37:9200"]
+  local = false
+  cluster_health = true
+
+  ## Optional SSL Config
+  # ssl_ca = "/etc/telegraf/ca.pem"
+  # ssl_cert = "/etc/telegraf/cert.pem"
+  # ssl_key = "/etc/telegraf/key.pem"
+  ## Use SSL but skip chain & host verification
+  # insecure_skip_verify = false
+
+[[inputs.memcached]]
+    servers = ["localhost:11211"]
+
+[[inputs.zookeeper]]
+    servers = ["10.33.32.172:2181"]
+
+
+###############################################################################
+#                            OUTPUT PLUGINS                                   #
+###############################################################################
+[[outputs.influxdb]]
+    urls = ["http://localhost:8086"]
+    database = "test"
+    write_consistency = "any"
+    timeout = "5s"
+    metric_batch_size = 100
+
+[[outputs.console]]
+

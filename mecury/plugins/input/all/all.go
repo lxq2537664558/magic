@@ -8,7 +8,6 @@ import (
 	_ "github.com/corego/vgo/mecury/plugins/input/haproxy"
 	_ "github.com/corego/vgo/mecury/plugins/input/http_response"
 	_ "github.com/corego/vgo/mecury/plugins/input/java_metrics_http"
-	_ "github.com/corego/vgo/mecury/plugins/input/jmx"
 	_ "github.com/corego/vgo/mecury/plugins/input/log_collect"
 	_ "github.com/corego/vgo/mecury/plugins/input/memcached"
 	_ "github.com/corego/vgo/mecury/plugins/input/mongodb"
