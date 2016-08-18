@@ -25,4 +25,5 @@ type Inputer interface {
 	Init()
 	Start()
 	Close() error
+	Recv() (*Metric, error)
 }

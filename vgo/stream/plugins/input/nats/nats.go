@@ -1,10 +1,6 @@
 package input
 
-import (
-	"fmt"
-
-	"github.com/corego/vgo/vgo/stream"
-)
+import "github.com/corego/vgo/vgo/stream"
 
 // Nats nats
 type Nats struct {
@@ -24,7 +20,14 @@ func (n *Nats) Init() {
 
 // Start start nats
 func (n *Nats) Start() {
+	// recv
+	// write
+}
 
+// Recv get data from serve
+func (n *Nats) Recv() (*stream.Metric, error) {
+	// recv
+	return nil, nil
 }
 
 // Close close nats
@@ -33,7 +36,6 @@ func (n *Nats) Close() error {
 }
 
 func init() {
-	fmt.Println("init nats")
 	stream.AddInput("nats",
 		&Nats{},
 	)
