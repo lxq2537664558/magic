@@ -1,6 +1,7 @@
 package misc
 
 import (
+	"bytes"
 	"crypto/rand"
 	"crypto/tls"
 	"crypto/x509"
@@ -8,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os/exec"
 	"runtime"
 	"strconv"
 	"time"
@@ -103,4 +105,40 @@ func GetTLSConfig(
 
 	// will be nil by default if nothing is provided
 	return t, nil
+}
+
+// CombinedOutputTimeout runs the given command with the given timeout and
+// returns the combined output of stdout and stderr.
+// If the command times out, it attempts to kill the process.
+func CombinedOutputTimeout(c *exec.Cmd, timeout time.Duration) ([]byte, error) {
+	var b bytes.Buffer
+	c.Stdout = &b
+	c.Stderr = &b
+	if err := c.Start(); err != nil {
+		return nil, err
+	}
+	err := WaitTimeout(c, timeout)
+	return b.Bytes(), err
+}
+
+// WaitTimeout waits for the given command to finish with a timeout.
+// It assumes the command has already been started.
+// If the command times out, it attempts to kill the process.
+func WaitTimeout(c *exec.Cmd, timeout time.Duration) error {
+	timer := time.NewTimer(timeout)
+	done := make(chan error)
+	go func() { done <- c.Wait() }()
+	select {
+	case err := <-done:
+		timer.Stop()
+		return err
+	case <-timer.C:
+		if err := c.Process.Kill(); err != nil {
+			log.Printf("FATAL error killing process: %s", err)
+			return err
+		}
+		// wait for the command to return after killing it
+		<-done
+		return TimeoutErr
+	}
 }

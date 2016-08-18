@@ -2,4 +2,7 @@ package misc
 
 import "errors"
 
-var NotImplementedError = errors.New("not implemented yet")
+var (
+	TimeoutErr          = errors.New("Command timed out.")
+	NotImplementedError = errors.New("not implemented yet")
+)
