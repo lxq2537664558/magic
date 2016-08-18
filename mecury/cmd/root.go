@@ -20,7 +20,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	_ "github.com/corego/vgo/common/vlog"
 	"github.com/corego/vgo/mecury/agent"
 	_ "github.com/corego/vgo/mecury/plugins/input/all"
 	_ "github.com/corego/vgo/mecury/plugins/output/all"
