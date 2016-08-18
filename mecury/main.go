@@ -1,3 +1,16 @@
+/***
+The code in this project source from https://github.com/influxdata/telegraf
+and contains modifications so that no other dependency from that project is needed. Other modifications included
+1.reconstructing the whole project structure
+2. removing uneccessary code and dependencies
+3. Many code and performance optimizing
+4. delete many useless inputs and outputs ,eg: java_metrics_http
+5. optimize some inputs,eg.: log_collect
+6. optimize configurations way, eg : removing many useless structures
+
+Itis licensed under Apache Version 2.0, http://www.apache.org/licenses/LICENSE-2.0.html
+***/
+
 // Copyright © 2016 NAME HERE <EMAIL ADDRESS>
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
