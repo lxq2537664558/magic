@@ -21,6 +21,10 @@ import (
 	"syscall"
 
 	"github.com/corego/vgo/vgo/stream"
+	_ "github.com/corego/vgo/vgo/stream/plugins/alarm/all"
+	_ "github.com/corego/vgo/vgo/stream/plugins/chain/all"
+	_ "github.com/corego/vgo/vgo/stream/plugins/input/all"
+	_ "github.com/corego/vgo/vgo/stream/plugins/metric_output/all"
 	"github.com/spf13/cobra"
 )
 
