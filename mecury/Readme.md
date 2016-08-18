@@ -43,9 +43,9 @@ See the [configuration guide](docs/Configuration.md)
 
 ## Supported Input Plugins
 
-See [input plugins](https://github.com/corego/vgo/mecury/plugins/input)
+See [input plugins](https://github.com/corego/vgo/tree/master/mecury/plugins/input)
 
 ## Supported Output Plugins
-
+See [output plugins](https://github.com/corego/vgo/tree/master/mecury/plugins/output)
 
 ## Contributing
