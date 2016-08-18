@@ -7,6 +7,17 @@
    log_level = "debug"
    log_path = "./out.log"
 
+
+###############################################################################
+#                           Global Filters                               #
+###############################################################################
+[global_filters]
+    inputdrop = ["otherMq"]
+    chaindrop = ["chaindrop","chaindrop2"]
+    alarmdrop = ["alarmdrop", "alarmdrop2"]
+    metric_outputdrop = ["metric_outputdrop", "metric_outputdrop2"]
+
+
 ###############################################################################
 #                            ALARM PLUGINS                                   #
 ###############################################################################
@@ -19,6 +30,8 @@
 # Read stream about input usage
 [[inputs.nats]]
     addrs = ["127.0.0.1:4245", "127.0.0.1:4246"]
+[[inputs.otherMq]]
+    addrs = ["127.0.0.1:1231", "127.0.0.1:2321"]
 
 ###############################################################################
 #                            OUTPUT PLUGINS                                   #

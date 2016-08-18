@@ -6,6 +6,7 @@ import (
 
 	"github.com/corego/vgo/common/vlog"
 	"github.com/naoina/toml"
+	"github.com/naoina/toml/ast"
 )
 
 type CommonConfig struct {
@@ -18,6 +19,9 @@ type CommonConfig struct {
 // Config ...
 type Config struct {
 	Common *CommonConfig
+
+	// global filter
+	Filter *GlobalFilter
 }
 
 // Conf ...
@@ -40,6 +44,11 @@ func LoadConfig() {
 	// init logger
 	initLogger()
 
+	// parse global filters
+	parseFilters(tbl)
+
+	log.Printf("------------------>>> %v\n", Conf.Filter)
+
 	// init Inputers
 	parseInputs(tbl)
 }
@@ -54,4 +63,26 @@ func initConf() {
 	Conf = &Config{
 		Common: &CommonConfig{},
 	}
+}
+
+func (c *Config) AddInput(name string, iTbl *ast.Table) {
+	input, ok := Inputs[name]
+	if !ok {
+		log.Fatalf("[FATAL] no plugin %v available\n", name)
+	}
+
+	// inC, err := buildInput(name, iTbl)
+	// if err != nil {
+	// 	log.Fatalln("[FATAL] build input : ", err)
+	// }
+
+	err := toml.UnmarshalTable(iTbl, input)
+	if err != nil {
+		log.Fatalln("[FATAL] unmarshal input: ", err)
+	}
+	// inC.Input = input
+
+	// c.Inputs = append(c.Inputs, inC)
+
+	log.Printf("AddInput %v \n", input)
 }
