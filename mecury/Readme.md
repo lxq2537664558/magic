@@ -2,8 +2,8 @@
 
 Mecury is written in pure Go, target is  collecting metrics from the system it's
 running on, or from other services, and writing them into InfluxDB、Nats or other
-[outputs](https://github.com/corego/vgo/mecury#supported-output-plugins).It is been 
-developed  based on Telegraf: https://github.com/influxdata/telegra ,but has changed
+[outputs](https://github.com/corego/vgo/tree/master/mecury#supported-output-plugins).It is been 
+developed  based on Telegraf: https://github.com/influxdata/telegraf ,but has changed
 a lot,for more changes details ,please ses the head of main.go.
 
 Features
