@@ -5,6 +5,7 @@ import (
 	_ "github.com/corego/vgo/mecury/plugins/input/http_response"
 	_ "github.com/corego/vgo/mecury/plugins/input/java_metrics_http"
 	_ "github.com/corego/vgo/mecury/plugins/input/log_collect"
+	_ "github.com/corego/vgo/mecury/plugins/input/mongodb"
 	_ "github.com/corego/vgo/mecury/plugins/input/system"
 	_ "github.com/corego/vgo/mecury/plugins/input/tcp_listener"
 	_ "github.com/corego/vgo/mecury/plugins/input/udp_listener"
