@@ -172,3 +172,29 @@ func parseAlarms(tbl *ast.Table) {
 		}
 	}
 }
+
+func parseChains(tbl *ast.Table) {
+	if val, ok := tbl.Fields["chains"]; ok {
+		subTbl, _ := val.(*ast.Table)
+		for pn, pt := range subTbl.Fields {
+			// filter the chains,drop the ones in global_filters
+			if !Conf.Filter.ShouldChainDropPass(pn) {
+				continue
+			}
+
+			switch iTbl := pt.(type) {
+			case *ast.Table:
+				Conf.AddChain(pn, iTbl)
+				vLogger.Info("config", zap.String("chainser", pn))
+			case []*ast.Table:
+				for _, t := range iTbl {
+					Conf.AddChain(pn, t)
+					vLogger.Info("config", zap.String("chainser", t.Name))
+				}
+
+			default:
+				log.Fatalln("[FATAL] chains parse error: ", iTbl)
+			}
+		}
+	}
+}

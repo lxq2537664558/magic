@@ -25,6 +25,7 @@ type Config struct {
 
 	Inputs []*InputConfig
 	Alarms []*AlarmConfig
+	Chains []*ChainConfig
 }
 
 // Conf ...
@@ -55,6 +56,9 @@ func LoadConfig() {
 
 	// init Alarms
 	parseAlarms(tbl)
+
+	// init Chains
+	parseChains(tbl)
 }
 
 // initLogger init logger
@@ -110,5 +114,26 @@ func (c *Config) AddArarm(name string, iTbl *ast.Table) {
 	amC.Alarm = alarm
 
 	c.Alarms = append(c.Alarms, amC)
+
+}
+
+func (c *Config) AddChain(name string, iTbl *ast.Table) {
+	chain, ok := Chains[name]
+	if !ok {
+		log.Fatalf("[FATAL] no plugin %v available\n", name)
+	}
+
+	ccC, err := buildChain(name, iTbl)
+	if err != nil {
+		log.Fatalln("[FATAL] build chain : ", err)
+	}
+
+	err = toml.UnmarshalTable(iTbl, chain)
+	if err != nil {
+		log.Fatalln("[FATAL] unmarshal chain: ", err)
+	}
+	ccC.Chain = chain
+
+	c.Chains = append(c.Chains, ccC)
 
 }
