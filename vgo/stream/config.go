@@ -22,6 +22,8 @@ type Config struct {
 
 	// global filter
 	Filter *GlobalFilter
+
+	Inputs []*InputConfig
 }
 
 // Conf ...
@@ -71,18 +73,17 @@ func (c *Config) AddInput(name string, iTbl *ast.Table) {
 		log.Fatalf("[FATAL] no plugin %v available\n", name)
 	}
 
-	// inC, err := buildInput(name, iTbl)
-	// if err != nil {
-	// 	log.Fatalln("[FATAL] build input : ", err)
-	// }
+	inC, err := buildInput(name, iTbl)
+	if err != nil {
+		log.Fatalln("[FATAL] build input : ", err)
+	}
 
-	err := toml.UnmarshalTable(iTbl, input)
+	err = toml.UnmarshalTable(iTbl, input)
 	if err != nil {
 		log.Fatalln("[FATAL] unmarshal input: ", err)
 	}
-	// inC.Input = input
+	inC.Input = input
 
-	// c.Inputs = append(c.Inputs, inC)
-
-	log.Printf("AddInput %v \n", input)
+	c.Inputs = append(c.Inputs, inC)
+	inC.Show()
 }

@@ -11,7 +11,6 @@ type Stream struct {
 // New get new stream struct
 func New() *Stream {
 	LoadConfig()
-	initPlugin()
 	stream := &Stream{}
 	return stream
 }
@@ -30,9 +29,4 @@ func (s *Stream) Start() {
 func (s *Stream) Close() error {
 
 	return nil
-}
-
-// initPlugin loading plugin
-func initPlugin() {
-
 }

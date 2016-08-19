@@ -1,6 +1,11 @@
 package stream
 
-import "time"
+import (
+	"log"
+	"time"
+
+	"github.com/naoina/toml/ast"
+)
 
 // InputConfig inputconfig
 type InputConfig struct {
@@ -10,9 +15,15 @@ type InputConfig struct {
 
 	Input Inputer
 
-	// Tags     map[string]string
-	// Filter   InputFilter
 	Interval time.Duration
+}
+
+func (ic *InputConfig) Show() {
+	log.Println("Name is ", ic.Name)
+	log.Println("Prefix is ", ic.Prefix)
+	log.Println("Suffix is ", ic.Suffix)
+	log.Println("Interval is ", ic.Interval)
+	log.Printf("Inputer is %v\n", ic.Input)
 }
 
 var Inputs = map[string]Inputer{}
@@ -26,4 +37,11 @@ type Inputer interface {
 	Start()
 	Close() error
 	Recv() (*Metric, error)
+}
+
+// buildInput parses input specific items from the ast.Table,
+func buildInput(name string, tbl *ast.Table) (*InputConfig, error) {
+	cp := &InputConfig{Name: name}
+
+	return cp, nil
 }
