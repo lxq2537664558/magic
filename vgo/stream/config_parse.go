@@ -198,3 +198,29 @@ func parseChains(tbl *ast.Table) {
 		}
 	}
 }
+
+func parseMetricOutputs(tbl *ast.Table) {
+	if val, ok := tbl.Fields["metric_outputs"]; ok {
+		subTbl, _ := val.(*ast.Table)
+		for pn, pt := range subTbl.Fields {
+			// filter the metric_outputs,drop the ones in global_filters
+			if !Conf.Filter.ShouldMetric_OutputDropPass(pn) {
+				continue
+			}
+
+			switch iTbl := pt.(type) {
+			case *ast.Table:
+				Conf.AddMetricOutput(pn, iTbl)
+				vLogger.Info("config", zap.String("metric_outputer", pn))
+			case []*ast.Table:
+				for _, t := range iTbl {
+					Conf.AddMetricOutput(pn, t)
+					vLogger.Info("config", zap.String("metric_outputer", t.Name))
+				}
+
+			default:
+				log.Fatalln("[FATAL] metric_outputs parse error: ", iTbl)
+			}
+		}
+	}
+}

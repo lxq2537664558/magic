@@ -23,9 +23,10 @@ type Config struct {
 	// global filter
 	Filter *GlobalFilter
 
-	Inputs []*InputConfig
-	Alarms []*AlarmConfig
-	Chains []*ChainConfig
+	Inputs        []*InputConfig
+	Alarms        []*AlarmConfig
+	Chains        []*ChainConfig
+	MetricOutputs []*MetricOutputConfig
 }
 
 // Conf ...
@@ -59,6 +60,9 @@ func LoadConfig() {
 
 	// init Chains
 	parseChains(tbl)
+
+	// init MetricOutputs
+	parseMetricOutputs(tbl)
 }
 
 // initLogger init logger
@@ -72,6 +76,7 @@ func initConf() {
 		Common: &CommonConfig{},
 		Inputs: make([]*InputConfig, 0),
 		Alarms: make([]*AlarmConfig, 0),
+		Chains: make([]*ChainConfig, 0),
 	}
 }
 
@@ -135,5 +140,26 @@ func (c *Config) AddChain(name string, iTbl *ast.Table) {
 	ccC.Chain = chain
 
 	c.Chains = append(c.Chains, ccC)
+
+}
+
+func (c *Config) AddMetricOutput(name string, iTbl *ast.Table) {
+	mo, ok := MetricOutputs[name]
+	if !ok {
+		log.Fatalf("[FATAL] no plugin %v available\n", name)
+	}
+
+	mcC, err := buildMetricOutput(name, iTbl)
+	if err != nil {
+		log.Fatalln("[FATAL] build MetricOutputs : ", err)
+	}
+
+	err = toml.UnmarshalTable(iTbl, mo)
+	if err != nil {
+		log.Fatalln("[FATAL] unmarshal MetricOutputs: ", err)
+	}
+	mcC.MetricOutput = mo
+
+	c.MetricOutputs = append(c.MetricOutputs, mcC)
 
 }
