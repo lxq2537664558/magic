@@ -24,6 +24,7 @@ type Config struct {
 	Filter *GlobalFilter
 
 	Inputs []*InputConfig
+	Alarms []*AlarmConfig
 }
 
 // Conf ...
@@ -49,10 +50,11 @@ func LoadConfig() {
 	// parse global filters
 	parseFilters(tbl)
 
-	log.Printf("------------------>>> %v\n", Conf.Filter)
-
 	// init Inputers
 	parseInputs(tbl)
+
+	// init Alarms
+	parseAlarms(tbl)
 }
 
 // initLogger init logger
@@ -64,6 +66,8 @@ func initLogger() {
 func initConf() {
 	Conf = &Config{
 		Common: &CommonConfig{},
+		Inputs: make([]*InputConfig, 0),
+		Alarms: make([]*AlarmConfig, 0),
 	}
 }
 
@@ -86,4 +90,25 @@ func (c *Config) AddInput(name string, iTbl *ast.Table) {
 
 	c.Inputs = append(c.Inputs, inC)
 	inC.Show()
+}
+
+func (c *Config) AddArarm(name string, iTbl *ast.Table) {
+	alarm, ok := Alarms[name]
+	if !ok {
+		log.Fatalf("[FATAL] no plugin %v available\n", name)
+	}
+
+	amC, err := buildAlarm(name, iTbl)
+	if err != nil {
+		log.Fatalln("[FATAL] build alarm : ", err)
+	}
+
+	err = toml.UnmarshalTable(iTbl, alarm)
+	if err != nil {
+		log.Fatalln("[FATAL] unmarshal alarm: ", err)
+	}
+	amC.Alarm = alarm
+
+	c.Alarms = append(c.Alarms, amC)
+
 }

@@ -14,9 +14,6 @@ type GlobalFilter struct {
 	InputDrop []string
 	inputDrop Filter
 
-	OutputDrop []string
-	outputDrop Filter
-
 	AlarmDrop []string
 	alarmDrop Filter
 
@@ -38,9 +35,27 @@ func (f *GlobalFilter) ShouldInputPass(key string) bool {
 	return true
 }
 
-func (f *GlobalFilter) ShouldOutputPass(key string) bool {
-	if f.outputDrop != nil {
-		if f.outputDrop.Match(key) {
+func (f *GlobalFilter) ShouldAlarmDropPass(key string) bool {
+	if f.alarmDrop != nil {
+		if f.alarmDrop.Match(key) {
+			return false
+		}
+	}
+	return true
+}
+
+func (f *GlobalFilter) ShouldMetric_OutputDropPass(key string) bool {
+	if f.metric_OutputDrop != nil {
+		if f.metric_OutputDrop.Match(key) {
+			return false
+		}
+	}
+	return true
+}
+
+func (f *GlobalFilter) ShouldChainDropPass(key string) bool {
+	if f.chainDrop != nil {
+		if f.chainDrop.Match(key) {
 			return false
 		}
 	}
