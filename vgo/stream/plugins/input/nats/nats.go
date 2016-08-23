@@ -1,10 +1,16 @@
 package input
 
-import "github.com/corego/vgo/vgo/stream"
+import (
+	"log"
+
+	"github.com/corego/vgo/vgo/stream"
+)
 
 // Nats nats
 type Nats struct {
-	Addrs []string
+	Addrs  []string
+	StopC  chan bool
+	WriteC chan *stream.Metric
 }
 
 // NewNats return new nats
@@ -14,20 +20,14 @@ func NewNats() *Nats {
 }
 
 // Init init nats
-func (n *Nats) Init() {
-
+func (n *Nats) Init(stopC chan bool, writeC chan *stream.Metric) {
+	n.StopC = stopC
+	n.WriteC = writeC
 }
 
 // Start start nats
 func (n *Nats) Start() {
-	// recv
-	// write
-}
-
-// Recv get data from serve
-func (n *Nats) Recv() (*stream.Metric, error) {
-	// recv
-	return nil, nil
+	log.Println("nats Start")
 }
 
 // Close close nats

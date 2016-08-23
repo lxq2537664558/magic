@@ -17,6 +17,10 @@ type AlarmConfig struct {
 	Interval time.Duration
 }
 
+func (amc *AlarmConfig) Start(stopC chan bool) {
+
+}
+
 var Alarms = map[string]Alarmer{}
 
 func AddAlarm(name string, ararm Alarmer) {

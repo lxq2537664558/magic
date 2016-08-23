@@ -4,7 +4,9 @@ import (
 	"log"
 	"time"
 
+	"github.com/corego/vgo/mecury/misc"
 	"github.com/naoina/toml/ast"
+	"github.com/uber-go/zap"
 )
 
 // InputConfig inputconfig
@@ -18,6 +20,20 @@ type InputConfig struct {
 	Interval time.Duration
 }
 
+// Start init and start Inputer service
+func (ic *InputConfig) Start(stopC chan bool, writeC chan *Metric) {
+	defer func() {
+		if err := recover(); err != nil {
+			misc.PrintStack(false)
+			vLogger.Fatal("flush fatal error ", zap.Error(err.(error)))
+		}
+	}()
+
+	ic.Input.Init(stopC, writeC)
+	go ic.Input.Start()
+}
+
+// Show show struct message
 func (ic *InputConfig) Show() {
 	log.Println("Name is ", ic.Name)
 	log.Println("Prefix is ", ic.Prefix)
@@ -33,10 +49,8 @@ func AddInput(name string, input Inputer) {
 }
 
 type Inputer interface {
-	Init()
+	Init(chan bool, chan *Metric)
 	Start()
-	Close() error
-	Recv() (*Metric, error)
 }
 
 // buildInput parses input specific items from the ast.Table,

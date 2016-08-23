@@ -40,15 +40,19 @@ func init() {
 }
 
 func streamrun(cmd *cobra.Command, args []string) {
+	// init config
+	stream.LoadConfig()
 	s := stream.New()
-	// start stream server
-	go s.Start()
-	// wait server stop signal
+	s.Init()
+	// stream shutdown signal
+	shutdown := make(chan struct{})
+	go s.Start(shutdown)
+	// waiting stop signal
 	chSig := make(chan os.Signal)
 	signal.Notify(chSig, syscall.SIGINT, syscall.SIGTERM)
-	fmt.Println("stream service received Signal: ", <-chSig)
-	fmt.Println("stream service is going to stop")
-	// stop stream server
+	fmt.Println("service received Signal: ", <-chSig)
+
+	fmt.Println("service is going to stop")
 	s.Close()
-	fmt.Println("stream service is stopped")
+
 }

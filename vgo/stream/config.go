@@ -10,10 +10,11 @@ import (
 )
 
 type CommonConfig struct {
-	Version  string
-	IsDebug  bool
-	LogLevel string
-	LogPath  string
+	Version      string
+	IsDebug      bool
+	LogLevel     string
+	LogPath      string
+	InputerQueue int
 }
 
 // Config ...
@@ -63,6 +64,26 @@ func LoadConfig() {
 
 	// init MetricOutputs
 	parseMetricOutputs(tbl)
+
+	log.Println("All inputs ------------------------")
+	for _, in := range Conf.Inputs {
+		log.Println(in.Name)
+	}
+
+	log.Println("All alarms ------------------------")
+	for _, out := range Conf.Alarms {
+		log.Println(out.Name)
+	}
+
+	log.Println("All chains ------------------------")
+	for _, out := range Conf.Chains {
+		log.Println(out.Name)
+	}
+
+	log.Println("All metric_outputs ------------------------")
+	for _, out := range Conf.MetricOutputs {
+		log.Println(out.Name)
+	}
 }
 
 // initLogger init logger
