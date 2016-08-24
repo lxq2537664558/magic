@@ -44,9 +44,16 @@ func (w *Writer) Working(num int) {
 		select {
 		case data, ok := <-w.recvC:
 			if ok {
-				// alarm.deal(data)
-				// chain.deal(data)
-				// metric.deal(data)
+				for _, amC := range Conf.Alarms {
+					amC.Alarm.Compute(data)
+				}
+				for _, chC := range Conf.Chains {
+					chC.Chain.Compute(data)
+				}
+
+				for _, moC := range Conf.MetricOutputs {
+					moC.MetricOutput.Compute(data)
+				}
 				log.Println("Working number is", num, ",recv data is", data)
 			}
 			break
