@@ -40,20 +40,20 @@ func (s *Stream) Start(shutdown chan struct{}) {
 	s.writer.Start()
 
 	// start plugins service
-	for _, inC := range Conf.Inputs {
-		inC.Start(s.stopPluginsChan, s.metricChan)
+	for _, c := range Conf.Inputs {
+		c.Start(s.stopPluginsChan, s.metricChan)
 	}
 
-	for _, amC := range Conf.Alarms {
-		amC.Start(s.stopPluginsChan)
+	for _, c := range Conf.Alarms {
+		c.Start(s.stopPluginsChan)
 	}
 
-	for _, chC := range Conf.Chains {
-		chC.Start(s.stopPluginsChan)
+	for _, c := range Conf.Chains {
+		c.Start(s.stopPluginsChan)
 	}
 
-	for _, moC := range Conf.MetricOutputs {
-		moC.Start(s.stopPluginsChan)
+	for _, c := range Conf.MetricOutputs {
+		c.Start(s.stopPluginsChan)
 	}
 }
 

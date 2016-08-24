@@ -47,8 +47,12 @@
 ###############################################################################
 #                            METRIC_OUTPUTS PLUGINS                           #
 ###############################################################################
-#[[metric_outputs.influxdb]]
-
+[[metric_outputs.influxdb]]
+    urls = ["http://localhost:8086"]
+    database = "test"
+    write_consistency = "any"
+    timeout = "5s"
+    metric_batch_size = 100
 
 ###############################################################################
 #                            CHAINS PLUGINS                                   #

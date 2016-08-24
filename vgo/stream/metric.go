@@ -1,8 +1,8 @@
 package stream
 
-import "github.com/influxdata/influxdb/client"
+import "github.com/influxdata/influxdb/client/v2"
 
 // TransferData transfer data(inpute transfer data)
 type Metric struct {
-	pt *client.Point
+	MetricData *client.Point
 }
