@@ -32,6 +32,7 @@ func (n *Nats) Start() {
 
 // Close close nats
 func (n *Nats) Close() error {
+	close(n.StopC)
 	return nil
 }
 

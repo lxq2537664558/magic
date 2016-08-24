@@ -8,28 +8,36 @@ import (
 
 var vLogger zap.Logger
 
+type StreamConfig struct {
+	InputerQueue int
+	WriterNum    int
+}
+
 // Stream struct
 type Stream struct {
 	stopPluginsChan chan bool
 	metricChan      chan *Metric
+	writer          *Writer
 }
 
 // New get new stream struct
 func New() *Stream {
-	stream := &Stream{
-		stopPluginsChan: make(chan bool, 1),
-		metricChan:      make(chan *Metric, Conf.Common.InputerQueue),
-	}
+	stream := &Stream{}
 	return stream
 }
 
 // Init init stream
 func (s *Stream) Init() {
-
+	s.stopPluginsChan = make(chan bool, 1)
+	s.metricChan = make(chan *Metric, Conf.Stream.InputerQueue)
+	s.writer = NewWriter()
+	s.writer.Init(s.metricChan)
 }
 
 // Start start stream server
 func (s *Stream) Start(shutdown chan struct{}) {
+	// start writer service
+	s.writer.Start()
 	for _, inC := range Conf.Inputs {
 		inC.Start(s.stopPluginsChan, s.metricChan)
 	}
@@ -37,6 +45,7 @@ func (s *Stream) Start(shutdown chan struct{}) {
 	for _, amC := range Conf.Alarms {
 		amC.Start(s.stopPluginsChan)
 	}
+
 }
 
 // Close close stream server
@@ -45,5 +54,6 @@ func (s *Stream) Close() error {
 	close(s.stopPluginsChan)
 	close(s.metricChan)
 
+	s.writer.Close()
 	return nil
 }

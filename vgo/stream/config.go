@@ -10,16 +10,18 @@ import (
 )
 
 type CommonConfig struct {
-	Version      string
-	IsDebug      bool
-	LogLevel     string
-	LogPath      string
-	InputerQueue int
+	Version  string
+	IsDebug  bool
+	LogLevel string
+	LogPath  string
+	// InputerQueue int
+	// WriterNum    int
 }
 
 // Config ...
 type Config struct {
 	Common *CommonConfig
+	Stream *StreamConfig
 
 	// global filter
 	Filter *GlobalFilter
@@ -47,6 +49,10 @@ func LoadConfig() {
 	}
 	// parse common config
 	parseCommon(tbl)
+
+	// parse stream config
+	parseStream(tbl)
+
 	// init logger
 	initLogger()
 
@@ -95,6 +101,7 @@ func initLogger() {
 func initConf() {
 	Conf = &Config{
 		Common: &CommonConfig{},
+		Stream: &StreamConfig{},
 		Inputs: make([]*InputConfig, 0),
 		Alarms: make([]*AlarmConfig, 0),
 		Chains: make([]*ChainConfig, 0),

@@ -22,6 +22,20 @@ func parseCommon(tbl *ast.Table) {
 	}
 }
 
+func parseStream(tbl *ast.Table) {
+	if val, ok := tbl.Fields["stream"]; ok {
+		subTbl, ok := val.(*ast.Table)
+		if !ok {
+			log.Fatalln("[FATAL] : ", subTbl)
+		}
+
+		err := toml.UnmarshalTable(subTbl, Conf.Stream)
+		if err != nil {
+			log.Fatalln("[FATAL] parseStream: ", err, subTbl)
+		}
+	}
+}
+
 func parseFilters(tbl *ast.Table) {
 	// parse input plugin drop
 	Conf.Filter = &GlobalFilter{}
