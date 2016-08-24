@@ -38,6 +38,8 @@ func (s *Stream) Init() {
 func (s *Stream) Start(shutdown chan struct{}) {
 	// start writer service
 	s.writer.Start()
+
+	// start plugins service
 	for _, inC := range Conf.Inputs {
 		inC.Start(s.stopPluginsChan, s.metricChan)
 	}
@@ -46,6 +48,13 @@ func (s *Stream) Start(shutdown chan struct{}) {
 		amC.Start(s.stopPluginsChan)
 	}
 
+	for _, chC := range Conf.Chains {
+		chC.Start(s.stopPluginsChan)
+	}
+
+	for _, moC := range Conf.MetricOutputs {
+		moC.Start(s.stopPluginsChan)
+	}
 }
 
 // Close close stream server
