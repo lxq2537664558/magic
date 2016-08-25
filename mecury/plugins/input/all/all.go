@@ -2,6 +2,7 @@ package all
 
 import (
 	_ "github.com/corego/vgo/mecury/plugins/input/apache"
+	_ "github.com/corego/vgo/mecury/plugins/input/dapper"
 	_ "github.com/corego/vgo/mecury/plugins/input/dns_query"
 	_ "github.com/corego/vgo/mecury/plugins/input/docker"
 	_ "github.com/corego/vgo/mecury/plugins/input/elasticsearch"

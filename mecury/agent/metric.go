@@ -34,8 +34,20 @@ type Metric interface {
 }
 
 // metric is a wrapper of the influxdb client.Point struct
-type metric struct {
-	pt *client.Point
+type MetricWrapper struct {
+	Pt *client.Point `json:"pt"`
+}
+
+//easyjson:json
+type Metrics struct {
+	Data []*MetricData `json:"d"`
+}
+
+type MetricData struct {
+	Name   string                 `json:"n"`
+	Tags   map[string]string      `json:"ts"`
+	Fields map[string]interface{} `json:"f"`
+	Time   time.Time              `json:"t"`
 }
 
 // NewMetric returns a metric with the given timestamp. If a timestamp is not
@@ -52,39 +64,39 @@ func NewMetric(
 	if err != nil {
 		return nil, err
 	}
-	return &metric{
-		pt: pt,
+	return &MetricWrapper{
+		Pt: pt,
 	}, nil
 }
 
-func (m *metric) Name() string {
-	return m.pt.Name()
+func (m *MetricWrapper) Name() string {
+	return m.Pt.Name()
 }
 
-func (m *metric) Tags() map[string]string {
-	return m.pt.Tags()
+func (m *MetricWrapper) Tags() map[string]string {
+	return m.Pt.Tags()
 }
 
-func (m *metric) Time() time.Time {
-	return m.pt.Time()
+func (m *MetricWrapper) Time() time.Time {
+	return m.Pt.Time()
 }
 
-func (m *metric) UnixNano() int64 {
-	return m.pt.UnixNano()
+func (m *MetricWrapper) UnixNano() int64 {
+	return m.Pt.UnixNano()
 }
 
-func (m *metric) Fields() map[string]interface{} {
-	return m.pt.Fields()
+func (m *MetricWrapper) Fields() map[string]interface{} {
+	return m.Pt.Fields()
 }
 
-func (m *metric) String() string {
-	return m.pt.String()
+func (m *MetricWrapper) String() string {
+	return m.Pt.String()
 }
 
-func (m *metric) PrecisionString(precison string) string {
-	return m.pt.PrecisionString(precison)
+func (m *MetricWrapper) PrecisionString(precison string) string {
+	return m.Pt.PrecisionString(precison)
 }
 
-func (m *metric) Point() *client.Point {
-	return m.pt
+func (m *MetricWrapper) Point() *client.Point {
+	return m.Pt
 }
