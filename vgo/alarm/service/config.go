@@ -4,8 +4,8 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/naoina/toml"
-	"github.com/naoina/toml/ast"
+	"github.com/influxdata/toml"
+	"github.com/influxdata/toml/ast"
 )
 
 var Conf *Config
