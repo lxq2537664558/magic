@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/corego/vgo/vgo/cmd"
+import "github.com/corego/vgo/vgo/alarm/cmd"
 
 func main() {
 	cmd.Execute()
