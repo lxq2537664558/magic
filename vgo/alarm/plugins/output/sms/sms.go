@@ -17,7 +17,7 @@ func (c *Sms) Start() error {
 		for {
 			a := <-c.in
 
-			fmt.Println("Console Output--------------------------", time.Now())
+			fmt.Println("Sms Output--------------------------", time.Now())
 
 			fmt.Println(a.Data)
 

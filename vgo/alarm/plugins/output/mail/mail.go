@@ -17,9 +17,9 @@ func (c *Mail) Start() error {
 		for {
 			a := <-c.in
 
-			fmt.Println("Console Output--------------------------", time.Now())
+			fmt.Println("Mail Output--------------------------", time.Now())
 
-			fmt.Println(string(a.Data))
+			fmt.Println(a.User, ":", string(a.Data))
 
 			fmt.Println()
 			fmt.Println()

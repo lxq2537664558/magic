@@ -35,5 +35,4 @@ func process(m *nats.Msg) {
 		// 不满足条件，计数＋1
 		alert.NowCount[a.Level]++
 	}
-
 }
