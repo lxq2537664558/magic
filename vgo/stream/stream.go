@@ -16,7 +16,7 @@ type StreamConfig struct {
 // Stream struct
 type Stream struct {
 	stopPluginsChan chan bool
-	metricChan      chan *Metric
+	metricChan      chan Metrics
 	writer          *Writer
 }
 
@@ -29,7 +29,7 @@ func New() *Stream {
 // Init init stream
 func (s *Stream) Init() {
 	s.stopPluginsChan = make(chan bool, 1)
-	s.metricChan = make(chan *Metric, Conf.Stream.InputerQueue)
+	s.metricChan = make(chan Metrics, Conf.Stream.InputerQueue)
 	s.writer = NewWriter()
 	s.writer.Init(s.metricChan)
 }

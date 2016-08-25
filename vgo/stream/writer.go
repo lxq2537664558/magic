@@ -5,7 +5,7 @@ import "log"
 // Writer send data to plugins(alarm, chain, metric)
 type Writer struct {
 	workn int
-	recvC chan *Metric
+	recvC chan Metrics
 	stopC chan bool
 }
 
@@ -16,7 +16,7 @@ func NewWriter() *Writer {
 }
 
 // Init init writer
-func (w *Writer) Init(metricChan chan *Metric) {
+func (w *Writer) Init(metricChan chan Metrics) {
 	w.recvC = metricChan
 	w.workn = Conf.Stream.WriterNum
 	w.stopC = make(chan bool, 1)
@@ -44,15 +44,15 @@ func (w *Writer) Working(num int) {
 		select {
 		case data, ok := <-w.recvC:
 			if ok {
-				for _, amC := range Conf.Alarms {
-					amC.Alarm.Compute(data)
+				for _, c := range Conf.Alarms {
+					c.Alarm.Compute(data)
 				}
-				for _, chC := range Conf.Chains {
-					chC.Chain.Compute(data)
+				for _, c := range Conf.Chains {
+					c.Chain.Compute(data)
 				}
 
-				for _, moC := range Conf.MetricOutputs {
-					moC.MetricOutput.Compute(data)
+				for _, c := range Conf.MetricOutputs {
+					c.MetricOutput.Compute(data)
 				}
 				log.Println("Working number is", num, ",recv data is", data)
 			}

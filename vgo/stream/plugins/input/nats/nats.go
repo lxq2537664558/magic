@@ -10,7 +10,7 @@ import (
 type Nats struct {
 	Addrs  []string
 	StopC  chan bool
-	WriteC chan *stream.Metric
+	WriteC chan stream.Metrics
 }
 
 // NewNats return new nats
@@ -20,7 +20,7 @@ func NewNats() *Nats {
 }
 
 // Init init nats
-func (n *Nats) Init(stopC chan bool, writeC chan *stream.Metric) {
+func (n *Nats) Init(stopC chan bool, writeC chan stream.Metrics) {
 	n.StopC = stopC
 	n.WriteC = writeC
 }

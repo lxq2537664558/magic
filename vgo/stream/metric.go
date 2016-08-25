@@ -1,8 +1,16 @@
 package stream
 
-import "github.com/influxdata/influxdb/client/v2"
+import "time"
 
-// TransferData transfer data(inpute transfer data)
-type Metric struct {
-	MetricData *client.Point
+// MetricData transfer data(inpute transfer data)
+//easyjson:json
+type Metrics struct {
+	Data []*MetricData `json:"d"`
+}
+
+type MetricData struct {
+	Name   string                 `json:"n"`
+	Tags   map[string]string      `json:"ts"`
+	Fields map[string]interface{} `json:"f"`
+	Time   time.Time              `json:"t"`
 }

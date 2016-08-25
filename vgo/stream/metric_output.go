@@ -51,7 +51,7 @@ func AddMetricOutput(name string, meto MetricOutputer) {
 type MetricOutputer interface {
 	Init(chan bool)
 	Start()
-	Compute(*Metric) error
+	Compute(Metrics) error
 }
 
 // buildMetricOutput parses MetricOutput specific items from the ast.Table,

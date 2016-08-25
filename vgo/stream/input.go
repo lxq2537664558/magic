@@ -21,7 +21,7 @@ type InputConfig struct {
 }
 
 // Start init and start Inputer service
-func (ic *InputConfig) Start(stopC chan bool, writeC chan *Metric) {
+func (ic *InputConfig) Start(stopC chan bool, writeC chan Metrics) {
 	defer func() {
 		if err := recover(); err != nil {
 			misc.PrintStack(false)
@@ -49,7 +49,7 @@ func AddInput(name string, input Inputer) {
 }
 
 type Inputer interface {
-	Init(chan bool, chan *Metric)
+	Init(chan bool, chan Metrics)
 	Start()
 }
 

@@ -51,7 +51,7 @@ func AddAlarm(name string, ararm Alarmer) {
 type Alarmer interface {
 	Init(chan bool)
 	Start()
-	Compute(*Metric) error
+	Compute(Metrics) error
 }
 
 // buildAlarm parses alarm specific items from the ast.Table,

@@ -9,15 +9,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/corego/vgo/vgo/misc"
 	"github.com/corego/vgo/vgo/stream"
 
 	"github.com/influxdata/influxdb/client/v2"
 )
-
-// Duration just wraps time.Duration1
-type Duration struct {
-	Duration time.Duration
-}
 
 type InfluxDB struct {
 	// URL is only for backwards compatability
@@ -29,7 +25,7 @@ type InfluxDB struct {
 	UserAgent        string
 	RetentionPolicy  string
 	WriteConsistency string
-	Timeout          Duration
+	Timeout          misc.Duration
 	UDPPayload       int `toml:"udp_payload"`
 	// Precision is only here for legacy support. It will be ignored.
 	Precision string
@@ -150,17 +146,9 @@ func (i *InfluxDB) Close() error {
 	return nil
 }
 
-func (i *InfluxDB) SampleConfig() string {
-	return sampleConfig
-}
-
-func (i *InfluxDB) Description() string {
-	return "Configuration for influxdb server to send metrics to"
-}
-
 // Choose a random server in the cluster to write to until a successful write
 // occurs, logging each unsuccessful. If all servers fail, return error.
-func (i *InfluxDB) Write(metrics []stream.Metric) error {
+func (i *InfluxDB) Write(metrics stream.Metrics) error {
 	if len(i.conns) == 0 {
 		err := i.Connect()
 		if err != nil {
@@ -176,8 +164,10 @@ func (i *InfluxDB) Write(metrics []stream.Metric) error {
 		return err
 	}
 
-	for _, metric := range metrics {
-		bp.AddPoint(metric.MetricData)
+	for _, metric := range metrics.Data {
+		// client.NewPoint(name, tags, fields, t)
+		// bp.AddPoint(metric.MetricData)
+		log.Println(metric)
 	}
 
 	// This will get set to nil if a successful write occurs
@@ -191,8 +181,7 @@ func (i *InfluxDB) Write(metrics []stream.Metric) error {
 			// If the database was not found, try to recreate it
 			if strings.Contains(e.Error(), "database not found") {
 				if errc := createDatabase(i.conns[n], i.Database); errc != nil {
-					log.Printf("ERROR: Database %s not found and failed to recreate\n",
-						i.Database)
+					log.Printf("ERROR: Database %s not found and failed to recreate\n", i.Database)
 				}
 			}
 		} else {
@@ -214,10 +203,11 @@ func (i *InfluxDB) Start() {
 
 }
 
-func (i *InfluxDB) Compute(*stream.Metric) error {
+func (i *InfluxDB) Compute(metrics stream.Metrics) error {
+	log.Println("influxDB data is", metrics)
 	return nil
 }
 
 func init() {
-	stream.AddMetricOutput("influxdb", &InfluxDB{Timeout: Duration{time.Second * 5}})
+	stream.AddMetricOutput("influxdb", &InfluxDB{Timeout: misc.Duration{time.Second * 5}})
 }

@@ -51,7 +51,7 @@ func (cc *ChainConfig) Show() {
 type Chainer interface {
 	Init(chan bool)
 	Start()
-	Compute(*Metric) error
+	Compute(Metrics) error
 }
 
 // buildChain parses chains specific items from the ast.Table,
