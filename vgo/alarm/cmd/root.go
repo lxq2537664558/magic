@@ -21,6 +21,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	_ "github.com/corego/vgo/vgo/alarm/plugins/output/all"
 	"github.com/corego/vgo/vgo/alarm/service"
 	"github.com/spf13/cobra"
 )
@@ -65,8 +66,8 @@ func initConfig() {
 }
 
 func start(cmd *cobra.Command, args []string) {
-	alarm := service.NewAlarm()
-	alarm.Start()
+	service := service.NewService()
+	service.Start()
 
 	// 等待服务器停止信号
 	chSig := make(chan os.Signal)

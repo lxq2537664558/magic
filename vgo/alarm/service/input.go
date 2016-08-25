@@ -3,7 +3,6 @@ package service
 import (
 	"log"
 
-	"github.com/corego/vgo/vgo/alarm/config"
 	"github.com/nats-io/nats"
 )
 
@@ -15,12 +14,12 @@ func (in *input) Start() {
 	nc := initNatsConn()
 	in.conn = nc
 
-	in.conn.Subscribe(config.Conf.Nats.Topic, process)
+	in.conn.Subscribe(Conf.Nats.Topic, process)
 }
 
 func initNatsConn() *nats.Conn {
 	opts := nats.DefaultOptions
-	opts.Servers = config.Conf.Nats.Addrs
+	opts.Servers = Conf.Nats.Addrs
 
 	nc, err := opts.Connect()
 	if err != nil {

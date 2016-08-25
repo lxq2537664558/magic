@@ -38,9 +38,9 @@
      "haproxy", "http_response", "java_metrics_http",
      "log_collect","mongodb","mysql",
      "net_response","nginx","ping","postgresql","redis","apache", "dns_query","docker",
-     "elasticsearch","memcached","zookeeper","cpu","dapper"]
+     "elasticsearch","memcached","zookeeper","dapper"]
 
-    outputdrop = [ "influxdb","console" ]
+    outputdrop = ["console","influxdb"]
 
 
 
