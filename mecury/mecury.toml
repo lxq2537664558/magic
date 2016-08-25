@@ -38,9 +38,9 @@
      "haproxy", "http_response", "java_metrics_http",
      "log_collect","mongodb","mysql",
      "net_response","nginx","ping","postgresql","redis","apache", "dns_query","docker",
-     "elasticsearch","memcached","zookeeper","cpu","mem"]
+     "elasticsearch","memcached","zookeeper","cpu","dapper"]
 
-    outputdrop = [ "influxdb","nats" ]
+    outputdrop = [ "influxdb","console" ]
 
 
 
@@ -269,3 +269,4 @@
 
 [[outputs.nats]]
     addrs = ["nats://10.7.14.236:4222", "nats://10.7.14.26:4222"]
+    topic = "vgo_metrics"

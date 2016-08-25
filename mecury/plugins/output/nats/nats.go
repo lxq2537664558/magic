@@ -9,6 +9,7 @@ import (
 
 type Nats struct {
 	Addrs []string
+	Topic string
 	conn  *nats.Conn
 }
 
@@ -53,7 +54,7 @@ func (n *Nats) Write(metrics []agent.Metric) error {
 		log.Println("[WARN] data to nats Marshal error :", err)
 	}
 
-	err = n.conn.Publish("vgo_metrics", b)
+	err = n.conn.Publish(n.Topic, b)
 	if err != nil {
 		log.Println("[WARN] nats publish error: ", err)
 	}
