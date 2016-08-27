@@ -1,7 +1,5 @@
 package service
 
-
-
 import (
 	"strings"
 

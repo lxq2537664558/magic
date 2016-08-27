@@ -13,6 +13,9 @@
 [stream]
     inputer_queue = 1000
     writer_num = 100
+    disruptor_buffersize   = 65536
+	disruptor_buffermask   = 65535
+	disruptor_reservations = 1
 
 
 ###############################################################################
@@ -39,7 +42,8 @@
 ###############################################################################
 # Read stream about input usage
 [[inputs.nats]]
-    addrs = ["127.0.0.1:4245", "127.0.0.1:4246"]
+    addrs = ["nats://10.7.14.236:4222", "nats://10.7.14.26:4222"]
+    topic = "vgo_metrics"
 #[[inputs.otherMq]]
 #    addrs = ["127.0.0.1:1231", "127.0.0.1:2321"]
 
@@ -48,8 +52,8 @@
 #                            METRIC_OUTPUTS PLUGINS                           #
 ###############################################################################
 [[metric_outputs.influxdb]]
-    urls = ["http://localhost:8086"]
-    database = "test"
+    urls = ["http://10.3.11.114:8086"]
+    database = "test1"
     write_consistency = "any"
     timeout = "5s"
 

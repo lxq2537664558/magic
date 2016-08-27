@@ -1,65 +1,28 @@
 package service
 
-import "log"
+import "fmt"
 
-// Writer send data to plugins(alarm, chain, metric)
-type Writer struct {
-	workn int
-	recvC chan Metrics
-	stopC chan bool
-}
+type Writer struct{}
 
-// NewWriter get new writer
-func NewWriter() *Writer {
-	w := &Writer{}
-	return w
-}
-
-// Init init writer
-func (w *Writer) Init(metricChan chan Metrics) {
-	w.recvC = metricChan
-	w.workn = Conf.Stream.WriterNum
-	w.stopC = make(chan bool, 1)
-}
-
-// Start start write service
-func (w *Writer) Start() {
-	for index := 0; index < w.workn; index++ {
-		num := index
-		go w.Working(num)
-	}
-	log.Println("Writer start")
-}
-
-// Close stop writer service
-func (w *Writer) Close() error {
-	log.Println("Writer close")
-	close(w.stopC)
-	return nil
-}
-
-func (w *Writer) Working(num int) {
-	// start workpool
-	for {
-		select {
-		case data, ok := <-w.recvC:
-			if ok {
-				for _, c := range Conf.Alarms {
-					c.Alarm.Compute(data)
-				}
-				for _, c := range Conf.Chains {
-					c.Chain.Compute(data)
-				}
-
-				for _, c := range Conf.MetricOutputs {
-					c.MetricOutput.Compute(data)
-				}
-				log.Println("Working number is", num, ",recv data is", data)
-			}
-			break
-		case <-w.stopC:
-			log.Println("Get stop signal!")
-			return
+func (this Writer) Consume(lower, upper int64) {
+	// create data pool
+	m := Metrics{}
+	for lower <= upper {
+		m = controller.ring[lower&controller.bufferMask]
+		// 消费
+		fmt.Println("消费信息--->>> ", m)
+		// ring[lower&BufferMask]
+		for _, c := range Conf.Alarms {
+			c.Alarm.Compute(m)
 		}
+		for _, c := range Conf.Chains {
+			c.Chain.Compute(m)
+		}
+
+		for _, c := range Conf.MetricOutputs {
+			c.MetricOutput.Compute(m)
+		}
+
+		lower++
 	}
 }

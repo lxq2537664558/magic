@@ -170,8 +170,12 @@ func (i *InfluxDB) Write(metrics service.Metrics) error {
 			return err
 		}
 		bp.AddPoint(pt)
-		// log.Println(pt)
+		// log.Println(metric.Name, metric.Tags, metric.Fields, metric.Time)
 		// log.Println(metric)
+		for _, v := range metric.Fields {
+			log.Printf("%T\n", v)
+		}
+
 	}
 
 	// This will get set to nil if a successful write occurs
@@ -181,7 +185,7 @@ func (i *InfluxDB) Write(metrics service.Metrics) error {
 	for _, n := range p {
 		if e := i.conns[n].Write(bp); e != nil {
 			// Log write failure
-			log.Printf("ERROR: %s", e)
+			log.Printf("ERROR: %s, %v", e, bp)
 			// If the database was not found, try to recreate it
 			if strings.Contains(e.Error(), "database not found") {
 				if errc := createDatabase(i.conns[n], i.Database); errc != nil {
@@ -208,7 +212,7 @@ func (i *InfluxDB) Start() {
 }
 
 func (i *InfluxDB) Compute(metrics service.Metrics) error {
-	// log.Println("influxDB data is", metrics)
+	log.Println("influxDB data is", metrics)
 	return i.Write(metrics)
 
 }

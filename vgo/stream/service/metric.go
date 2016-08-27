@@ -1,7 +1,5 @@
 package service
 
-
-
 import "time"
 
 // MetricData transfer data(inpute transfer data)
