@@ -32,4 +32,6 @@ func (a *Service) Start() {
 	for _, o := range Conf.Outputs {
 		o.Output.Start()
 	}
+
+	startManager()
 }

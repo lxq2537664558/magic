@@ -1,0 +1,47 @@
+// protoc -I proto/ proto/vgo.proto --go_out=plugins=grpc:proto
+
+syntax = "proto3";
+
+package proto;
+
+service Alarm {
+	rpc AddGroup(Group) 		returns (Reply) 	{}
+	rpc AddUsers(Users) 		returns (Reply) 	{}
+	rpc AddAlerts(Alerts) 	returns (Reply) 	{}
+}
+
+message Group {
+	string 				id 		= 1;
+	map<string,Alert> 	alerts 	= 2;
+	map<string,User> 		users 	= 3;
+}
+
+message Users {
+	string 			group_id 	= 1;
+	map<string,User>  	users 	 	= 2;
+}
+
+message Alerts {
+	string 				group_id		= 1;
+	map<string,Alert>	alerts		= 2; 	
+}
+
+message Reply {
+	string msg = 1;
+}
+
+message Alert {
+	int32 	warn_count      = 1;
+	int32 	crit_count      = 2;
+	string 	warn_alarm      = 3;
+	string 	crit_alarm      = 4;
+    int32   warn_duration   = 5;
+    int32   crit_duration   = 6;
+}
+
+
+message User {
+	string 				name = 1;
+	map<string,string> 	info = 2;
+}
+

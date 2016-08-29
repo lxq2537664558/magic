@@ -1,13 +1,20 @@
 package service
 
-import "github.com/nats-io/nats"
+import (
+	"log"
+
+	"time"
+
+	"github.com/nats-io/nats"
+)
 
 //easyjson:json
 type AlertData struct {
-	ID      string  `json:"id"`
-	GroupID string  `json:"gid"`
-	Value   float64 `json:"v"`
-	Level   int     `json:"l"` //0: warn, 1 : critical
+	ID       string  `json:"id"` // metric name + field
+	GroupID  string  `json:"gid"`
+	Value    float64 `json:"v"`
+	Level    int     `json:"l"` //0: warn, 1 : critical
+	HostName string  `json:"h"`
 }
 
 func process(m *nats.Msg) {
@@ -19,7 +26,17 @@ func process(m *nats.Msg) {
 	alert := group.Alerts[a.ID]
 	gs.RUnlock()
 
+	// 判断当前时间是否超出允许的报警信息更新间隔
+	now := time.Now()
+	if now.Sub(alert.LastTime[a.Level]) > alert.Duration[a.Level] {
+		// 清空之前的报警历史数据
+		alert.NowCount[a.Level] = 1
+		alert.LastTime[a.Level] = now
+		return
+	}
+
 	if alert.NowCount[a.Level]+1 >= alert.Count[a.Level] {
+		log.Println(alert.Count[a.Level])
 		output := Conf.Outputs[alert.AlarmOutput[a.Level]]
 		// 报警
 		for _, u := range group.Users {
@@ -35,4 +52,7 @@ func process(m *nats.Msg) {
 		// 不满足条件，计数＋1
 		alert.NowCount[a.Level]++
 	}
+
+	// 更新报警数据的更新时间
+	alert.LastTime[a.Level] = now
 }
