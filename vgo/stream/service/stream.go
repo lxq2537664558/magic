@@ -1,6 +1,7 @@
 package service
 
 import (
+	"alert/strategy"
 	"log"
 
 	"github.com/uber-go/zap"
@@ -14,6 +15,8 @@ type StreamConfig struct {
 	DisruptorBuffersize   int64
 	DisruptorBuffermask   int64
 	DisruptorReservations int64
+	StrategyDbname        string
+	StrategyBucketname    string
 }
 
 func (sc *StreamConfig) Show() {
@@ -22,6 +25,8 @@ func (sc *StreamConfig) Show() {
 	log.Println("DisruptorBuffersize", sc.DisruptorBuffersize)
 	log.Println("DisruptorBuffermask", sc.DisruptorBuffermask)
 	log.Println("DisruptorReservations", sc.DisruptorReservations)
+	log.Println("StrategyDbName", sc.StrategyDbname)
+	log.Println("StrategyBucketName", sc.StrategyBucketname)
 }
 
 // Stream struct
@@ -30,6 +35,7 @@ type Stream struct {
 	metricChan      chan Metrics
 	writer          *Writer
 	controller      *Controller
+	strategyes      *strategy.Strategy
 }
 
 var streamer *Stream
@@ -47,8 +53,11 @@ func (s *Stream) Init() {
 
 	// init disruptor
 	s.controller = NewController()
-	// (bufferSize int64, bufferMask int64, reservations int64)
 	s.controller.Init(Conf.Stream.DisruptorBuffersize, Conf.Stream.DisruptorBuffermask, Conf.Stream.DisruptorReservations)
+
+	// init strategyes
+	s.strategyes = strategy.NewStrategy(Conf.Stream.StrategyDbname, Conf.Stream.StrategyBucketname)
+	s.strategyes.Init()
 }
 
 // Start start stream server

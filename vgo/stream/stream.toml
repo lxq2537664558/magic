@@ -16,6 +16,8 @@
     disruptor_buffersize   = 65536
 	disruptor_buffermask   = 65535
 	disruptor_reservations = 1
+    strategy_dbname = "stream.db"
+    strategy_bucketname = "groups"
 
 
 ###############################################################################
