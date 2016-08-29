@@ -1,7 +1,5 @@
 package service
 
-
-
 import (
 	"io/ioutil"
 	"log"
@@ -16,8 +14,6 @@ type CommonConfig struct {
 	IsDebug  bool
 	LogLevel string
 	LogPath  string
-	// InputerQueue int
-	// WriterNum    int
 }
 
 // Config ...
@@ -41,20 +37,20 @@ func LoadConfig() {
 	// init the new config params
 	initConf()
 
-	contents, err := ioutil.ReadFile("vgo.toml")
+	contents, err := ioutil.ReadFile("stream.toml")
 	if err != nil {
-		log.Fatal("[FATAL] load vgo.toml: ", err)
+		log.Fatal("[FATAL] load stream.toml: ", err)
 	}
 	tbl, err := toml.Parse(contents)
 	if err != nil {
-		log.Fatal("[FATAL] parse vgo.toml: ", err)
+		log.Fatal("[FATAL] parse stream.toml: ", err)
 	}
 	// parse common config
 	parseCommon(tbl)
 
 	// parse stream config
 	parseStream(tbl)
-
+	Conf.Stream.Show()
 	// init logger
 	initLogger()
 
@@ -98,6 +94,7 @@ func LoadConfig() {
 func initLogger() {
 	vlog.Init(Conf.Common.LogPath, Conf.Common.LogLevel, Conf.Common.IsDebug)
 	vLogger = vlog.Logger
+	log.SetFlags(log.Lshortfile | log.LstdFlags)
 }
 
 func initConf() {
