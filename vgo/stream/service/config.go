@@ -22,10 +22,9 @@ type Config struct {
 	Stream *StreamConfig
 
 	// global filter
-	Filter *GlobalFilter
-
+	Filter        *GlobalFilter
+	Outputs       map[string]*Output
 	Inputs        []*InputConfig
-	Alarms        []*AlarmConfig
 	Chains        []*ChainConfig
 	MetricOutputs []*MetricOutputConfig
 }
@@ -60,8 +59,8 @@ func LoadConfig() {
 	// init Inputers
 	parseInputs(tbl)
 
-	// init Alarms
-	parseAlarms(tbl)
+	// init Outputs
+	parseOutputs(tbl)
 
 	// init Chains
 	parseChains(tbl)
@@ -74,8 +73,8 @@ func LoadConfig() {
 		log.Println(in.Name)
 	}
 
-	log.Println("All alarms ------------------------")
-	for _, out := range Conf.Alarms {
+	log.Println("All outpus ------------------------")
+	for _, out := range Conf.Outputs {
 		log.Println(out.Name)
 	}
 
@@ -94,16 +93,16 @@ func LoadConfig() {
 func initLogger() {
 	vlog.Init(Conf.Common.LogPath, Conf.Common.LogLevel, Conf.Common.IsDebug)
 	vLogger = vlog.Logger
-	log.SetFlags(log.Lshortfile | log.LstdFlags)
+	log.SetFlags(log.Lmicroseconds | log.Lshortfile | log.LstdFlags)
 }
 
 func initConf() {
 	Conf = &Config{
-		Common: &CommonConfig{},
-		Stream: &StreamConfig{},
-		Inputs: make([]*InputConfig, 0),
-		Alarms: make([]*AlarmConfig, 0),
-		Chains: make([]*ChainConfig, 0),
+		Common:  &CommonConfig{},
+		Stream:  &StreamConfig{},
+		Outputs: make(map[string]*Output),
+		Inputs:  make([]*InputConfig, 0),
+		Chains:  make([]*ChainConfig, 0),
 	}
 }
 
@@ -128,25 +127,24 @@ func (c *Config) AddInput(name string, iTbl *ast.Table) {
 	inC.Show()
 }
 
-func (c *Config) AddArarm(name string, iTbl *ast.Table) {
-	alarm, ok := Alarms[name]
+func (c *Config) AddOutput(name string, iTbl *ast.Table) {
+	output, ok := Outputs[name]
 	if !ok {
-		log.Fatalf("[FATAL] no plugin %v available\n", name)
+		log.Fatalf("[FATAL] no output plugin %v available\n", name)
 	}
 
-	amC, err := buildAlarm(name, iTbl)
+	outC, err := buildOutput(name, iTbl)
 	if err != nil {
-		log.Fatalln("[FATAL] build alarm : ", err)
+		log.Fatalln("[FATAL] build output : ", err)
 	}
 
-	err = toml.UnmarshalTable(iTbl, alarm)
+	err = toml.UnmarshalTable(iTbl, output)
 	if err != nil {
-		log.Fatalln("[FATAL] unmarshal alarm: ", err)
+		log.Fatalln("[FATAL] unmarshal output: ", err)
 	}
-	amC.Alarm = alarm
+	outC.Output = output
 
-	c.Alarms = append(c.Alarms, amC)
-
+	c.Outputs[name] = outC
 }
 
 func (c *Config) AddChain(name string, iTbl *ast.Table) {

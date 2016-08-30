@@ -20,10 +20,10 @@ import (
 	"os/signal"
 	"syscall"
 
-	_ "github.com/corego/vgo/vgo/stream/plugins/alarm/all"
 	_ "github.com/corego/vgo/vgo/stream/plugins/chain/all"
 	_ "github.com/corego/vgo/vgo/stream/plugins/input/all"
 	_ "github.com/corego/vgo/vgo/stream/plugins/metric_output/all"
+	_ "github.com/corego/vgo/vgo/stream/plugins/output/all"
 	"github.com/corego/vgo/vgo/stream/service"
 	"github.com/spf13/cobra"
 )

@@ -1,7 +1,5 @@
 package service
 
-import "fmt"
-
 type Writer struct{}
 
 func (this Writer) Consume(lower, upper int64) {
@@ -10,11 +8,9 @@ func (this Writer) Consume(lower, upper int64) {
 	for lower <= upper {
 		m = controller.ring[lower&controller.bufferMask]
 		// 消费
-		fmt.Println("消费信息--->>> ", m)
-		// ring[lower&BufferMask]
-		for _, c := range Conf.Alarms {
-			c.Alarm.Compute(m)
-		}
+
+		streamer.alarmer.Compute(m)
+
 		for _, c := range Conf.Chains {
 			c.Chain.Compute(m)
 		}

@@ -36,6 +36,7 @@ type Stream struct {
 	writer          *Writer
 	controller      *Controller
 	strategyes      *strategy.Strategy
+	alarmer         *Alarmer
 }
 
 var streamer *Stream
@@ -58,6 +59,10 @@ func (s *Stream) Init() {
 	// init strategyes
 	s.strategyes = strategy.NewStrategy(Conf.Stream.StrategyDbname, Conf.Stream.StrategyBucketname)
 	s.strategyes.Init()
+
+	// init alarmer
+	s.alarmer = NewAlarm()
+	s.alarmer.Init()
 }
 
 // Start start stream server
@@ -65,13 +70,17 @@ func (s *Stream) Start(shutdown chan struct{}) {
 
 	s.controller.Start()
 
+	s.alarmer.Start()
+
 	// start plugins service
 	for _, c := range Conf.Inputs {
 		c.Start(s.stopPluginsChan, s.metricChan)
 	}
 
-	for _, c := range Conf.Alarms {
-		c.Start(s.stopPluginsChan)
+	for _, c := range Conf.Outputs {
+		if err := c.Output.Start(); err != nil {
+			log.Fatal("Output ", c.Name, " Start failed, err message is", err)
+		}
 	}
 
 	for _, c := range Conf.Chains {
@@ -91,5 +100,6 @@ func (s *Stream) Close() error {
 
 	// s.writer.Close()
 	s.controller.Close()
+	s.alarmer.Close()
 	return nil
 }
