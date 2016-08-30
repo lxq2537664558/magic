@@ -31,14 +31,23 @@ message Reply {
 }
 
 message Alert {
-	int32 	warn_count      = 1;
-	int32 	crit_count      = 2;
-	string 	warn_alarm      = 3;
-	string 	crit_alarm      = 4;
-    int32   warn_duration   = 5;
-    int32   crit_duration   = 6;
+	// 1 : average 2 : gauge 3: alive status
+	int32 type  = 1;
+	
+	// 1:   >,   2:  = ,   3: <
+	int32 operator = 2;
+	
+	
+	int32 warn_value = 3;
+	int32 crit_value = 4;
+	
+	string warn_output = 5;
+	string crit_output = 6;
+	
+	int32 duration = 7;
+	
+	string template = 8;
 }
-
 
 message User {
 	string 				name = 1;

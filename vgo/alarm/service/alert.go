@@ -19,6 +19,7 @@ type Group struct {
 }
 
 type Alert struct {
+	Type        int32
 	Value       []float64       // index 0 : total value of warn , 1 : total value of critical
 	Count       []int32         //index 0: warn, 1 : critical
 	NowCount    []int32         //index 0: warn, 1 : critical
