@@ -172,9 +172,9 @@ func (i *InfluxDB) Write(metrics service.Metrics) error {
 		bp.AddPoint(pt)
 		// log.Println(metric.Name, metric.Tags, metric.Fields, metric.Time)
 		// log.Println(metric)
-		for _, v := range metric.Fields {
-			log.Printf("%T\n", v)
-		}
+		// for _, v := range metric.Fields {
+		// 	log.Printf("%T\n", v)
+		// }
 
 	}
 
@@ -212,7 +212,7 @@ func (i *InfluxDB) Start() {
 }
 
 func (i *InfluxDB) Compute(metrics service.Metrics) error {
-	log.Println("influxDB data is", metrics)
+	// log.Println("influxDB data is", metrics)
 	return i.Write(metrics)
 
 }

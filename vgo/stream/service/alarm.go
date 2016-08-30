@@ -1,7 +1,5 @@
 package service
 
-import "log"
-
 type Alarmer struct {
 }
 
@@ -23,9 +21,18 @@ func (am *Alarmer) Close() error {
 }
 
 func (am *Alarmer) Compute(m Metrics) error {
-	// Compute
 
+	// Compute
+	// for _, v := range m.Data {
+	// 	for k, _ := range v.Fields {
+	// 		log.Println("Name", k, v.Name+"."+k)
+	// 	}
+	// }
 	// Alarm
-	log.Println("Alarmer Compute message is", m)
+	// log.Println("Alarmer Compute message is", m)
 	return nil
+}
+
+func (am *Alarmer) compute() {
+
 }
