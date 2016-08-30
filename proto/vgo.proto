@@ -51,6 +51,8 @@ message Alert {
 
 message User {
 	string 				name = 1;
-	map<string,string> 	info = 2;
+	string              sms = 2;
+	string              mail = 3;
+	string              message_push = 4;
 }
 
