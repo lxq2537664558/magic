@@ -38,18 +38,6 @@ type MetricWrapper struct {
 	Pt *client.Point `json:"pt"`
 }
 
-//easyjson:json
-type Metrics struct {
-	Data []*MetricData `json:"d"`
-}
-
-type MetricData struct {
-	Name   string                 `json:"n"`
-	Tags   map[string]string      `json:"ts"`
-	Fields map[string]interface{} `json:"f"`
-	Time   time.Time              `json:"t"`
-}
-
 // NewMetric returns a metric with the given timestamp. If a timestamp is not
 // given, then data is sent to the database without a timestamp, in which case
 // the server will assign local time upon reception. NOTE: it is recommended to

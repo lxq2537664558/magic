@@ -40,7 +40,7 @@
      "net_response","nginx","ping","postgresql","redis","apache", "dns_query","docker",
      "elasticsearch","memcached","zookeeper","dapper"]
 
-    outputdrop = ["console","influxdb"]
+    outputdrop = ["influxdb","nats"]
 
 
 

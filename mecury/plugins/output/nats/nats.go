@@ -2,6 +2,7 @@ package nats
 
 import (
 	"log"
+	"time"
 
 	"github.com/corego/vgo/mecury/agent"
 	"github.com/nats-io/nats"
@@ -11,6 +12,19 @@ type Nats struct {
 	Addrs []string
 	Topic string
 	conn  *nats.Conn
+}
+
+//easyjson:json
+type Metrics struct {
+	Data     []*MetricData `json:"d"`
+	Interval int           `json:"i"`
+}
+
+type MetricData struct {
+	Name   string                 `json:"n"`
+	Tags   map[string]string      `json:"ts"`
+	Fields map[string]interface{} `json:"f"`
+	Time   time.Time              `json:"t"`
 }
 
 func (n *Nats) Connect() error {
@@ -36,12 +50,13 @@ func (n *Nats) Description() string {
 }
 
 func (n *Nats) Write(metrics []agent.Metric) error {
-	mData := agent.Metrics{
-		Data: make([]*agent.MetricData, len(metrics)),
+	mData := Metrics{
+		Data:     make([]*MetricData, len(metrics)),
+		Interval: int(agent.Conf.Agent.Interval.Duration.Seconds()),
 	}
 
 	for i, v := range metrics {
-		mData.Data[i] = &agent.MetricData{
+		mData.Data[i] = &MetricData{
 			Name:   v.Name(),
 			Tags:   v.Tags(),
 			Fields: v.Fields(),
