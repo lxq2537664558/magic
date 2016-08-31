@@ -1,10 +1,6 @@
 package service
 
-import (
-	"fmt"
-
-	disruptor "github.com/smartystreets/go-disruptor"
-)
+import disruptor "github.com/smartystreets/go-disruptor"
 
 var controller *Controller
 
@@ -43,7 +39,7 @@ func Publish(m Metrics) {
 	writer := controller.controller.Writer()
 
 	sequence = writer.Reserve(controller.reservations)
-	fmt.Println(sequence, controller.reservations)
+	// fmt.Println(sequence, controller.reservations)
 	// 赋值
 	for lower := sequence - controller.reservations + 1; lower <= sequence; lower++ {
 		controller.ring[lower&controller.bufferMask] = m
@@ -52,17 +48,3 @@ func Publish(m Metrics) {
 	writer.Commit(sequence-controller.reservations+1, sequence)
 
 }
-
-// type Writer struct{}
-
-// func (this Writer) Consume(lower, upper int64) {
-// 	m := Metric{}
-// 	for lower <= upper {
-// 		m = controller.ring[lower&controller.bufferMask]
-// 		// 消费
-// 		fmt.Println(m)
-// 		// ring[lower&BufferMask]
-// 		lower++
-// 	}
-// 	// fmt.Println(m)
-// }

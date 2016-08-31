@@ -1,62 +1,38 @@
 package service
 
-import (
-	"log"
-	"time"
-
-	"github.com/corego/vgo/vgo/stream/misc"
-	"github.com/naoina/toml/ast"
-	"github.com/uber-go/zap"
-)
-
-// AlarmConfig alarmconfig
-type AlarmConfig struct {
-	Name   string
-	Prefix string
-	Suffix string
-
-	Alarm Alarmer
-
-	Interval time.Duration
+type Alarmer struct {
 }
 
-// Start init and start Alarmer service
-func (amc *AlarmConfig) Start(stopC chan bool) {
-	defer func() {
-		if err := recover(); err != nil {
-			misc.PrintStack(false)
-			vLogger.Fatal("flush fatal error ", zap.Error(err.(error)))
-		}
-	}()
-
-	amc.Alarm.Init(stopC)
-	go amc.Alarm.Start()
+func NewAlarm() *Alarmer {
+	alarmer := &Alarmer{}
+	return alarmer
 }
 
-// Show show struct message
-func (amc *AlarmConfig) Show() {
-	log.Println("Name is ", amc.Name)
-	log.Println("Prefix is ", amc.Prefix)
-	log.Println("Suffix is ", amc.Suffix)
-	log.Println("Interval is ", amc.Interval)
-	log.Printf("Inputer is %v\n", amc.Alarm)
+func (am *Alarmer) Init() {
+
 }
 
-var Alarms = map[string]Alarmer{}
+func (am *Alarmer) Start() {
 
-func AddAlarm(name string, ararm Alarmer) {
-	Alarms[name] = ararm
 }
 
-type Alarmer interface {
-	Init(chan bool)
-	Start()
-	Compute(Metrics) error
+func (am *Alarmer) Close() error {
+	return nil
 }
 
-// buildAlarm parses alarm specific items from the ast.Table,
-func buildAlarm(name string, tbl *ast.Table) (*AlarmConfig, error) {
-	ac := &AlarmConfig{Name: name}
+func (am *Alarmer) Compute(m Metrics) error {
 
-	return ac, nil
+	// Compute
+	// for _, v := range m.Data {
+	// 	for k, _ := range v.Fields {
+	// 		log.Println("Name", k, v.Name+"."+k)
+	// 	}
+	// }
+	// Alarm
+	// log.Println("Alarmer Compute message is", m)
+	return nil
+}
+
+func (am *Alarmer) compute() {
+
 }

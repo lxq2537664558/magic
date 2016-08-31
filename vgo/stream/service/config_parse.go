@@ -8,6 +8,24 @@ import (
 	"github.com/uber-go/zap"
 )
 
+func parseOutputs(tbl *ast.Table) {
+	if val, ok := tbl.Fields["outputs"]; ok {
+		subTbl, _ := val.(*ast.Table)
+		for pn, pt := range subTbl.Fields {
+			switch iTbl := pt.(type) {
+			case *ast.Table:
+				Conf.AddOutput(pn, iTbl)
+			case []*ast.Table:
+				for _, t := range iTbl {
+					Conf.AddOutput(pn, t)
+				}
+			default:
+				log.Fatalln("[FATAL] inputs parse error: ", iTbl)
+			}
+		}
+	}
+}
+
 func parseCommon(tbl *ast.Table) {
 	if val, ok := tbl.Fields["common"]; ok {
 		subTbl, ok := val.(*ast.Table)
@@ -161,31 +179,31 @@ func parseInputs(tbl *ast.Table) {
 	}
 }
 
-func parseAlarms(tbl *ast.Table) {
-	if val, ok := tbl.Fields["alarms"]; ok {
-		subTbl, _ := val.(*ast.Table)
-		for pn, pt := range subTbl.Fields {
-			// filter the alarms,drop the ones in global_filters
-			if !Conf.Filter.ShouldAlarmDropPass(pn) {
-				continue
-			}
+// func parseAlarms(tbl *ast.Table) {
+// 	if val, ok := tbl.Fields["alarms"]; ok {
+// 		subTbl, _ := val.(*ast.Table)
+// 		for pn, pt := range subTbl.Fields {
+// 			// filter the alarms,drop the ones in global_filters
+// 			if !Conf.Filter.ShouldAlarmDropPass(pn) {
+// 				continue
+// 			}
 
-			switch iTbl := pt.(type) {
-			case *ast.Table:
-				Conf.AddArarm(pn, iTbl)
-				vLogger.Info("config", zap.String("alarmer", pn))
-			case []*ast.Table:
-				for _, t := range iTbl {
-					Conf.AddArarm(pn, t)
-					vLogger.Info("config", zap.String("alarmer", t.Name))
-				}
+// 			switch iTbl := pt.(type) {
+// 			case *ast.Table:
+// 				Conf.AddArarm(pn, iTbl)
+// 				vLogger.Info("config", zap.String("alarmer", pn))
+// 			case []*ast.Table:
+// 				for _, t := range iTbl {
+// 					Conf.AddArarm(pn, t)
+// 					vLogger.Info("config", zap.String("alarmer", t.Name))
+// 				}
 
-			default:
-				log.Fatalln("[FATAL] alarms parse error: ", iTbl)
-			}
-		}
-	}
-}
+// 			default:
+// 				log.Fatalln("[FATAL] alarms parse error: ", iTbl)
+// 			}
+// 		}
+// 	}
+// }
 
 func parseChains(tbl *ast.Table) {
 	if val, ok := tbl.Fields["chains"]; ok {

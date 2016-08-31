@@ -10,6 +10,8 @@ import (
 	"github.com/boltdb/bolt"
 )
 
+var strategyes *Strategy
+
 type Strategy struct {
 	// grlock    sync.RWMutex
 	// aglock    sync.RWMutex
@@ -190,12 +192,13 @@ func (sg *Strategy) Close() error {
 
 func NewStrategy(dbname string, bucketname string) *Strategy {
 	sg := &Strategy{dbname: dbname, bucketName: []byte(bucketname)}
+	strategyes = sg
 	return sg
 }
 
 // test test
 func test() {
-	var strategyes *Strategy
+
 	strategyes = NewStrategy("my.db", "groups")
 	strategyes.Init()
 	fmt.Println("Alert", strategyes)
