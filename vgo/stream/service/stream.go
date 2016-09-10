@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/corego/vgo/vgo/stream/strategy"
 	"github.com/uber-go/zap"
@@ -53,6 +54,7 @@ func New() *Stream {
 // Init init stream
 func (s *Stream) Init() {
 	s.stopPluginsChan = make(chan bool, 1)
+	s.metricChan = make(chan Metrics, 1)
 
 	// init disruptor
 	s.controller = NewController()
@@ -94,7 +96,7 @@ func StreamTestFunc() {
 			}
 		}
 	}()
-
+	time.Sleep(time.Second * 1)
 	log.Println("Host get groups is ", gs)
 	// DeleHost("scc@Google")
 	DeleGroupInHosts("scc@Google", "zeus")

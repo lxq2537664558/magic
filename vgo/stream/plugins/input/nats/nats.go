@@ -63,7 +63,7 @@ func dealMetricMsg(m *nats.Msg) {
 		log.Println("nats UnmarshalJSON failed, err message is ", err)
 	} else {
 		service.Publish(data)
-		log.Println("Nats get msg")
+		// log.Println("Nats get msg")
 	}
 	// gNats.Write(data)
 }

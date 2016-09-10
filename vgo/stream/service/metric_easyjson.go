@@ -4,7 +4,6 @@ package service
 
 import (
 	json "encoding/json"
-
 	jlexer "github.com/mailru/easyjson/jlexer"
 	jwriter "github.com/mailru/easyjson/jwriter"
 )
@@ -195,6 +194,8 @@ func easyjson_9478868c_decode_github_com_corego_vgo_vgo_stream_service_Metrics(i
 				in.WantComma()
 			}
 			in.Delim(']')
+		case "i":
+			out.Interval = int(in.Int())
 		default:
 			in.SkipRecursive()
 		}
@@ -223,6 +224,12 @@ func easyjson_9478868c_encode_github_com_corego_vgo_vgo_stream_service_Metrics(o
 		}
 	}
 	out.RawByte(']')
+	if !first {
+		out.RawByte(',')
+	}
+	first = false
+	out.RawString("\"i\":")
+	out.Int(int(in.Interval))
 	out.RawByte('}')
 }
 func (v Metrics) MarshalJSON() ([]byte, error) {

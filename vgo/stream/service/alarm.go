@@ -1,5 +1,7 @@
 package service
 
+import "github.com/uber-go/zap"
+
 type Alarmer struct {
 }
 
@@ -20,14 +22,25 @@ func (am *Alarmer) Close() error {
 	return nil
 }
 
+// 三种监控
+// 平均值
+// 瞬时平均值
+// 状态存活监控
+
 func (am *Alarmer) Compute(m Metrics) error {
 
 	// Compute
-	// for _, v := range m.Data {
-	// 	for k, _ := range v.Fields {
-	// 		log.Println("Name", k, v.Name+"."+k)
-	// 	}
-	// }
+	for _, v := range m.Data {
+		hostname, ok := v.Tags["host"]
+		if !ok {
+			vLogger.Error("MetricData unfind hostname")
+			continue
+		}
+		vLogger.Debug("Alarmer Compute", zap.String("hostname", hostname))
+		streamer.hosts.RLock()
+
+		streamer.hosts.RUnlock()
+	}
 	// Alarm
 	// log.Println("Alarmer Compute message is", m)
 	return nil

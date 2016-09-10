@@ -5,7 +5,8 @@ import "time"
 // MetricData transfer data(inpute transfer data)
 //easyjson:json
 type Metrics struct {
-	Data []*MetricData `json:"d"`
+	Data     []*MetricData `json:"d"`
+	Interval int           `json:"i"`
 }
 
 type MetricData struct {
