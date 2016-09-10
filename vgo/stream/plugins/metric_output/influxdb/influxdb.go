@@ -11,6 +11,7 @@ import (
 
 	"github.com/corego/vgo/vgo/stream/misc"
 	"github.com/corego/vgo/vgo/stream/service"
+	"github.com/uber-go/zap"
 
 	"github.com/influxdata/influxdb/client/v2"
 )
@@ -167,15 +168,12 @@ func (i *InfluxDB) Write(metrics service.Metrics) error {
 	for _, metric := range metrics.Data {
 		pt, err := client.NewPoint(metric.Name, metric.Tags, metric.Fields, metric.Time)
 		if err != nil {
+			service.VLogger.Error("InfluxDB Write", zap.Error(err))
 			return err
 		}
+		service.VLogger.Debug("InfluxDB Write", zap.Object("@metric", metric))
 		bp.AddPoint(pt)
-		// log.Println(metric.Name, metric.Tags, metric.Fields, metric.Time)
-		// log.Println(metric)
-		// for _, v := range metric.Fields {
-		// 	log.Printf("%T\n", v)
-		// }
-
+		log.Println(metric)
 	}
 
 	// This will get set to nil if a successful write occurs
@@ -184,12 +182,11 @@ func (i *InfluxDB) Write(metrics service.Metrics) error {
 	p := rand.Perm(len(i.conns))
 	for _, n := range p {
 		if e := i.conns[n].Write(bp); e != nil {
-			// Log write failure
-			log.Printf("ERROR: %s, %v", e, bp)
+			service.VLogger.Error("InfluxDB Write", zap.Error(e))
 			// If the database was not found, try to recreate it
 			if strings.Contains(e.Error(), "database not found") {
 				if errc := createDatabase(i.conns[n], i.Database); errc != nil {
-					log.Printf("ERROR: Database %s not found and failed to recreate\n", i.Database)
+					service.VLogger.Error("ERROR: Database "+i.Database+" not found and failed to recreate\n", zap.Error(errc))
 				}
 			}
 		} else {

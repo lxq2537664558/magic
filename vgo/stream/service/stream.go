@@ -9,7 +9,7 @@ import (
 	"github.com/uber-go/zap"
 )
 
-var vLogger zap.Logger
+var VLogger zap.Logger
 
 type StreamConfig struct {
 	InputerQueue          int

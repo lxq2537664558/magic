@@ -31,7 +31,7 @@ func (cc *ChainConfig) Start(stopC chan bool) {
 	defer func() {
 		if err := recover(); err != nil {
 			misc.PrintStack(false)
-			vLogger.Fatal("flush fatal error ", zap.Error(err.(error)))
+			VLogger.Fatal("flush fatal error ", zap.Error(err.(error)))
 		}
 	}()
 

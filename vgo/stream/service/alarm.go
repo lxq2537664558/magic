@@ -33,10 +33,10 @@ func (am *Alarmer) Compute(m Metrics) error {
 	for _, v := range m.Data {
 		hostname, ok := v.Tags["host"]
 		if !ok {
-			vLogger.Error("MetricData unfind hostname")
+			VLogger.Error("MetricData unfind hostname")
 			continue
 		}
-		vLogger.Debug("Alarmer Compute", zap.String("hostname", hostname))
+		VLogger.Debug("Alarmer Compute", zap.String("hostname", hostname))
 		streamer.hosts.RLock()
 
 		streamer.hosts.RUnlock()

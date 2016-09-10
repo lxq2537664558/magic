@@ -92,7 +92,7 @@ func LoadConfig() {
 // initLogger init logger
 func initLogger() {
 	vlog.Init(Conf.Common.LogPath, Conf.Common.LogLevel, Conf.Common.IsDebug)
-	vLogger = vlog.Logger
+	VLogger = vlog.Logger
 	log.SetFlags(log.Lmicroseconds | log.Lshortfile | log.LstdFlags)
 }
 

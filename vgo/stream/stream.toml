@@ -58,8 +58,8 @@
 #                            METRIC_OUTPUTS PLUGINS                           #
 ###############################################################################
 [[metric_outputs.influxdb]]
-    urls = ["http://10.3.11.114:8086"]
-    database = "test1"
+    urls = ["http://10.7.15.36:8086"]
+    database = "metrics"
     write_consistency = "any"
     timeout = "5s"
 

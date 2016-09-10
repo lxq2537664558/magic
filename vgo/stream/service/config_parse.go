@@ -165,11 +165,11 @@ func parseInputs(tbl *ast.Table) {
 			switch iTbl := pt.(type) {
 			case *ast.Table:
 				Conf.AddInput(pn, iTbl)
-				vLogger.Info("config", zap.String("inputer", pn))
+				VLogger.Info("config", zap.String("inputer", pn))
 			case []*ast.Table:
 				for _, t := range iTbl {
 					Conf.AddInput(pn, t)
-					vLogger.Info("config", zap.String("inputer", t.Name))
+					VLogger.Info("config", zap.String("inputer", t.Name))
 				}
 
 			default:
@@ -191,11 +191,11 @@ func parseInputs(tbl *ast.Table) {
 // 			switch iTbl := pt.(type) {
 // 			case *ast.Table:
 // 				Conf.AddArarm(pn, iTbl)
-// 				vLogger.Info("config", zap.String("alarmer", pn))
+// 				VLogger.Info("config", zap.String("alarmer", pn))
 // 			case []*ast.Table:
 // 				for _, t := range iTbl {
 // 					Conf.AddArarm(pn, t)
-// 					vLogger.Info("config", zap.String("alarmer", t.Name))
+// 					VLogger.Info("config", zap.String("alarmer", t.Name))
 // 				}
 
 // 			default:
@@ -217,11 +217,11 @@ func parseChains(tbl *ast.Table) {
 			switch iTbl := pt.(type) {
 			case *ast.Table:
 				Conf.AddChain(pn, iTbl)
-				vLogger.Info("config", zap.String("chainser", pn))
+				VLogger.Info("config", zap.String("chainser", pn))
 			case []*ast.Table:
 				for _, t := range iTbl {
 					Conf.AddChain(pn, t)
-					vLogger.Info("config", zap.String("chainser", t.Name))
+					VLogger.Info("config", zap.String("chainser", t.Name))
 				}
 
 			default:
@@ -243,11 +243,11 @@ func parseMetricOutputs(tbl *ast.Table) {
 			switch iTbl := pt.(type) {
 			case *ast.Table:
 				Conf.AddMetricOutput(pn, iTbl)
-				vLogger.Info("config", zap.String("metric_outputer", pn))
+				VLogger.Info("config", zap.String("metric_outputer", pn))
 			case []*ast.Table:
 				for _, t := range iTbl {
 					Conf.AddMetricOutput(pn, t)
-					vLogger.Info("config", zap.String("metric_outputer", t.Name))
+					VLogger.Info("config", zap.String("metric_outputer", t.Name))
 				}
 
 			default:
