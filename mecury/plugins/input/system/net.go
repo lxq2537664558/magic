@@ -3,7 +3,6 @@ package system
 import (
 	"fmt"
 	"net"
-	"strings"
 
 	"github.com/corego/vgo/mecury/agent"
 )
@@ -85,19 +84,19 @@ func (s *NetIOStats) Gather(acc agent.Accumulator) error {
 
 	// Get system wide stats for different network protocols
 	// (ignore these stats if the call fails)
-	netprotos, _ := s.ps.NetProto()
-	fields := make(map[string]interface{})
-	for _, proto := range netprotos {
-		for stat, value := range proto.Stats {
-			name := fmt.Sprintf("%s_%s", strings.ToLower(proto.Protocol),
-				strings.ToLower(stat))
-			fields[name] = value
-		}
-	}
-	tags := map[string]string{
-		"interface": "all",
-	}
-	acc.AddFields("net", fields, tags)
+	// netprotos, _ := s.ps.NetProto()
+	// fields := make(map[string]interface{})
+	// for _, proto := range netprotos {
+	// 	for stat, value := range proto.Stats {
+	// 		name := fmt.Sprintf("%s_%s", strings.ToLower(proto.Protocol),
+	// 			strings.ToLower(stat))
+	// 		fields[name] = value
+	// 	}
+	// }
+	// tags := map[string]string{
+	// 	"interface": "all",
+	// }
+	// acc.AddFields("net", fields, tags)
 
 	return nil
 }

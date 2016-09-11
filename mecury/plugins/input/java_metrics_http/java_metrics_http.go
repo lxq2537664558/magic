@@ -3,6 +3,7 @@ package java_metrics_http
 import (
 	"encoding/json"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/corego/vgo/mecury/agent"
@@ -57,14 +58,31 @@ func (h *HttpListener) handle(ctx *fasthttp.RequestCtx) {
 	var rawM map[string]interface{}
 	json.Unmarshal(m, &rawM)
 
-	st := time.Now()
-	for name, v := range rawM {
+	for n, v := range rawM {
 		fields := v.(map[string]interface{})
-		h.acc.AddFields(name, fields, agent.Conf.Tags, time.Now())
-	}
+		tags := make(map[string]string)
+		for k, v := range agent.Conf.Tags {
+			tags[k] = v
+		}
 
-	tu := time.Now().Sub(st)
-	log.Println("http time used: ", tu.Nanoseconds(), "ns")
+		ns := strings.Split(n, ",")
+		if len(ns) <= 0 {
+			log.Println("invalid metric name: ", n)
+			continue
+		} else if len(ns) == 1 {
+			h.acc.AddFields(ns[0], fields, tags, time.Now())
+			continue
+		}
+
+		for _, v := range ns[1:] {
+			tag := strings.Split(v, "=")
+			if len(tag) == 2 {
+				tags[tag[0]] = tag[1]
+			}
+		}
+
+		h.acc.AddFields(ns[0], fields, tags, time.Now())
+	}
 }
 
 func init() {

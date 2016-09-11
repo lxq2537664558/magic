@@ -61,13 +61,14 @@ func (s *DiskIOStats) Gather(acc agent.Accumulator) error {
 		}
 
 		fields := map[string]interface{}{
-			"reads":       io.ReadCount,
-			"writes":      io.WriteCount,
-			"read_bytes":  io.ReadBytes,
-			"write_bytes": io.WriteBytes,
-			"read_time":   io.ReadTime,
-			"write_time":  io.WriteTime,
-			"io_time":     io.IoTime,
+			"reads":           io.ReadCount,
+			"writes":          io.WriteCount,
+			"read_bytes":      io.ReadBytes,
+			"write_bytes":     io.WriteBytes,
+			"read_time":       io.ReadTime,
+			"write_time":      io.WriteTime,
+			"io_time":         io.IoTime,
+			"iop_in_progress": io.IopsInProgress,
 		}
 		acc.AddFields("diskio", fields, tags)
 	}

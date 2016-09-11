@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/corego/vgo/mecury/agent"
 )
@@ -22,7 +23,12 @@ var (
 )
 
 type Kernel struct {
-	statFile string
+	LastCTXT        int64
+	LastIntr        int64
+	LastPagein      int64
+	LastPageout     int64
+	LastCollectTime time.Time
+	statFile        string
 }
 
 func (k *Kernel) Description() string {
@@ -39,6 +45,8 @@ func (k *Kernel) Gather(acc agent.Accumulator) error {
 
 	fields := make(map[string]interface{})
 
+	now := time.Now()
+
 	dataFields := bytes.Fields(data)
 	for i, field := range dataFields {
 		switch {
@@ -47,13 +55,23 @@ func (k *Kernel) Gather(acc agent.Accumulator) error {
 			if err != nil {
 				return err
 			}
-			fields["interrupts"] = int64(m)
+
+			if k.LastIntr != 0 {
+				fields["interrupts"] = float64(m-k.LastIntr) / now.Sub(k.LastCollectTime).Seconds()
+			}
+			k.LastIntr = m
+
 		case bytes.Equal(field, context_switches):
 			m, err := strconv.ParseInt(string(dataFields[i+1]), 10, 64)
 			if err != nil {
 				return err
 			}
-			fields["context_switches"] = int64(m)
+
+			if k.LastCTXT != 0 {
+				fields["context_switches"] = float64(m-k.LastCTXT) / now.Sub(k.LastCollectTime).Seconds()
+			}
+			k.LastCTXT = m
+
 		case bytes.Equal(field, processes_forked):
 			m, err := strconv.ParseInt(string(dataFields[i+1]), 10, 64)
 			if err != nil {
@@ -75,11 +93,20 @@ func (k *Kernel) Gather(acc agent.Accumulator) error {
 			if err != nil {
 				return err
 			}
-			fields["disk_pages_in"] = int64(in)
-			fields["disk_pages_out"] = int64(out)
+
+			if k.LastPagein == 0 {
+				fields["disk_pages_in"] = float64(in-k.LastPagein) / now.Sub(k.LastCollectTime).Seconds()
+			}
+			k.LastPagein = in
+
+			if k.LastPageout == 0 {
+				fields["disk_pages_out"] = float64(out-k.LastPageout) / now.Sub(k.LastCollectTime).Seconds()
+			}
+			k.LastPageout = out
 		}
 	}
 
+	k.LastCollectTime = now
 	acc.AddFields("kernel", fields, map[string]string{})
 
 	return nil
