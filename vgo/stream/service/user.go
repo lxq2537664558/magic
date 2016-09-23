@@ -1,4 +1,4 @@
-package strategy
+package service
 
 // User group user
 type User struct {

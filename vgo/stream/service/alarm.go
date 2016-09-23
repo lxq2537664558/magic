@@ -1,7 +1,5 @@
 package service
 
-import "github.com/uber-go/zap"
-
 type Alarmer struct {
 }
 
@@ -30,17 +28,17 @@ func (am *Alarmer) Close() error {
 func (am *Alarmer) Compute(m Metrics) error {
 
 	// Compute
-	for _, v := range m.Data {
-		hostname, ok := v.Tags["host"]
-		if !ok {
-			VLogger.Error("MetricData unfind hostname")
-			continue
-		}
-		VLogger.Debug("Alarmer Compute", zap.String("hostname", hostname))
-		streamer.hosts.RLock()
+	// for _, v := range m.Data {
+	// 	hostname, ok := v.Tags["host"]
+	// 	if !ok {
+	// 		VLogger.Error("MetricData unfind hostname")
+	// 		continue
+	// 	}
+	// 	VLogger.Debug("Alarmer Compute", zap.String("hostname", hostname))
+	// 	streamer.hosts.RLock()
 
-		streamer.hosts.RUnlock()
-	}
+	// 	streamer.hosts.RUnlock()
+	// }
 	// Alarm
 	// log.Println("Alarmer Compute message is", m)
 	return nil

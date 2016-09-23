@@ -1,4 +1,4 @@
-package strategy
+package service
 
 // Group monitor Group
 type Group struct {

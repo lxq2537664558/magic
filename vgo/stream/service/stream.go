@@ -1,11 +1,8 @@
 package service
 
 import (
-	"fmt"
 	"log"
-	"time"
 
-	"github.com/corego/vgo/vgo/stream/strategy"
 	"github.com/uber-go/zap"
 )
 
@@ -37,9 +34,9 @@ type Stream struct {
 	metricChan      chan Metrics
 	writer          *Writer
 	controller      *Controller
-	strategyes      *strategy.Strategy
 	alarmer         *Alarmer
-	hosts           *strategy.Hosts
+	// strategyes      *strategy.Strategy
+	// hosts           *strategy.Hosts
 }
 
 var streamer *Stream
@@ -61,85 +58,85 @@ func (s *Stream) Init() {
 	s.controller.Init(Conf.Stream.DisruptorBuffersize, Conf.Stream.DisruptorBuffermask, Conf.Stream.DisruptorReservations)
 
 	// init strategyes
-	s.strategyes = strategy.NewStrategy(Conf.Stream.StrategyDbname, Conf.Stream.StrategyBucketname)
-	s.strategyes.Init()
+	// s.strategyes = strategy.NewStrategy(Conf.Stream.StrategyDbname, Conf.Stream.StrategyBucketname)
+	// s.strategyes.Init()
 
 	// init alarmer
 	s.alarmer = NewAlarm()
 	s.alarmer.Init()
 
 	// init hosts
-	s.hosts = strategy.NewHosts()
+	// s.hosts = strategy.NewHosts()
 }
 
 func StreamTestFunc() {
 	// strategy.HostTest()
-	AddHost("scc@Google", "zeus")
-	AddHost("scc@Google", "room")
-	AddHost("scc@Google", "cache")
-	AddHost("scc@Google", "center")
-	AddHost("scc@Google", "vgo")
-	AddHost("scc@Google", "uuid")
-	gs, _ := GetGroups("scc@Google")
-	go func() {
-		for {
-			for k, v := range gs {
-				log.Println(k, v)
-			}
-		}
-	}()
+	// AddHost("scc@Google", "zeus")
+	// AddHost("scc@Google", "room")
+	// AddHost("scc@Google", "cache")
+	// AddHost("scc@Google", "center")
+	// AddHost("scc@Google", "vgo")
+	// AddHost("scc@Google", "uuid")
+	// gs, _ := GetGroups("scc@Google")
+	// go func() {
+	// 	for {
+	// 		for k, v := range gs {
+	// 			log.Println(k, v)
+	// 		}
+	// 	}
+	// }()
 
-	go func() {
-		for {
-			for k, v := range gs {
-				log.Println(k, v)
-			}
-		}
-	}()
-	time.Sleep(time.Second * 1)
-	log.Println("Host get groups is ", gs)
-	// DeleHost("scc@Google")
-	DeleGroupInHosts("scc@Google", "zeus")
-	DeleGroupInHosts("scc@Google", "room")
-	DeleGroupInHosts("scc@Google", "cache")
-	DeleGroupInHosts("scc@Google", "uuid")
-	DeleGroupInHosts("scc@Google", "vgo")
-	DeleGroupInHosts("scc@Google", "center")
-	gs, _ = GetGroups("scc@Google")
-	log.Println("Host get groups is ", gs)
+	// go func() {
+	// 	for {
+	// 		for k, v := range gs {
+	// 			log.Println(k, v)
+	// 		}
+	// 	}
+	// }()
+	// time.Sleep(time.Second * 1)
+	// log.Println("Host get groups is ", gs)
+	// // DeleHost("scc@Google")
+	// DeleGroupInHosts("scc@Google", "zeus")
+	// DeleGroupInHosts("scc@Google", "room")
+	// DeleGroupInHosts("scc@Google", "cache")
+	// DeleGroupInHosts("scc@Google", "uuid")
+	// DeleGroupInHosts("scc@Google", "vgo")
+	// DeleGroupInHosts("scc@Google", "center")
+	// gs, _ = GetGroups("scc@Google")
+	// log.Println("Host get groups is ", gs)
 
 }
 
-func AddHost(hostname string, gid string) error {
-	if streamer == nil {
-		return fmt.Errorf("streamer is nil, please init stream!")
-	}
-	streamer.hosts.Add(hostname, gid)
-	return nil
-}
+// func AddHost(hostname string, gid string) error {
+// 	if streamer == nil {
+// 		return fmt.Errorf("streamer is nil, please init stream!")
+// 	}
+// 	streamer.hosts.Add(hostname, gid)
+// 	return nil
+// }
 
-func GetGroups(hostname string) (map[string]bool, error) {
-	if streamer == nil {
-		return nil, fmt.Errorf("streamer is nil, please init stream!")
-	}
-	return streamer.hosts.Get(hostname), nil
-}
+// func GetGroups(hostname string) (map[string]bool, error) {
+// 	if streamer == nil {
+// 		return nil, fmt.Errorf("streamer is nil, please init stream!")
+// 	}
+// 	return streamer.hosts.Get(hostname), nil
+// }
 
-func DeleGroupInHosts(hostname string, gid string) error {
-	if streamer == nil {
-		return fmt.Errorf("streamer is nil, please init stream!")
-	}
-	streamer.hosts.DeleGroupInHosts(hostname, gid)
-	return nil
-}
+// func DeleGroupInHosts(hostname string, gid string) error {
+// 	if streamer == nil {
+// 		return fmt.Errorf("streamer is nil, please init stream!")
+// 	}
+// 	streamer.hosts.DeleGroupInHosts(hostname, gid)
+// 	return nil
+// }
 
-func DeleHost(hostname string) error {
-	if streamer == nil {
-		return fmt.Errorf("streamer is nil, please init stream!")
-	}
-	streamer.hosts.DelHost(hostname)
-	return nil
-}
+// func DeleHost(hostname string) error {
+// 	if streamer == nil {
+// 		return fmt.Errorf("streamer is nil, please init stream!")
+// 	}
+// 	streamer.hosts.DelHost(hostname)
+// 	return nil
+// }
 
 // Start start stream server
 func (s *Stream) Start(shutdown chan struct{}) {

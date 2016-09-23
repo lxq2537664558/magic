@@ -1,4 +1,4 @@
-package strategy
+package service
 
 import (
 	"log"
