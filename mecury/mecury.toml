@@ -33,7 +33,7 @@
 #                           Global Filters                               #
 ###############################################################################
 [global_filters]
-    inputdrop = ["udp_listener","net",
+    inputdrop = ["udp_listener","net","kernel","disk",
      "haproxy", "http_response", 
      "log_collect","mongodb","mysql",
      "net_response","nginx","ping","postgresql","redis","apache", "dns_query","docker",

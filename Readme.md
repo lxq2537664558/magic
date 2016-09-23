@@ -6,6 +6,10 @@ Official Site
 ------------
 <a href="http://vgo.io">http://vgo.io</a>
 
+Ready To Use?
+---------------
+This project is still in early stage,but agent mecury is ready to use and we also used in our production enviroment
+
 Features
 ------------
  - Pure Go
