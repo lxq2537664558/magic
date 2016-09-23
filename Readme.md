@@ -38,15 +38,22 @@ Components
  - influxdb
  - grafana
  
-Installation
+Installation(only mecury now)
 ------------
 These part all are Runable applications,so,we could get with following command:  </br>
    ```bash
     $ go get -u github.com/corego/vgo
     $ cd $GOPATH/src/github.com/corego/vgo/mecury
-    $ cd $GOPATH/src/github.com/corego/vgo/vgo
    ```
 Then we get two independent binarys in our $GOPATH/bin directory: 
    *  mecury.
-   *  vgo.
 
+
+Usage(only mecury now)
+------------
+ - For now ,you can use mecury to collect system info、java metrics info(see input plugins),and output to console(for debug)、influxdb、nats.
+ - You can configure these in mecury.toml, [global_filters] is used to filtered out the undesired inputs or outputs.
+ - In the default mecury.toml, we collect the system info and start the java metris httplistener, 
+ and output these metrics to console for debug.For more details,please see the corresponding readme.md in 
+the sub directories of pluginsy
+ - Start the mecury with default mecury.toml and see what displays in your console!
