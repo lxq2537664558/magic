@@ -11,10 +11,22 @@ type AlertStatic struct {
 	Template   string
 }
 
+func NewAlertStatic() *AlertStatic {
+	return &AlertStatic{}
+}
+
 type AlertDynatic struct {
 }
 
 type Alert struct {
-	AlertDynatic
-	AlertStatic
+	AlertDy *AlertDynatic
+	AlertSt *AlertStatic
+}
+
+func NewAlert() *Alert {
+	alert := &Alert{
+		AlertDy: &AlertDynatic{},
+		AlertSt: &AlertStatic{},
+	}
+	return alert
 }

@@ -1,5 +1,7 @@
 package service
 
+import "github.com/uber-go/zap"
+
 type Alarmer struct {
 }
 
@@ -27,20 +29,31 @@ func (am *Alarmer) Close() error {
 
 func (am *Alarmer) Compute(m Metrics) error {
 
-	// Compute
-	// for _, v := range m.Data {
-	// 	hostname, ok := v.Tags["host"]
-	// 	if !ok {
-	// 		VLogger.Error("MetricData unfind hostname")
-	// 		continue
-	// 	}
-	// 	VLogger.Debug("Alarmer Compute", zap.String("hostname", hostname))
-	// 	streamer.hosts.RLock()
+	for _, metric := range m.Data {
+		hostname, ok := metric.Tags["host"]
+		if !ok {
+			VLogger.Error("MetricData unfind hostname")
+			continue
+		}
+		VLogger.Info("Compute", zap.String("@hostname", hostname))
+		// streamer.groups.GetGroups(hostname)
+		groups := streamer.hostsTogroups.Get(hostname)
+		if groups == nil {
+			// VLogger.Debug("unfind groups", zap.String("@hostname", hostname))
+			continue
+		}
 
-	// 	streamer.hosts.RUnlock()
-	// }
-	// Alarm
-	// log.Println("Alarmer Compute message is", m)
+		VLogger.Debug("Compute", zap.Object("@groups", groups))
+		// for gid, _ := range groups {
+		// 	if g := GetGroup(gid); g != nil {
+		// 		for field, _ := range metric.Fields {
+		// 			if alert, ok := g.Alerts[metric.Name+"."+field]; ok {
+		// 				log.Println(alert)
+		// 			}
+		// 		}
+		// 	}
+		// }
+	}
 	return nil
 }
 

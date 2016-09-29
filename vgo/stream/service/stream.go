@@ -1,8 +1,14 @@
 package service
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 
+	"github.com/corego/vgo/mecury/misc"
+	"github.com/corego/vgo/proto"
+
+	"github.com/boltdb/bolt"
 	"github.com/uber-go/zap"
 )
 
@@ -14,18 +20,19 @@ type StreamConfig struct {
 	DisruptorBuffersize   int64
 	DisruptorBuffermask   int64
 	DisruptorReservations int64
-	StrategyDbname        string
-	StrategyBucketname    string
+	Dbname                string
+	Bucketname            string
+	GrpcAddr              string
 }
 
 func (sc *StreamConfig) Show() {
-	log.Println("InputerQueue", sc.InputerQueue)
-	log.Println("WriterNum", sc.WriterNum)
-	log.Println("DisruptorBuffersize", sc.DisruptorBuffersize)
-	log.Println("DisruptorBuffermask", sc.DisruptorBuffermask)
-	log.Println("DisruptorReservations", sc.DisruptorReservations)
-	log.Println("StrategyDbName", sc.StrategyDbname)
-	log.Println("StrategyBucketName", sc.StrategyBucketname)
+	VLogger.Debug("Show", zap.Int("@InputerQueue", sc.InputerQueue))
+	VLogger.Debug("Show", zap.Int("@WriterNum", sc.WriterNum))
+	VLogger.Debug("Show", zap.Int64("@DisruptorBuffersize", sc.DisruptorBuffersize))
+	VLogger.Debug("Show", zap.Int64("@DisruptorBuffermask", sc.DisruptorBuffermask))
+	VLogger.Debug("Show", zap.Int64("@DisruptorReservations", sc.DisruptorReservations))
+	VLogger.Debug("Show", zap.String("@Dbname", sc.Dbname))
+	VLogger.Debug("Show", zap.String("@Bucketname", sc.Bucketname))
 }
 
 // Stream struct
@@ -35,8 +42,10 @@ type Stream struct {
 	writer          *Writer
 	controller      *Controller
 	alarmer         *Alarmer
-	// strategyes      *strategy.Strategy
-	// hosts           *strategy.Hosts
+	db              *DB
+	groups          *Groups
+	hostsTogroups   *HostsToGroup
+	grpc            *Grpc
 }
 
 var streamer *Stream
@@ -57,95 +66,174 @@ func (s *Stream) Init() {
 	s.controller = NewController()
 	s.controller.Init(Conf.Stream.DisruptorBuffersize, Conf.Stream.DisruptorBuffermask, Conf.Stream.DisruptorReservations)
 
-	// init strategyes
-	// s.strategyes = strategy.NewStrategy(Conf.Stream.StrategyDbname, Conf.Stream.StrategyBucketname)
-	// s.strategyes.Init()
-
 	// init alarmer
 	s.alarmer = NewAlarm()
 	s.alarmer.Init()
 
-	// init hosts
-	// s.hosts = strategy.NewHosts()
+	// init db
+	s.db = NewDB(Conf.Stream.Dbname, Conf.Stream.Bucketname)
+	s.db.Init()
+
+	// init groups
+	s.groups = NewGroups()
+
+	// init hostsTogroups
+	s.hostsTogroups = NewHostsToGroup()
+
+	// load alerts from db
+	s.LoadGroupsAlert()
+
+	// init grpc
+	s.grpc = NewGrpc()
+	s.grpc.Init(Conf.Stream.GrpcAddr)
 }
 
-func StreamTestFunc() {
-	// strategy.HostTest()
-	// AddHost("scc@Google", "zeus")
-	// AddHost("scc@Google", "room")
-	// AddHost("scc@Google", "cache")
-	// AddHost("scc@Google", "center")
-	// AddHost("scc@Google", "vgo")
-	// AddHost("scc@Google", "uuid")
-	// gs, _ := GetGroups("scc@Google")
-	// go func() {
-	// 	for {
-	// 		for k, v := range gs {
-	// 			log.Println(k, v)
-	// 		}
-	// 	}
-	// }()
+func (s *Stream) ShowGroups() {
+	s.groups.RLock()
+	defer s.groups.RUnlock()
 
-	// go func() {
-	// 	for {
-	// 		for k, v := range gs {
-	// 			log.Println(k, v)
-	// 		}
-	// 	}
-	// }()
-	// time.Sleep(time.Second * 1)
-	// log.Println("Host get groups is ", gs)
-	// // DeleHost("scc@Google")
-	// DeleGroupInHosts("scc@Google", "zeus")
-	// DeleGroupInHosts("scc@Google", "room")
-	// DeleGroupInHosts("scc@Google", "cache")
-	// DeleGroupInHosts("scc@Google", "uuid")
-	// DeleGroupInHosts("scc@Google", "vgo")
-	// DeleGroupInHosts("scc@Google", "center")
-	// gs, _ = GetGroups("scc@Google")
-	// log.Println("Host get groups is ", gs)
-
+	for k, v := range s.groups.groups {
+		log.Println("----------------------------------------------------------- start")
+		log.Println(k)
+		v.Show()
+		log.Println("----------------------------------------------------------- end")
+	}
 }
 
-// func AddHost(hostname string, gid string) error {
-// 	if streamer == nil {
-// 		return fmt.Errorf("streamer is nil, please init stream!")
-// 	}
-// 	streamer.hosts.Add(hostname, gid)
-// 	return nil
-// }
+func (s *Stream) AddGroup(group *proto.Group) error {
+	return s.groups.AddGroup(group)
+}
 
-// func GetGroups(hostname string) (map[string]bool, error) {
-// 	if streamer == nil {
-// 		return nil, fmt.Errorf("streamer is nil, please init stream!")
-// 	}
-// 	return streamer.hosts.Get(hostname), nil
-// }
+func (s *Stream) AddAlerts(alerts *proto.Alerts) error {
+	return s.groups.AddAlerts(alerts)
+}
 
-// func DeleGroupInHosts(hostname string, gid string) error {
-// 	if streamer == nil {
-// 		return fmt.Errorf("streamer is nil, please init stream!")
-// 	}
-// 	streamer.hosts.DeleGroupInHosts(hostname, gid)
-// 	return nil
-// }
+func (s *Stream) AddUsers(users *proto.Users) error {
+	return s.groups.AddUsers(users)
+}
+func (s *Stream) AddHosts(hosts *proto.Hosts) error {
+	return s.groups.AddHosts(hosts)
+}
 
-// func DeleHost(hostname string) error {
-// 	if streamer == nil {
-// 		return fmt.Errorf("streamer is nil, please init stream!")
-// 	}
-// 	streamer.hosts.DelHost(hostname)
-// 	return nil
-// }
+func (s *Stream) ShowHostsToGroup() {
+	s.hostsTogroups.Show()
+}
+
+func (s *Stream) LoadGroupsAlert() error {
+	VLogger.Debug("DB", zap.String("@Dbname", s.db.dbname))
+	ok, err := s.db.isExist()
+	if !ok || err != nil {
+		return err
+	}
+
+	s.db.db.View(func(tx *bolt.Tx) error {
+		groupRaws := make(map[string]*GroupRaw)
+		b := tx.Bucket(s.db.bucketName)
+		c := b.Cursor()
+		// loading history data
+		for k, v := c.First(); k != nil; k, v = c.Next() {
+			g := &GroupRaw{}
+			json.Unmarshal(v, g)
+			VLogger.Info("LoadGroupsAlert", zap.String("@key", string(k)), zap.Object("@GroupRaw", g))
+			groupRaws[string(k)] = g
+		}
+
+		// load rawGroups into allGroup
+		for gid, graw := range groupRaws {
+			fmt.Println(gid, graw)
+			// 初始化该group和parent线上的所有group
+			firstG, ok := s.groups.groups[gid] //sg.AllGroup[k]
+			// 当前group一旦初始化过,直接返回
+			if ok {
+				continue
+			}
+
+			firstG = NewGroup() //&Group{Alerts: make(map[string]*Alert)}
+			for rule, alertstatic := range graw.AlertStatics {
+				VLogger.Info("LoadGroupsAlert", zap.String("@Rule", rule), zap.Object("@Alertstatic", alertstatic))
+				alert := NewAlert()
+				alert.AlertSt = alertstatic
+				firstG.Alerts[rule] = alert
+			}
+			firstG.Users = graw.Users
+			firstG.ID = graw.ID
+			firstG.Hosts = graw.Hosts
+
+			// 添加host和group关联关系
+			for hostname, _ := range graw.Hosts {
+				s.hostsTogroups.Add(hostname, graw.ID)
+			}
+			s.groups.groups[gid] = firstG
+			parent := graw.Parent
+			g := firstG
+			for {
+				// 如果没有parent，则返回
+				if parent == "" {
+					break
+				}
+				// 寻找父亲
+				pr1, ok := groupRaws[parent]
+				if !ok {
+					log.Fatal("can find parent, parent name is ", parent)
+					return fmt.Errorf("can find parent, parent name is %s ", parent)
+				}
+
+				pp1, ok := s.groups.groups[parent]
+				// 若第一个父亲已经存在，指针赋值后直接返回
+				if ok {
+					// 增加子节点
+					pp1.AddChild(g.ID)
+					g.Parent = pp1
+					break
+				}
+				pp1 = NewGroup()
+				for rule, alertstatic := range pr1.AlertStatics {
+					alert := NewAlert()
+					alert.AlertSt = alertstatic
+					pp1.Alerts[rule] = alert
+				}
+
+				// 添加host和group关联关系
+				for hostname, _ := range pr1.Hosts {
+					s.hostsTogroups.Add(hostname, pr1.ID)
+				}
+
+				pp1.Users = pr1.Users
+				pp1.ID = pr1.ID
+				g.Parent = pp1
+				s.groups.groups[parent] = pp1
+				parent = pr1.Parent
+				// 增加子节点
+				pp1.AddChild(g.ID)
+				g = pp1
+			}
+		}
+		// free mem
+		// load rawGroups into allGroup
+		for k, _ := range groupRaws {
+			delete(groupRaws, k)
+		}
+
+		return nil
+	})
+
+	return nil
+}
 
 // Start start stream server
 func (s *Stream) Start(shutdown chan struct{}) {
-
-	// StreamTestFunc()
+	defer func() {
+		if err := recover(); err != nil {
+			misc.PrintStack(false)
+			VLogger.Fatal("Stream fatal error ", zap.Error(err.(error)))
+		}
+	}()
 
 	s.controller.Start()
 
 	s.alarmer.Start()
+
+	go s.grpc.Start()
 
 	// start plugins service
 	for _, c := range Conf.Inputs {
@@ -154,7 +242,7 @@ func (s *Stream) Start(shutdown chan struct{}) {
 
 	for _, c := range Conf.Outputs {
 		if err := c.Output.Start(); err != nil {
-			log.Fatal("Output ", c.Name, " Start failed, err message is", err)
+			VLogger.Panic("Output", zap.String("@Name", c.Name), zap.Error(err))
 		}
 	}
 
@@ -173,8 +261,17 @@ func (s *Stream) Close() error {
 	close(s.stopPluginsChan)
 	close(s.metricChan)
 
-	// s.writer.Close()
-	s.controller.Close()
-	s.alarmer.Close()
+	if err := s.controller.Close(); err != nil {
+		VLogger.Error("Close", zap.String("@controller", err.Error()))
+	}
+
+	if err := s.alarmer.Close(); err != nil {
+		VLogger.Error("Close", zap.String("@alarmer", err.Error()))
+	}
+
+	if err := s.grpc.Close(); err != nil {
+		VLogger.Error("Close", zap.String("@grpc", err.Error()))
+	}
+
 	return nil
 }

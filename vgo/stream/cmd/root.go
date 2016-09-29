@@ -73,8 +73,8 @@ func start(cmd *cobra.Command, args []string) {
 	// waiting stop signal
 	chSig := make(chan os.Signal)
 	signal.Notify(chSig, syscall.SIGINT, syscall.SIGTERM)
-	fmt.Println("service received Signal: ", <-chSig)
+	<-chSig
+	// fmt.Println("service received Signal: ", <-chSig)
 
-	fmt.Println("service is going to stop")
 	s.Close()
 }

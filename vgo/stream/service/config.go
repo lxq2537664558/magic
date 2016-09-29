@@ -49,10 +49,11 @@ func LoadConfig() {
 
 	// parse stream config
 	parseStream(tbl)
-	Conf.Stream.Show()
+
 	// init logger
 	initLogger()
 
+	Conf.Stream.Show()
 	// parse global filters
 	parseFilters(tbl)
 

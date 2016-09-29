@@ -16,8 +16,9 @@
     disruptor_buffersize   = 65536
 	disruptor_buffermask   = 65535
 	disruptor_reservations = 1
-    strategy_dbname = "stream.db"
-    strategy_bucketname = "groups"
+    dbname = "stream.db"
+    bucketname = "groups"
+    grpc_addr = "127.0.0.1:9898"
 ###############################################################################
 #                            OUTPUT PLUGINS                                   #
 ###############################################################################
@@ -31,7 +32,7 @@
     inputdrop = ["otherMq"]
     chaindrop = ["chaindrop","chaindrop2"]
     alarmdrop = ["alarmdrop", "alarmdrop2"]
-    metric_outputdrop = ["metric_outputdrop", "metric_outputdrop2"]
+    metric_outputdrop = ["metric_outputdrop", "metric_outputdrop2", "influxdb"]
 
 
 ###############################################################################
