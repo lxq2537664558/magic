@@ -65,8 +65,8 @@ message User {
 }
 
 message Host {
-	string 				hostname = 1;
-	string			 	addr 	 = 2;
+	string 				name = 1;
+	string			 	addr = 2;
 }
 
 
