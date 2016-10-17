@@ -2,11 +2,15 @@ package service
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/corego/vgo/mecury/misc"
 	"github.com/corego/vgo/proto"
+
+	_ "net/http/pprof"
 
 	"github.com/boltdb/bolt"
 	"github.com/uber-go/zap"
@@ -23,6 +27,7 @@ type StreamConfig struct {
 	Dbname                string
 	Bucketname            string
 	GrpcAddr              string
+	PprofAddr             string
 }
 
 func (sc *StreamConfig) Show() {
@@ -229,6 +234,8 @@ func (s *Stream) Start(shutdown chan struct{}) {
 		}
 	}()
 
+	pprofStart()
+
 	s.controller.Start()
 
 	s.alarmer.Start()
@@ -274,4 +281,12 @@ func (s *Stream) Close() error {
 	}
 
 	return nil
+}
+
+// pprof
+func pprofStart() {
+	flag.Parse()
+	go func() {
+		log.Println(http.ListenAndServe(Conf.Stream.PprofAddr, nil))
+	}()
 }

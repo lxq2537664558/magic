@@ -19,6 +19,8 @@ type Group struct {
 	Users  map[string]*User
 	Hosts  map[string]*Host
 	Child  map[string]bool
+	// 第一个key为 metric.Name+"."+field ， 第二个key为子的路径
+	// Alerts map[string]map[string]*Alert
 }
 
 func NewGroup() *Group {
@@ -152,12 +154,14 @@ func (gs *Groups) AddHosts(hosts *proto.Hosts) error {
 	}
 }
 
-// func (gs *Groups) GetGroups() []*Group {
-// 	gs.RLock()
-// 	defer gs.RUnlock()
-
-// 	return nil
-// }
+func (gs *Groups) GetGroup(gid string) *Group {
+	gs.RLock()
+	defer gs.RUnlock()
+	if group, ok := gs.groups[gid]; ok {
+		return group
+	}
+	return nil
+}
 
 func proGroupToGroup(proGroup *proto.Group) (*Group, error) {
 	group := NewGroup()

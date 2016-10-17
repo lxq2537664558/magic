@@ -39,8 +39,6 @@ func Publish(m Metrics) {
 	writer := controller.controller.Writer()
 
 	sequence = writer.Reserve(controller.reservations)
-	// fmt.Println(sequence, controller.reservations)
-	// 赋值
 	for lower := sequence - controller.reservations + 1; lower <= sequence; lower++ {
 		controller.ring[lower&controller.bufferMask] = m
 	}
