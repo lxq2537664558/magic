@@ -4,7 +4,7 @@
 </p>
 Official Site
 ------------
-<a href="http://vgo.io">http://vgo.io</a>
+<a href="http://vgo.io">http://openapm.io</a>
 
 Ready To Use?
 ---------------
@@ -32,7 +32,7 @@ Functionality
 
 Components
 ------------
- - vgo : The monitor platform,which is server side. 
+ - openapm : The monitor platform,which is server side. 
  - mecury : A plug-in client side agent,Collec and report metrics to output(Default is to vgo).
  - etcd
  - influxdb
