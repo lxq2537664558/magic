@@ -2,6 +2,7 @@ package service
 
 import (
 	"log"
+	"strings"
 	"sync"
 
 	"github.com/uber-go/zap"
@@ -39,16 +40,47 @@ func (hs *HostsToGroup) Show() {
 
 }
 
+// Add 将组和主机之间的关联起来，如果已保存的组是和当前组有包含关系的，那么覆盖已保存的组
 func (hs *HostsToGroup) Add(hostname string, gid string) {
 	hs.Lock()
 	if groups, ok := hs.hostsTogroups[hostname]; ok {
-		groups[gid] = true
+		for oldg, _ := range groups {
+			delf, insef := containsGroup(oldg, gid)
+			if insef {
+				// 删除老的，添加新的，俗称覆盖。
+				if delf {
+					delete(groups, oldg)
+				}
+				groups[gid] = true
+				VLogger.Debug("Add", zap.String("@oldgid", oldg), zap.String("@newgid", gid))
+			}
+		}
 	} else {
 		groups := make(map[string]bool)
 		groups[gid] = true
 		hs.hostsTogroups[hostname] = groups
 	}
 	hs.Unlock()
+}
+
+// containsGroup 组是否包含,还要确定是否删除老的组映射关系
+func containsGroup(oldg string, newg string) (bool, bool) {
+	olen := len(oldg)
+	nlen := len(newg)
+	if olen == nlen {
+		if oldg != newg {
+			return false, true
+		}
+	} else if olen > nlen {
+		if !strings.Contains(oldg, newg) {
+			return false, true
+		}
+	} else if olen < nlen {
+		if strings.Contains(newg, oldg) {
+			return true, true
+		}
+	}
+	return false, false
 }
 
 func (hs *HostsToGroup) Get(hostname string) map[string]bool {

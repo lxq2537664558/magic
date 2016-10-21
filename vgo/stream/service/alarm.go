@@ -1,9 +1,6 @@
 package service
 
-import (
-	"log"
-	"time"
-)
+import "time"
 
 type Alarmer struct {
 }
@@ -31,7 +28,6 @@ func (am *Alarmer) Close() error {
 // 状态存活监控
 
 func (am *Alarmer) Compute(m Metrics) error {
-
 	for _, metric := range m.Data {
 		hostname, ok := metric.Tags["host"]
 		if !ok {
@@ -43,16 +39,20 @@ func (am *Alarmer) Compute(m Metrics) error {
 			continue
 		}
 		for gid, _ := range groups {
+			// VLogger.Info("Compute", zap.String("@show——gid", gid), zap.Int("@len", len(groups)))
 			if group := streamer.groups.GetGroup(gid); group != nil {
-				// VLogger.Info("GetGroup", zap.String("@Gid", gid), zap.String("@field", field), zap.String("@alert", metric.Name+"."+field))
-				for field, _ := range metric.Fields {
-					if alert, ok := group.Alerts[metric.Name+"."+field]; ok {
-						switch fieldValue := metric.Fields[field].(type) {
-						case float64:
-							am.compute(alert, metric, fieldValue, m.Interval)
-						default:
-							log.Printf("%T\n", fieldValue)
+				originalGroup := group
+				for {
+					if !group.ComputAlarm(am, metric, m.Interval, originalGroup) {
+						if group.Parent != nil {
+							group = group.Parent
+						} else {
+							// VLogger.Info("Compute", zap.String("@show2	", group.ID))
+							break
 						}
+					} else {
+						// VLogger.Info("Compute", zap.String("@show", group.ID))
+						break
 					}
 				}
 			}
@@ -61,7 +61,7 @@ func (am *Alarmer) Compute(m Metrics) error {
 	return nil
 }
 
-func (am *Alarmer) compute(alert *Alert, metric *MetricData, fieldValue float64, Interval int) (int, bool) {
+func (am *Alarmer) compute(alert *Alert, metric *MetricData, fieldValue float64, Interval int, originalGroup *Group) (int, bool) {
 	if alert.AlertSt.Type == 1 {
 		if alert.AlertDy == nil {
 			len := alert.AlertSt.Duration / int32(Interval)
@@ -75,9 +75,9 @@ func (am *Alarmer) compute(alert *Alert, metric *MetricData, fieldValue float64,
 				RingArray: make([]float64, len),
 			}
 		}
-		alert.AlertDy.computAverage(fieldValue)
+		alert.AlertDy.computAverage(fieldValue, originalGroup)
 	} else {
-		alert.AlertSt.computGauge(fieldValue)
+		alert.AlertSt.computGauge(fieldValue, originalGroup)
 	}
 	return 0, false
 }

@@ -41,6 +41,22 @@ func (g *Group) Show() {
 	VLogger.Info("Group", zap.Object("@Hosts", g.Hosts))
 }
 
+// ComputAlarm 计算是否需要报警,如果当前组节点找不到alert，返回false
+func (g *Group) ComputAlarm(am *Alarmer, metric *MetricData, Interval int, originalGroup *Group) bool {
+	find := false
+	for field, _ := range metric.Fields {
+		if alert, ok := g.Alerts[metric.Name+"."+field]; ok {
+			if value, ok := metric.Fields[field].(float64); ok {
+				am.compute(alert, metric, value, Interval, originalGroup)
+				find = true
+			} else {
+				continue
+			}
+		}
+	}
+	return find
+}
+
 func (g *Group) AddChild(child string) {
 	g.Child[child] = true
 }

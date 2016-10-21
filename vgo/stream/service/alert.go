@@ -7,6 +7,7 @@ import (
 	"github.com/uber-go/zap"
 )
 
+// AlertStatic alert 静态数据变量，存放报警策略信息
 type AlertStatic struct {
 	Type       int32 // 1 : average 2 : gauge 3: alive status
 	Operator   int32 // 1:   >,   2:  = ,   3: <
@@ -22,7 +23,7 @@ func NewAlertStatic() *AlertStatic {
 	return &AlertStatic{}
 }
 
-func (as *AlertStatic) computGauge(reportData float64) {
+func (as *AlertStatic) computGauge(reportData float64, originalGroup *Group) {
 	// 检查是否到达报警阀值
 	// if reportData == as.WarnValue {
 
@@ -31,6 +32,7 @@ func (as *AlertStatic) computGauge(reportData float64) {
 	// }
 }
 
+// AlertDynatic alert动态数据变量，动态存放上报的数据
 type AlertDynatic struct {
 	StartTime int64     // 插入时间
 	Len       int32     // 总长度
@@ -42,7 +44,7 @@ func NewAlertDynatic() *AlertDynatic {
 	return &AlertDynatic{}
 }
 
-func (ad *AlertDynatic) computAverage(reportData float64) {
+func (ad *AlertDynatic) computAverage(reportData float64, originalGroup *Group) {
 	ad.RingArray[ad.NowIndex] = reportData
 	if ad.NowIndex >= (int(ad.Len) - 1) {
 		var total float64

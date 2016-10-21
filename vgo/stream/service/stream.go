@@ -145,7 +145,7 @@ func (s *Stream) LoadGroupsAlert() error {
 
 		// load rawGroups into allGroup
 		for gid, graw := range groupRaws {
-			fmt.Println(gid, graw)
+			// VLogger.Info("Loading", zap.String("@gid", gid), zap.Object("@graw", graw))
 			// 初始化该group和parent线上的所有group
 			firstG, ok := s.groups.groups[gid] //sg.AllGroup[k]
 			// 当前group一旦初始化过,直接返回
@@ -153,7 +153,8 @@ func (s *Stream) LoadGroupsAlert() error {
 				continue
 			}
 
-			firstG = NewGroup() //&Group{Alerts: make(map[string]*Alert)}
+			firstG = NewGroup()
+			// 初始化alert静态数据变量
 			for rule, alertstatic := range graw.AlertStatics {
 				VLogger.Info("LoadGroupsAlert", zap.String("@Rule", rule), zap.Object("@Alertstatic", alertstatic))
 				alert := NewAlert()
@@ -171,6 +172,7 @@ func (s *Stream) LoadGroupsAlert() error {
 			s.groups.groups[gid] = firstG
 			parent := graw.Parent
 			g := firstG
+			// 设置父节点信息
 			for {
 				// 如果没有parent，则返回
 				if parent == "" {
@@ -189,6 +191,7 @@ func (s *Stream) LoadGroupsAlert() error {
 					// 增加子节点
 					pp1.AddChild(g.ID)
 					g.Parent = pp1
+					// 这里要删除父节点和主机之间的关联
 					break
 				}
 				pp1 = NewGroup()
