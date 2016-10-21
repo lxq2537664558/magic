@@ -5,7 +5,7 @@ import (
 	"net"
 	"sync"
 
-	"github.com/corego/vgo/proto"
+	"github.com/aiyun/openapm/proto"
 
 	"time"
 

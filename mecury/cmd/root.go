@@ -20,9 +20,9 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/corego/vgo/mecury/agent"
-	_ "github.com/corego/vgo/mecury/plugins/input/all"
-	_ "github.com/corego/vgo/mecury/plugins/output/all"
+	"github.com/aiyun/openapm/mecury/agent"
+	_ "github.com/aiyun/openapm/mecury/plugins/input/all"
+	_ "github.com/aiyun/openapm/mecury/plugins/output/all"
 	"github.com/spf13/cobra"
 )
 

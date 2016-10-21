@@ -2,7 +2,7 @@
 
 Mecury is written in pure Go, target is  collecting metrics from the system it's
 running on, or from other services, and writing them into InfluxDB、Nats or other
-[outputs](https://github.com/corego/vgo/tree/master/mecury#supported-output-plugins).It is been 
+[outputs](https://github.com/aiyun/openapm/tree/master/mecury#supported-output-plugins).It is been 
 developed  based on Telegraf: https://github.com/influxdata/telegraf ,but has changed
 a lot,for more changes details ,please ses the head of main.go.
 
@@ -20,8 +20,8 @@ Features
 
 ## Installation:
     ```bash
-       $ go get -u github.com/corego/vgo
-       $ cd $GOPATH/src/github.com/corego/vgo/mecury && go build
+       $ go get -u github.com/aiyun/openapm
+       $ cd $GOPATH/src/github.com/aiyun/openapm/mecury && go build
     ```
 
     Thats all,you even don't need to download any dependencies
@@ -43,9 +43,9 @@ See the [configuration guide](docs/Configuration.md)
 
 ## Supported Input Plugins
 
-See [input plugins](https://github.com/corego/vgo/tree/master/mecury/plugins/input)
+See [input plugins](https://github.com/aiyun/openapm/tree/master/mecury/plugins/input)
 
 ## Supported Output Plugins
-See [output plugins](https://github.com/corego/vgo/tree/master/mecury/plugins/output)
+See [output plugins](https://github.com/aiyun/openapm/tree/master/mecury/plugins/output)
 
 ## Contributing

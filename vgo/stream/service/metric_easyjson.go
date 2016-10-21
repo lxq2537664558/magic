@@ -15,7 +15,7 @@ var (
 	_ = jwriter.Writer{}
 )
 
-func easyjson_9478868c_decode_github_com_corego_vgo_vgo_stream_service_MetricData(in *jlexer.Lexer, out *MetricData) {
+func easyjson_9478868c_decode_github_com_aiyun_vgo_vgo_stream_service_MetricData(in *jlexer.Lexer, out *MetricData) {
 	if in.IsNull() {
 		in.Skip()
 		return
@@ -83,7 +83,7 @@ func easyjson_9478868c_decode_github_com_corego_vgo_vgo_stream_service_MetricDat
 	}
 	in.Delim('}')
 }
-func easyjson_9478868c_encode_github_com_corego_vgo_vgo_stream_service_MetricData(out *jwriter.Writer, in MetricData) {
+func easyjson_9478868c_encode_github_com_aiyun_vgo_vgo_stream_service_MetricData(out *jwriter.Writer, in MetricData) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -145,21 +145,21 @@ func easyjson_9478868c_encode_github_com_corego_vgo_vgo_stream_service_MetricDat
 }
 func (v MetricData) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjson_9478868c_encode_github_com_corego_vgo_vgo_stream_service_MetricData(&w, v)
+	easyjson_9478868c_encode_github_com_aiyun_vgo_vgo_stream_service_MetricData(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 func (v MetricData) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson_9478868c_encode_github_com_corego_vgo_vgo_stream_service_MetricData(w, v)
+	easyjson_9478868c_encode_github_com_aiyun_vgo_vgo_stream_service_MetricData(w, v)
 }
 func (v *MetricData) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjson_9478868c_decode_github_com_corego_vgo_vgo_stream_service_MetricData(&r, v)
+	easyjson_9478868c_decode_github_com_aiyun_vgo_vgo_stream_service_MetricData(&r, v)
 	return r.Error()
 }
 func (v *MetricData) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson_9478868c_decode_github_com_corego_vgo_vgo_stream_service_MetricData(l, v)
+	easyjson_9478868c_decode_github_com_aiyun_vgo_vgo_stream_service_MetricData(l, v)
 }
-func easyjson_9478868c_decode_github_com_corego_vgo_vgo_stream_service_Metrics(in *jlexer.Lexer, out *Metrics) {
+func easyjson_9478868c_decode_github_com_aiyun_vgo_vgo_stream_service_Metrics(in *jlexer.Lexer, out *Metrics) {
 	if in.IsNull() {
 		in.Skip()
 		return
@@ -203,7 +203,7 @@ func easyjson_9478868c_decode_github_com_corego_vgo_vgo_stream_service_Metrics(i
 	}
 	in.Delim('}')
 }
-func easyjson_9478868c_encode_github_com_corego_vgo_vgo_stream_service_Metrics(out *jwriter.Writer, in Metrics) {
+func easyjson_9478868c_encode_github_com_aiyun_vgo_vgo_stream_service_Metrics(out *jwriter.Writer, in Metrics) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -234,17 +234,17 @@ func easyjson_9478868c_encode_github_com_corego_vgo_vgo_stream_service_Metrics(o
 }
 func (v Metrics) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjson_9478868c_encode_github_com_corego_vgo_vgo_stream_service_Metrics(&w, v)
+	easyjson_9478868c_encode_github_com_aiyun_vgo_vgo_stream_service_Metrics(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 func (v Metrics) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson_9478868c_encode_github_com_corego_vgo_vgo_stream_service_Metrics(w, v)
+	easyjson_9478868c_encode_github_com_aiyun_vgo_vgo_stream_service_Metrics(w, v)
 }
 func (v *Metrics) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjson_9478868c_decode_github_com_corego_vgo_vgo_stream_service_Metrics(&r, v)
+	easyjson_9478868c_decode_github_com_aiyun_vgo_vgo_stream_service_Metrics(&r, v)
 	return r.Error()
 }
 func (v *Metrics) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson_9478868c_decode_github_com_corego_vgo_vgo_stream_service_Metrics(l, v)
+	easyjson_9478868c_decode_github_com_aiyun_vgo_vgo_stream_service_Metrics(l, v)
 }

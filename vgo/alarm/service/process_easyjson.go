@@ -15,7 +15,7 @@ var (
 	_ = jwriter.Writer{}
 )
 
-func easyjson_5c87105d_decode_github_com_corego_vgo_vgo_alarm_service_AlertData(in *jlexer.Lexer, out *AlertData) {
+func easyjson_5c87105d_decode_github_com_aiyun_vgo_vgo_alarm_service_AlertData(in *jlexer.Lexer, out *AlertData) {
 	if in.IsNull() {
 		in.Skip()
 		return
@@ -43,7 +43,7 @@ func easyjson_5c87105d_decode_github_com_corego_vgo_vgo_alarm_service_AlertData(
 	}
 	in.Delim('}')
 }
-func easyjson_5c87105d_encode_github_com_corego_vgo_vgo_alarm_service_AlertData(out *jwriter.Writer, in AlertData) {
+func easyjson_5c87105d_encode_github_com_aiyun_vgo_vgo_alarm_service_AlertData(out *jwriter.Writer, in AlertData) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -69,17 +69,17 @@ func easyjson_5c87105d_encode_github_com_corego_vgo_vgo_alarm_service_AlertData(
 }
 func (v AlertData) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjson_5c87105d_encode_github_com_corego_vgo_vgo_alarm_service_AlertData(&w, v)
+	easyjson_5c87105d_encode_github_com_aiyun_vgo_vgo_alarm_service_AlertData(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 func (v AlertData) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson_5c87105d_encode_github_com_corego_vgo_vgo_alarm_service_AlertData(w, v)
+	easyjson_5c87105d_encode_github_com_aiyun_vgo_vgo_alarm_service_AlertData(w, v)
 }
 func (v *AlertData) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjson_5c87105d_decode_github_com_corego_vgo_vgo_alarm_service_AlertData(&r, v)
+	easyjson_5c87105d_decode_github_com_aiyun_vgo_vgo_alarm_service_AlertData(&r, v)
 	return r.Error()
 }
 func (v *AlertData) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson_5c87105d_decode_github_com_corego_vgo_vgo_alarm_service_AlertData(l, v)
+	easyjson_5c87105d_decode_github_com_aiyun_vgo_vgo_alarm_service_AlertData(l, v)
 }

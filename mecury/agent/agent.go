@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/corego/vgo/mecury/misc"
+	"github.com/aiyun/openapm/mecury/misc"
 	"github.com/uber-go/zap"
 )
 

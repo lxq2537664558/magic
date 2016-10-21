@@ -3,7 +3,7 @@ package nats
 import (
 	"log"
 
-	"github.com/corego/vgo/vgo/stream/service"
+	"github.com/aiyun/openapm/vgo/stream/service"
 	"github.com/nats-io/nats"
 )
 

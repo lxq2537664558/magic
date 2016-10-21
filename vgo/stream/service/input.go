@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/corego/vgo/mecury/misc"
+	"github.com/aiyun/openapm/mecury/misc"
 	"github.com/naoina/toml/ast"
 	"github.com/uber-go/zap"
 )

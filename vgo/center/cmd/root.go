@@ -21,7 +21,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/corego/vgo/vgo/center/service"
+	"github.com/aiyun/openapm/vgo/center/service"
 	"github.com/spf13/cobra"
 )
 

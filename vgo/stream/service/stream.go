@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/corego/vgo/mecury/misc"
-	"github.com/corego/vgo/proto"
+	"github.com/aiyun/openapm/mecury/misc"
+	"github.com/aiyun/openapm/proto"
 
 	_ "net/http/pprof"
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/corego/vgo/mecury/agent"
+	"github.com/aiyun/openapm/mecury/agent"
 )
 
 type NetIOStats struct {

@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/corego/vgo/mecury/agent"
+	"github.com/aiyun/openapm/mecury/agent"
 )
 
 // /proc/stat file line prefixes to gather stats on:

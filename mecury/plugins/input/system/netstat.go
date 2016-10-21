@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"syscall"
 
-	"github.com/corego/vgo/mecury/agent"
+	"github.com/aiyun/openapm/mecury/agent"
 )
 
 type NetStats struct {

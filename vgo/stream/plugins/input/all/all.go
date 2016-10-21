@@ -1,5 +1,5 @@
 package all
 
 import (
-	_ "github.com/corego/vgo/vgo/stream/plugins/input/nats"
+	_ "github.com/aiyun/openapm/vgo/stream/plugins/input/nats"
 )

@@ -1,6 +1,6 @@
 package all
 
 import (
-	_ "github.com/corego/vgo/vgo/stream/plugins/output/mail"
-	_ "github.com/corego/vgo/vgo/stream/plugins/output/sms"
+	_ "github.com/aiyun/openapm/vgo/stream/plugins/output/mail"
+	_ "github.com/aiyun/openapm/vgo/stream/plugins/output/sms"
 )

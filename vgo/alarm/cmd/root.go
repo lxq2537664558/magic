@@ -21,8 +21,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	_ "github.com/corego/vgo/vgo/alarm/plugins/output/all"
-	"github.com/corego/vgo/vgo/alarm/service"
+	_ "github.com/aiyun/openapm/vgo/alarm/plugins/output/all"
+	"github.com/aiyun/openapm/vgo/alarm/service"
 	"github.com/spf13/cobra"
 )
 

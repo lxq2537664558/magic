@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/corego/vgo/vgo/stream/cmd"
+import "github.com/aiyun/openapm/vgo/stream/cmd"
 
 func main() {
 	cmd.Execute()

@@ -8,7 +8,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/corego/vgo/mecury/agent"
+	"github.com/aiyun/openapm/mecury/agent"
 	"github.com/lib/pq"
 )
 

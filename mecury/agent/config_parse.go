@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/corego/vgo/mecury/misc"
+	"github.com/aiyun/openapm/mecury/misc"
 	"github.com/influxdata/toml"
 	"github.com/influxdata/toml/ast"
 	"github.com/uber-go/zap"

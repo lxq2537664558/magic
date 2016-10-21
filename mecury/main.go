@@ -27,7 +27,7 @@ Itis licensed under Apache Version 2.0, http://www.apache.org/licenses/LICENSE-2
 
 package main
 
-import "github.com/corego/vgo/mecury/cmd"
+import "github.com/aiyun/openapm/mecury/cmd"
 
 func main() {
 	cmd.Execute()

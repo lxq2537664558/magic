@@ -6,7 +6,7 @@ import (
 
 	"github.com/shirou/gopsutil/net"
 
-	"github.com/corego/vgo/mecury/agent"
+	"github.com/aiyun/openapm/mecury/agent"
 )
 
 type IfStat struct {

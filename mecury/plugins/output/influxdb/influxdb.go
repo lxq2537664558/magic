@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/corego/vgo/mecury/agent"
-	"github.com/corego/vgo/mecury/misc"
+	"github.com/aiyun/openapm/mecury/agent"
+	"github.com/aiyun/openapm/mecury/misc"
 
 	"github.com/influxdata/influxdb/client/v2"
 )

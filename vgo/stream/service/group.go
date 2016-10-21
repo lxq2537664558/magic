@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/corego/vgo/proto"
+	"github.com/aiyun/openapm/proto"
 
 	"github.com/uber-go/zap"
 )

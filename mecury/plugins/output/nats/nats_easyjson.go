@@ -15,7 +15,7 @@ var (
 	_ = jwriter.Writer{}
 )
 
-func easyjson_26fff448_decode_github_com_corego_vgo_mecury_plugins_output_nats_Metrics(in *jlexer.Lexer, out *Metrics) {
+func easyjson_26fff448_decode_github_com_aiyun_vgo_mecury_plugins_output_nats_Metrics(in *jlexer.Lexer, out *Metrics) {
 	if in.IsNull() {
 		in.Skip()
 		return
@@ -44,7 +44,7 @@ func easyjson_26fff448_decode_github_com_corego_vgo_mecury_plugins_output_nats_M
 					v1 = nil
 				} else {
 					v1 = new(MetricData)
-					easyjson_26fff448_decode_github_com_corego_vgo_mecury_plugins_output_nats_MetricData(in, &*v1)
+					easyjson_26fff448_decode_github_com_aiyun_vgo_mecury_plugins_output_nats_MetricData(in, &*v1)
 				}
 				out.Data = append(out.Data, v1)
 				in.WantComma()
@@ -59,7 +59,7 @@ func easyjson_26fff448_decode_github_com_corego_vgo_mecury_plugins_output_nats_M
 	}
 	in.Delim('}')
 }
-func easyjson_26fff448_encode_github_com_corego_vgo_mecury_plugins_output_nats_Metrics(out *jwriter.Writer, in Metrics) {
+func easyjson_26fff448_encode_github_com_aiyun_vgo_mecury_plugins_output_nats_Metrics(out *jwriter.Writer, in Metrics) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -76,7 +76,7 @@ func easyjson_26fff448_encode_github_com_corego_vgo_mecury_plugins_output_nats_M
 		if v3 == nil {
 			out.RawString("null")
 		} else {
-			easyjson_26fff448_encode_github_com_corego_vgo_mecury_plugins_output_nats_MetricData(out, *v3)
+			easyjson_26fff448_encode_github_com_aiyun_vgo_mecury_plugins_output_nats_MetricData(out, *v3)
 		}
 	}
 	out.RawByte(']')
@@ -90,21 +90,21 @@ func easyjson_26fff448_encode_github_com_corego_vgo_mecury_plugins_output_nats_M
 }
 func (v Metrics) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjson_26fff448_encode_github_com_corego_vgo_mecury_plugins_output_nats_Metrics(&w, v)
+	easyjson_26fff448_encode_github_com_aiyun_vgo_mecury_plugins_output_nats_Metrics(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 func (v Metrics) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjson_26fff448_encode_github_com_corego_vgo_mecury_plugins_output_nats_Metrics(w, v)
+	easyjson_26fff448_encode_github_com_aiyun_vgo_mecury_plugins_output_nats_Metrics(w, v)
 }
 func (v *Metrics) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjson_26fff448_decode_github_com_corego_vgo_mecury_plugins_output_nats_Metrics(&r, v)
+	easyjson_26fff448_decode_github_com_aiyun_vgo_mecury_plugins_output_nats_Metrics(&r, v)
 	return r.Error()
 }
 func (v *Metrics) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjson_26fff448_decode_github_com_corego_vgo_mecury_plugins_output_nats_Metrics(l, v)
+	easyjson_26fff448_decode_github_com_aiyun_vgo_mecury_plugins_output_nats_Metrics(l, v)
 }
-func easyjson_26fff448_decode_github_com_corego_vgo_mecury_plugins_output_nats_MetricData(in *jlexer.Lexer, out *MetricData) {
+func easyjson_26fff448_decode_github_com_aiyun_vgo_mecury_plugins_output_nats_MetricData(in *jlexer.Lexer, out *MetricData) {
 	if in.IsNull() {
 		in.Skip()
 		return
@@ -172,7 +172,7 @@ func easyjson_26fff448_decode_github_com_corego_vgo_mecury_plugins_output_nats_M
 	}
 	in.Delim('}')
 }
-func easyjson_26fff448_encode_github_com_corego_vgo_mecury_plugins_output_nats_MetricData(out *jwriter.Writer, in MetricData) {
+func easyjson_26fff448_encode_github_com_aiyun_vgo_mecury_plugins_output_nats_MetricData(out *jwriter.Writer, in MetricData) {
 	out.RawByte('{')
 	first := true
 	_ = first

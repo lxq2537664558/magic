@@ -1,6 +1,6 @@
 <p align="left">
     <a href="https://vgo.io">
-     <img  width="250" src="https://github.com/corego/vgo/blob/master/assets/images/vgo.png"></a>
+     <img  width="250" src="https://github.com/aiyun/openapm/blob/master/assets/images/vgo.png"></a>
 </p>
 Official Site
 ------------
@@ -42,8 +42,8 @@ Installation(only mecury now)
 ------------
 These part all are Runable applications,so,we could get with following command:  </br>
    ```bash
-    $ go get -u github.com/corego/vgo
-    $ cd $GOPATH/src/github.com/corego/vgo/mecury
+    $ go get -u github.com/aiyun/openapm
+    $ cd $GOPATH/src/github.com/aiyun/openapm/mecury
    ```
 Then we get two independent binarys in our $GOPATH/bin directory: 
    *  mecury.

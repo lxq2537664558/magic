@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/corego/vgo/vgo/stream/misc"
-	"github.com/corego/vgo/vgo/stream/service"
+	"github.com/aiyun/openapm/vgo/stream/misc"
+	"github.com/aiyun/openapm/vgo/stream/service"
 	"github.com/uber-go/zap"
 
 	"github.com/influxdata/influxdb/client/v2"

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/corego/vgo/mecury/agent"
+	"github.com/aiyun/openapm/mecury/agent"
 	"github.com/valyala/fasthttp"
 )
 

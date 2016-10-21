@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/corego/vgo/common/vlog"
+	"github.com/aiyun/openapm/common/vlog"
 	"github.com/influxdata/toml"
 	"github.com/influxdata/toml/ast"
 	"github.com/uber-go/zap"

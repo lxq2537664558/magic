@@ -3,7 +3,7 @@ package service
 import (
 	"fmt"
 
-	"github.com/corego/vgo/common/vlog"
+	"github.com/aiyun/openapm/common/vlog"
 	"github.com/uber-go/zap"
 )
 

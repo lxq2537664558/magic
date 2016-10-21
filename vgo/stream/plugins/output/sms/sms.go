@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/corego/vgo/vgo/stream/service"
+	"github.com/aiyun/openapm/vgo/stream/service"
 )
 
 type Sms struct {

@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/corego/vgo/mecury/agent"
-	"github.com/corego/vgo/mecury/misc/errchan"
+	"github.com/aiyun/openapm/mecury/agent"
+	"github.com/aiyun/openapm/mecury/misc/errchan"
 )
 
 type Nginx struct {

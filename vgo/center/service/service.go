@@ -3,7 +3,7 @@ package service
 import (
 	"log"
 
-	"github.com/corego/vgo/proto"
+	"github.com/aiyun/openapm/proto"
 
 	"github.com/kataras/iris"
 	"google.golang.org/grpc"

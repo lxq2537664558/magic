@@ -46,8 +46,8 @@ message Alert {
 	int32 operator = 2;
 	
 	
-	int32 warn_value = 3;
-	int32 crit_value = 4;
+	double warn_value = 3;
+	double crit_value = 4;
 	
 	string warn_output = 5;
 	string crit_output = 6;

@@ -8,8 +8,8 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/corego/vgo/mecury/agent"
-	"github.com/corego/vgo/mecury/misc"
+	"github.com/aiyun/openapm/mecury/agent"
+	"github.com/aiyun/openapm/mecury/misc"
 )
 
 // NetResponses struct

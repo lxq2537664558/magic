@@ -1,5 +1,5 @@
 package all
 
 import (
-	_ "github.com/corego/vgo/vgo/stream/plugins/metric_output/influxdb"
+	_ "github.com/aiyun/openapm/vgo/stream/plugins/metric_output/influxdb"
 )

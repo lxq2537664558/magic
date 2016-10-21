@@ -5,7 +5,7 @@ import (
 
 	context "golang.org/x/net/context"
 
-	"github.com/corego/vgo/proto"
+	"github.com/aiyun/openapm/proto"
 	"github.com/uber-go/zap"
 	"google.golang.org/grpc"
 )

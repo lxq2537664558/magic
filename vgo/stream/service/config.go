@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/corego/vgo/common/vlog"
+	"github.com/aiyun/openapm/common/vlog"
 	"github.com/naoina/toml"
 	"github.com/naoina/toml/ast"
 )

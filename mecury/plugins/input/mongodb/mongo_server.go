@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/corego/vgo/mecury/agent"
+	"github.com/aiyun/openapm/mecury/agent"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"

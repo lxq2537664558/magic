@@ -7,10 +7,10 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/corego/vgo/mecury/agent"
-	"github.com/corego/vgo/mecury/misc/errchan"
-	"github.com/corego/vgo/mecury/misc/globpath"
-	"github.com/corego/vgo/mecury/plugins/input/dapper/parsers/raw"
+	"github.com/aiyun/openapm/mecury/agent"
+	"github.com/aiyun/openapm/mecury/misc/errchan"
+	"github.com/aiyun/openapm/mecury/misc/globpath"
+	"github.com/aiyun/openapm/mecury/plugins/input/dapper/parsers/raw"
 	"github.com/hpcloud/tail"
 	"github.com/syndtr/goleveldb/leveldb"
 )
