@@ -75,9 +75,10 @@ func (am *Alarmer) compute(alert *Alert, metric *MetricData, fieldValue float64,
 				RingArray: make([]float64, len),
 			}
 		}
-		alert.AlertDy.computAverage(fieldValue, originalGroup)
+		// alert.computAverage(fieldValue, originalGroup)
+		alert.computAverage(fieldValue, originalGroup)
 	} else {
-		alert.AlertSt.computGauge(fieldValue, originalGroup)
+		alert.computGauge(fieldValue, originalGroup)
 	}
 	return 0, false
 }

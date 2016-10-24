@@ -50,7 +50,7 @@
 ###############################################################################
 # Read stream about input usage
 [[inputs.nats]]
-    addrs = ["nats://127.0.0.1:4222", "nats://127.0.0.1:4222"]
+    addrs = ["nats://10.7.14.236:4222", "nats://10.7.14.26:4222"]
     topic = "vgo_metrics"
 #[[inputs.otherMq]]
 #    addrs = ["127.0.0.1:1231", "127.0.0.1:2321"]
@@ -60,7 +60,7 @@
 #                            METRIC_OUTPUTS PLUGINS                           #
 ###############################################################################
 [[metric_outputs.influxdb]]
-    urls = ["http://127.0.0.1:8086"]
+    urls = ["http://10.7.15.36:8086"]
     database = "metrics"
     write_consistency = "any"
     timeout = "5s"
