@@ -11,6 +11,11 @@ all the components you need to develop a game, our goal is to make the game deve
 </p>
 
 
+Status
+------------
+Before alpha, still in early stage of developing
+
+
 Features
 ------------
 ### Extremely performant
@@ -19,7 +24,7 @@ Features
 ### Easy and efficient
 - Easy to study and use
 - Efficient in developing
-- Pretty docs and examples
+- Detailed docs and examples
 ### Safety
 - The rust language has the most the safety compares to c++/c
 - Safety is one of our most important goal throughout the developing
