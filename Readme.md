@@ -5,7 +5,7 @@
 
 Magic
 ------------
-A extremely fast, security and extensible framework for various game server,written in rust. Magic provides
+A extremely fast, safty and extensible framework for various game server,written in rust. Magic provides
 all the components you need to develop a game, our goal is to make the game development to be easiest and efficient.
 - Homepage: http://magic.gg
 
@@ -19,3 +19,23 @@ Features
 #### Easy and efficient
 - Easy to study and use
 - Efficient in developing
+- Pretty docs and examples
+
+#### Safety
+- The rust language has the most the safety compares to c++/c
+- Safety is one of our most important goal throughout the developing
+
+#### Various games supported
+- MMO-RPG (up to huge size online)
+- Low-latency (Moba, Arpg etc)
+- Games build on blockchain (<a href="http://crystal.gg">Crystal</a>- A blockchain for game which is built on Magic)
+
+#### Extensible
+###### Plugin System
+- Add new features with developing your own plugins, or you can search these in **Plugin Market**
+
+###### Custom features
+- Network protocol
+- Encryption interface
+
+
