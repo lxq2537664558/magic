@@ -45,7 +45,7 @@ Fast, scalable, real-time game server development is not an easy job, and a good
 
 Contribute
 ------------
-Want to be part of the Magic project? Great! All are welcome! We will get there quicker together :) Whether you find a bug, have a great feature request or you fancy owning a task from the road map, you can join our <a href="https://gitter.im/magicgame/dev" target="_blank">gitter-dev-room</a>
+Want to be part of the Magic project? Great! All are welcome! We will get there quicker together :) Whether you find a bug, have a great feature request or you fancy owning a task from the road map, you can join our <a href="https://gitter.im/magicgame/magic" target="_blank">Gitter</a>
 
 
 Contributors(Sort by contribution)
