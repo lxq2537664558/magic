@@ -47,4 +47,4 @@ Contributing to magic
 
 
 Contributors(Sort by contribution)
-- Sunface(✨✨✨✨✨)
+- Sunface(🌟🌟🌟🌟🌟)
