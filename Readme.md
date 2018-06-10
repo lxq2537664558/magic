@@ -45,7 +45,8 @@ Features
 Why magic? 
 ------------
 Extremely fast,extensible and common game server development is really hard, is there a framework which can cover the mojarity scenes of game? Maybe the only answer will be Magic.With Magic Framework you can build games like：WoW, Dota, DNF, Hearthstone, Online-Poker, Social-Game etc.
-So Magic is not only a framework, but also a ecosystem for developers!
+
+So Magic is not only a framework, but also a **ecosystem for developers**!
 
 
 
