@@ -1,8 +1,0 @@
-common:
-  version: 0.0.1
-  debug:   true
-  logpath: "./out.log"
-  loglevel: DEBUG
-
-center:
-  addr: ":6781"
