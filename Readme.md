@@ -50,4 +50,4 @@ Want to be part of the Magic project? Great! All are welcome! We will get there 
 
 Contributors(Sort by contribution)
 ------------
-- <a href="https://github.com/sunface" target="_blank">Sunface</a> (🌟🌟🌟🌟🌟)
+- <a href="https://github.com/sunface" target="_blank">Sunface</a> (⭐️️️️⭐️️️️⭐️️️️⭐️️️️⭐️️️️)
