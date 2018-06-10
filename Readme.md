@@ -44,7 +44,8 @@ Features
 
 Why magic? 
 ------------
-Fast, scalable, real-time game server development is not an easy job, and a good container or framework can reduce its complexity. Unfortunately, unlike web, finding a game server framework solution is difficult, especially an open source solution. Pomelo fills this gap, providing a full solution for building game server frameworks. Pomelo has the following advantages:
+Extremely fast,extensible and common game server development is really hard, is there a framework which can cover the mojarity scenes of game? Maybe the only answer will be Magic.With Magic Framework you can build games like：WoW, Dota, DNF, Hearthstone, Online-Poker, Social-Game etc.
+So Magic is not only a framework, but also a ecosystem for developers!
 
 
 
