@@ -35,6 +35,10 @@ Features
 - Social Game
 - Poker Game
 - For building games on blockchain (<a href="http://crystal.gg">Crystal</a>:A blockchain for game which is built on Magic)
+### Advanced architeture
+- Support big server mode 
+- Support world  server mode
+- Easily merge the existing servers
 ### Extensible
 #### Plugin System
 - Add new features with developing your own plugins, or you can search these in **Plugin Market**
