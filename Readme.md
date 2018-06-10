@@ -36,3 +36,15 @@ Features
 - Network protocol
 - Encryption interface
 
+Why magic? 
+------------
+
+
+
+
+Contributing to magic
+------------
+
+
+Contributors(Sort by contribution)
+- Sunface(✨✨✨✨✨)
