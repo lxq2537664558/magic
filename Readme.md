@@ -4,7 +4,7 @@ Magic
 A extremely fast, safty and extensible framework for various game server,written in rust. Magic provides
 all the components you need to develop a game, our goal is to make the game development to be easiest and efficient.
 - Homepage: http://magic.gg
-- Chat: <a href="https://gitter.im/magicgame/magic" target="_blank">Gitter</a>
+- Community: <a https://www.reddit.com/r/magicgame/new/>Reddit</a> 
 <p align="left">
     <a href="http://magic.gg">
      <img  width="200" src="./logo.png"></a>
@@ -45,7 +45,7 @@ Fast, scalable, real-time game server development is not an easy job, and a good
 
 Contribute
 ------------
-Want to be part of the Magic project? Great! All are welcome! We will get there quicker together :) Whether you find a bug, have a great feature request or you fancy owning a task from the road map, you can join our <a href="https://gitter.im/magicgame/magic" target="_blank">Gitter</a>
+Want to be part of the Magic project? Great! All are welcome! We will get there quicker together :) Whether you find a bug, have a great feature request or you fancy owning a task from the road map, you can join our <a href="https://www.reddit.com/r/magicgame/new/" target="_blank">Reddit</a>
 
 
 Contributors(Sort by contribution)
