@@ -29,10 +29,10 @@ Features
 - Poker Game
 - Games build on blockchain (<a href="http://crystal.gg">Crystal</a>:A blockchain for game which is built on Magic)
 ### Extensible
-##### Plugin System
+#### Plugin System
 - Add new features with developing your own plugins, or you can search these in **Plugin Market**
 - We will also provide some built-in plugins, like: server status、 game server managing etc
-##### Custom features
+#### Custom features
 - Network protocol
 - Encryption interface
 
