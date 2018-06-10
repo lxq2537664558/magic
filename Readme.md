@@ -47,4 +47,5 @@ Contributing to magic
 
 
 Contributors(Sort by contribution)
+------------
 - <a href="github.com/sunface">Sunface</a> (🌟🌟🌟🌟🌟)
