@@ -1,13 +1,14 @@
-<p align="left">
-    <a href="http://magic.gg">
-     <img  width="250" src="./magic.png"></a>
-</p>
 
 Magic
 ------------
 A extremely fast, safty and extensible framework for various game server,written in rust. Magic provides
 all the components you need to develop a game, our goal is to make the game development to be easiest and efficient.
 - Homepage: http://magic.gg
+- Chat: <a href="https://gitter.im/magicgame/magic" target="_blank">Gitter</a>
+<p align="left">
+    <a href="http://magic.gg">
+     <img  width="250" src="./magic.png"></a>
+</p>
 
 
 Features
@@ -38,12 +39,13 @@ Features
 
 Why magic? 
 ------------
+Fast, scalable, real-time game server development is not an easy job, and a good container or framework can reduce its complexity. Unfortunately, unlike web, finding a game server framework solution is difficult, especially an open source solution. Pomelo fills this gap, providing a full solution for building game server frameworks. Pomelo has the following advantages:
 
 
 
-
-Contributing to magic
+Contribute
 ------------
+Want to be part of the Magic project? Great! All are welcome! We will get there quicker together :) Whether you find a bug, have a great feature request or you fancy owning a task from the road map, you can join our <a href="https://gitter.im/magicgame/dev" target="_blank">gitter-dev-room</a>
 
 
 Contributors(Sort by contribution)
