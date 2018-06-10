@@ -1,11 +1,10 @@
 
 Magic
 ------------
-A extremely fast, safty and extensible framework for various game server,written in rust. Magic provides
-all the components you need to develop a game, our goal is to make the game development to be easiest and efficient.
-- Homepage: http://magic.gg
-- Community: <a href="https://www.reddit.com/r/magicgame/new/">Reddit</a>
-- <a href="ReadmeCn.md">中文Readme</a>
+Magic是一款性能极高、安全且扩展性强的游戏服务器端开发框架，使用Rust语言开发。Magic的目标是打造一个真正的游戏开发生态，让游戏开发前所未有的简单和高效。
+- 主页: http://magic.gg
+- 社区: <a href="https://www.reddit.com/r/magicgame/new/">Reddit</a>
+- <a href="Readme.md">英文Readme</a>
 <p align="left">
     <a href="http://magic.gg">
      <img  width="200" src="./logo.png"></a>
