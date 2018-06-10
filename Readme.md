@@ -7,7 +7,7 @@ all the components you need to develop a game, our goal is to make the game deve
 - Chat: <a href="https://gitter.im/magicgame/magic" target="_blank">Gitter</a>
 <p align="left">
     <a href="http://magic.gg">
-     <img  width="250" src="./magic.png"></a>
+     <img  width="200" src="./logo.png"></a>
 </p>
 
 
@@ -28,7 +28,7 @@ Features
 - Low-latency (Moba, Arpg etc)
 - Social Game
 - Poker Game
-- Games build on blockchain (<a href="http://crystal.gg">Crystal</a>:A blockchain for game which is built on Magic)
+- For building games on blockchain (<a href="http://crystal.gg">Crystal</a>:A blockchain for game which is built on Magic)
 ### Extensible
 #### Plugin System
 - Add new features with developing your own plugins, or you can search these in **Plugin Market**
