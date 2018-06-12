@@ -1,6 +1,9 @@
 
 Magic
 ------------
+
+[![Join the chat at https://gitter.im/magicgame/magic](https://badges.gitter.im/magicgame/magic.svg)](https://gitter.im/magicgame/magic?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A extremely fast, safty and extensible framework for various game server,written in rust. Magic provides
 all the components you need to develop a game, our goal is to make the game development to be easiest and efficient.
 - Homepage: http://magic.gg
